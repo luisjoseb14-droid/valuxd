@@ -1,0 +1,42 @@
+{
+  "name": "Default Style",
+  "font": {
+    "name": "Aloevera Display Regular",
+    "path": "AloeveraDisplay-Regular.otf",
+    "id": ""
+  },
+  "font_size": 10,
+  "color": "#FFFFFF",
+  "rgb_color": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "shadow": {
+    "alpha": 0.4952380955219269,
+    "angle": -45,
+    "diffuse": 0.02500000037252903,
+    "distance": 2.9999992847442627,
+    "content": {
+      "render_type": "solid",
+      "solid": {
+        "color": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "thickness_projection_angle": -45,
+    "thickness_projection_distance": 0,
+    "thickness_projection_enable": false
+  },
+  "animation": {
+    "enabled": true,
+    "resource_id": "7646371622298914068",
+    "name": "Entrada deslizante desde la izquierda",
+    "path": "",
+    "duration": 500000,
+    "type": "in"
+  }
+}

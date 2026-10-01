@@ -1,0 +1,26 @@
+{
+	"version":	"1.0",
+	"mode":	2,
+	"name":	"2020_09_24_16_32_48_86d09b5afe4011ea978facde48001132",
+	"nodes":	[{
+			"name":	"blit_0",
+			"type":	"blit",
+			"config":	{
+				"size":	{
+					"width":	0,
+					"height":	0
+				},
+				"keyMaps":	{
+					"intParam":	{
+					},
+					"floatParam":	{
+					},
+					"stringParam":	{
+					},
+					"pathParam":	{
+					}
+				}
+			}
+		}],
+	"links":	[]
+}

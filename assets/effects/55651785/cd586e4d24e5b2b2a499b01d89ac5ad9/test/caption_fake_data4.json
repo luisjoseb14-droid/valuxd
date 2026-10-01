@@ -1,0 +1,105 @@
+{
+    "text": "You are over my head.\nI am   out of my mind.",
+    "words": [
+        {
+            "end_time": 1000,
+            "start_time": 0,
+            "text": "You"
+        },
+        {
+            "end_time": 1000,
+            "start_time": 1000,
+            "text": " "
+        },
+        {
+            "end_time": 1200,
+            "start_time": 1000,
+            "text": "are"
+        },
+        {
+            "end_time": 1200,
+            "start_time": 1200,
+            "text": " "
+        },
+        {
+            "end_time": 2200,
+            "start_time": 1200,
+            "text": "over"
+        },
+        {
+            "end_time": 2200,
+            "start_time": 2200,
+            "text": " "
+        },
+        {
+            "end_time": 3200,
+            "start_time": 2200,
+            "text": "my"
+        },
+        {
+            "end_time": 3200,
+            "start_time": 3200,
+            "text": " "
+        },
+        {
+            "end_time": 4400,
+            "start_time": 3200,
+            "text": "head."
+        },
+        {
+            "end_time": 5000,
+            "start_time": 4600,
+            "text": "\nI"
+        },
+        {
+            "end_time": 5000,
+            "start_time": 5000,
+            "text": " "
+        },
+        {
+            "end_time": 5300,
+            "start_time": 5000,
+            "text": "am"
+        },
+        {
+            "end_time": 5300,
+            "start_time": 5300,
+            "text": " "
+        },
+        {
+            "end_time": 6300,
+            "start_time": 5300,
+            "text": "  out"
+        },
+        {
+            "end_time": 6300,
+            "start_time": 6300,
+            "text": " "
+        },
+        {
+            "end_time": 7000,
+            "start_time": 6300,
+            "text": "of"
+        },
+        {
+            "end_time": 7000,
+            "start_time": 7000,
+            "text": " "
+        },
+        {
+            "end_time": 8000,
+            "start_time": 7000,
+            "text": "my"
+        },
+        {
+            "end_time": 8000,
+            "start_time": 8000,
+            "text": " "
+        },
+        {
+            "end_time": 9000,
+            "start_time": 8000,
+            "text": "mind."
+        }
+    ]
+}

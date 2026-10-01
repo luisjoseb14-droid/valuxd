@@ -1,0 +1,104 @@
+{
+  "name": "Letra Deditos Barefoot",
+  "description": "Estilo Deditos Barefoot: Lilita One blanco arriba, Lilita One naranja abajo con animación Mini zoom, sonido de click y soporte para palabras destacadas solas.",
+  "layout": "dual",
+  "allow_solo_highlights": true,
+  "max_solo_highlights": 3,
+  "top": {
+    "font_name": "Lilita One",
+    "font_title": "Lilita One",
+    "font_path": "LilitaOne-Regular.ttf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 14.0,
+    "y": -0.056567505720824,
+    "scale": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "shadow": {
+      "alpha": 0.5,
+      "angle": -45.0,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    }
+  },
+  "bottom": {
+    "font_name": "Lilita One",
+    "font_title": "Lilita One",
+    "font_path": "LilitaOne-Regular.ttf",
+    "color": "#FB8E48",
+    "rgb_color": [
+      0.984313726425171,
+      0.556862771511078,
+      0.2823529541492462
+    ],
+    "font_size": 21.0,
+    "y": -0.145812356979405,
+    "scale": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "animation": {
+      "enabled": true,
+      "name": "Mini zoom",
+      "resource_id": "6763469998330483213",
+      "category_id": "ruchang",
+      "category_name": "Entrada",
+      "type": "in",
+      "duration": 500000,
+      "path": ""
+    },
+    "shadow": {
+      "alpha": 0.5,
+      "angle": -45.0,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    }
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.7012964487075806
+  },
+  "pacing": {
+    "min_seconds": 3.0,
+    "max_seconds": 4.5
+  },
+  "margins": {
+    "max_chars_per_line": 18,
+    "max_words_per_line": 3
+  }
+}

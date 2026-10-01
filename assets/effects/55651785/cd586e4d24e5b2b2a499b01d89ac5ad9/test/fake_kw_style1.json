@@ -1,0 +1,68 @@
+{
+    "styles": [
+        {
+            "size": 20,
+            "bold": true,
+            "italic": true,
+            "underline": true,
+            "select": true,
+            "useLetterColor": true,
+            
+            "version": "3.0",
+            "fill": {
+                "enable": true,
+                "alpha": 1,
+                "content": {
+                    "solid": {
+                        "color": [
+                            1,
+                            0,
+                            0
+                        ],
+                        "alpha": 1
+                    },
+                    "render_type": "solid"
+                }
+            },
+            "strokes": [
+                {
+                    "enable": true,
+                    "alpha": 1,
+                    "content": {
+                        "solid": {
+                            "color": [
+                                0,
+                                1,
+                                0
+                            ],
+                            "alpha": 1
+                        },
+                        "render_type": "solid"
+                    },
+                    "width": 0.2
+                }
+            ],
+            "shadows": [
+                {
+                    "enable": true,
+                    "alpha": 1,
+                    "content": {
+                        "solid": {
+                            "color": [
+                                0,
+                                1,
+                                0
+                            ],
+                            "alpha": 1
+                        },
+                        "render_type": "solid"
+                    },
+                    "distance": 100,
+                    "angle": 0,
+                    "feather": 0.0,
+                }
+            ]
+            
+        }
+    ]
+}

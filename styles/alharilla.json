@@ -1,0 +1,99 @@
+{
+  "name": "Letra Alharilla",
+  "description": "Estilo de 2 capas de Alharilla: Raleway Medium blanco arriba, Bebas Neue Regular verde menta en mayúsculas abajo con animación Proyección 2 y sonido de click sincronizado.",
+  "layout": "dual",
+  "top": {
+    "font_name": "Raleway-Medium",
+    "font_path": "Raleway-Medium.ttf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 10.0,
+    "y": -0.063454748826138,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    }
+  },
+  "bottom": {
+    "font_name": "BebasNeue-Regular",
+    "font_path": "BebasNeue-Regular.ttf",
+    "color": "#83C4BE",
+    "rgb_color": [
+      0.513725519180298,
+      0.7686274647712708,
+      0.745098054409027
+    ],
+    "font_size": 19.322694778442383,
+    "y": -0.206851056032705,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "uppercase": true,
+    "animation": {
+      "enabled": true,
+      "resource_id": "7641260445180939541",
+      "name": "Proyección 2",
+      "duration": 300000,
+      "path": "",
+      "type": "in"
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    }
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 1.0
+  },
+  "pacing": {
+    "min_seconds": 3.0,
+    "max_seconds": 4.5
+  },
+  "margins": {
+    "max_chars_per_line": 18,
+    "max_words_per_line": 3
+  }
+}

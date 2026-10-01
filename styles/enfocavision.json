@@ -1,0 +1,104 @@
+{
+  "name": "Letra Doctores Enfocavision",
+  "description": "Estilo de 2 capas de Doctores Enfocavision: ITC Avant Garde Demi blanco arriba, ITC Avant Garde Bold verde menta (#85FFD6) abajo con animación Mini zoom y sonido de click sincronizado.",
+  "layout": "dual",
+  "top": {
+    "font_name": "ITC Avant Garde Gothic Std Demi",
+    "font_title": "ITC Avant Garde Gothic Std Demi",
+    "font_path": "ITC Avant Garde Gothic Std Demi.otf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 7.0,
+    "y": -0.111725608022547,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    },
+    "uppercase": false
+  },
+  "bottom": {
+    "font_name": "ITC Avant Garde Gothic Std Bold",
+    "font_title": "ITC Avant Garde Gothic Std Bold",
+    "font_path": "ITC Avant Garde Gothic Std Bold.otf",
+    "color": "#85FFD6",
+    "rgb_color": [
+      0.5215686559677124,
+      1.0,
+      0.8392156958580017
+    ],
+    "font_size": 12.0,
+    "y": -0.207018040767503,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "animation": {
+      "enabled": true,
+      "resource_id": "7646371622298914068",
+      "name": "Mini zoom",
+      "path": "",
+      "duration": 500000,
+      "type": "in"
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    },
+    "useLetterColor": true,
+    "uppercase": false
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.65
+  },
+  "pacing": {
+    "min_seconds": 3.0,
+    "max_seconds": 4.5
+  },
+  "margins": {
+    "max_chars_per_line": 18,
+    "max_words_per_line": 3,
+    "max_highlight_chars": 18
+  }
+}

@@ -1,0 +1,70 @@
+{
+    "text": "happy🎉 birthday🍰 to you \nand   your family🎉",
+    "words": [
+        {
+            "end_time": 900,
+            "start_time": 50,
+            "text": "happy🎉"
+        },
+        {
+            "end_time": 900,
+            "start_time": 900,
+            "text": " "
+        },
+        {
+            "end_time": 1700,
+            "start_time": 1000,
+            "text": "birthday🍰"
+        },
+        {
+            "end_time": 1500,
+            "start_time": 1500,
+            "text": " "
+        },
+        {
+            "end_time": 2000,
+            "start_time": 1700,
+            "text": "to"
+        },
+        {
+            "end_time": 2000,
+            "start_time": 2000,
+            "text": " "
+        },
+        {
+            "end_time": 2500,
+            "start_time": 2000,
+            "text": "you"
+        },
+        {
+            "end_time": 2500,
+            "start_time": 2500,
+            "text": " "
+        },
+        {
+            "end_time": 2700,
+            "start_time": 2500,
+            "text": "\nand"
+        },
+        {
+            "end_time": 2700,
+            "start_time": 2700,
+            "text": " "
+        },
+        {
+            "end_time": 3500,
+            "start_time": 3000,
+            "text": "  your"
+        },
+        {
+            "end_time": 3500,
+            "start_time": 3500,
+            "text": " "
+        },
+        {
+            "end_time": 4000,
+            "start_time": 3500,
+            "text": "family"
+        }
+    ]
+}

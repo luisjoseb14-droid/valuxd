@@ -1,0 +1,48 @@
+{
+    "studio_anim_params": {
+        "selectors": [
+            {
+                "base_attrs": {
+                    "custom_script": {
+                        "isRelativePath": true,
+                        "path": "/res/20260528_211605_38c8.jsdat"
+                    }
+                },
+                "class": "Text_BaseSelector",
+                "selector_attrs": {
+                    "basedOn": {
+                        "value": 0
+                    },
+                    "class": "Text_BaseSelector",
+                    "constrained": {
+                        "value": 1
+                    },
+                    "customShape": {
+                        "value": 0
+                    },
+                    "end": {
+                        "value": 1
+                    },
+                    "offset": {
+                        "value": 0
+                    },
+                    "randomSeed": {
+                        "value": 50
+                    },
+                    "randomSort": {
+                        "value": false
+                    },
+                    "shape": {
+                        "value": 0
+                    },
+                    "smooth": {
+                        "value": 0
+                    },
+                    "start": {
+                        "value": 0
+                    }
+                }
+            }
+        ]
+    }
+}

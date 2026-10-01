@@ -1,0 +1,89 @@
+[
+    {
+        "ClassName": "TextAnim",
+        "Super": "ScriptComponent",
+        "FilePath": "TextAnim.lua",
+        "FileAbsPath": "/Users/zg/Downloads/\u3010fix\u3011\u5b57\u5e55\u52a8\u753b/\u6a21\u7248\u5305/TextAnim.lua",
+        "Properties": [
+            {
+                "VarName": "autoPlay",
+                "VarType": "Bool",
+                "Comment": ""
+            },
+            {
+                "VarName": "duration",
+                "VarType": "Double",
+                "Comment": ""
+            },
+            {
+                "VarName": "curTime",
+                "VarType": "Double",
+                "Comment": ""
+            },
+            {
+                "VarName": "progress",
+                "VarType": "Double",
+                "Comment": "",
+                "AnnoItems": [
+                    {
+                        "ItemType": "UI",
+                        "Attributes": [
+                            {
+                                "AttrType": "Range",
+                                "RawValue": "",
+                                "Values": [
+                                    0.0,
+                                    1.0
+                                ]
+                            },
+                            {
+                                "AttrType": "Slider",
+                                "RawValue": "",
+                                "Values": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Methods": [
+            {
+                "FuncName": "_registerModule",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "getAEData",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "new",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "textStart",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "textInit",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "textSeek",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "textReset",
+                "Params": [],
+                "Comment": ""
+            }
+        ],
+        "Comment": "",
+        "ExportFiles": []
+    }
+]

@@ -1,0 +1,105 @@
+{
+  "name": "Letra CUIDUS",
+  "description": "Estilo de 2 capas de CUIDUS: Gentium Plus Italic blanco arriba, Gentium Plus Bold rosa suave (#E5C7D2) abajo con animación Descenso y sonido de click sincronizado.",
+  "layout": "dual",
+  "top": {
+    "font_name": "Gentium Plus Italic",
+    "font_title": "Gentium Plus Italic",
+    "font_path": "GentiumPlus-Italic.ttf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 15.0,
+    "y": 0.0,
+    "scale": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "shadow": {
+      "alpha": 0.5010438561439514,
+      "angle": -45.0,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    },
+    "uppercase": false
+  },
+  "bottom": {
+    "font_name": "Gentium Plus Bold",
+    "font_title": "Gentium Plus Bold",
+    "font_path": "GentiumPlus-Bold.ttf",
+    "color": "#e5c7d2",
+    "rgb_color": [
+      0.898039221763611,
+      0.7803921699523926,
+      0.8235294222831726
+    ],
+    "font_size": 18.0,
+    "y": -0.072675872122094,
+    "scale": {
+      "x": 1.202033821399421,
+      "y": 1.202033821399421
+    },
+    "animation": {
+      "enabled": true,
+      "resource_id": "7648941380408053013",
+      "name": "Descenso",
+      "path": "",
+      "duration": 100000,
+      "type": "in",
+      "category_id": "ruchang_fav",
+      "category_name": "Favoritos"
+    },
+    "shadow": {
+      "alpha": 0.5010438561439514,
+      "angle": -45.0,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    },
+    "useLetterColor": true,
+    "uppercase": false
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.50
+  },
+  "pacing": {
+    "min_seconds": 3.0,
+    "max_seconds": 4.5
+  },
+  "margins": {
+    "max_chars_per_line": 18,
+    "max_words_per_line": 3
+  }
+}

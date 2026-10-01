@@ -1,0 +1,15 @@
+{
+    "depend_resource_list": [
+        {
+            "resource_id": "7148719615961469441",
+            "source": 2,
+            "type": "fonts"
+        },
+        {
+            "resource_id": "7258195155394499074",
+            "source": 2,
+            "type": "text"
+        }
+    ],
+    "script_template_version": "1.0.0"
+}

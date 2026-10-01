@@ -1,0 +1,104 @@
+{
+  "name": "Letra de Pequeños Cuidados",
+  "description": "Estilo de 2 capas de Pequeños Cuidados: Parafina blanco arriba, Chewy Regular amarillo abajo con animación Mini zoom y sonido de click sincronizado.",
+  "layout": "dual",
+  "top": {
+    "font_name": "Parafina Bold S",
+    "font_title": "Parafina Bold S",
+    "font_path": "Parafina Bold S.ttf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 9.0,
+    "y": -0.11634766240146056,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    },
+    "uppercase": false
+  },
+  "bottom": {
+    "font_name": "Chewy Regular",
+    "font_title": "Chewy Regular",
+    "font_path": "Chewy-Regular.ttf",
+    "color": "#fee872",
+    "rgb_color": [
+      0.9960784316062927,
+      0.9098039269447327,
+      0.4470588266849518
+    ],
+    "font_size": 21.97653958944279,
+    "y": -0.23921068757903077,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "animation": {
+      "enabled": true,
+      "resource_id": "6763469998330483213",
+      "name": "Mini zoom",
+      "path": "",
+      "duration": 233333,
+      "type": "in"
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 0,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0.5647059082984924,
+            0.4627451002597809,
+            0.18039216101169586
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    },
+    "useLetterColor": true,
+    "uppercase": false
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.66
+  },
+  "pacing": {
+    "min_seconds": 3.0,
+    "max_seconds": 4.5
+  },
+  "margins": {
+    "max_chars_per_line": 18,
+    "max_words_per_line": 3,
+    "max_highlight_chars": 12
+  }
+}

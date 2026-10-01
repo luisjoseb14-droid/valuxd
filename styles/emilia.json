@@ -1,0 +1,148 @@
+{
+  "name": "Letra Emilia",
+  "description": "Estilo de 2 capas de Emilia: Neue Helvena blanco arriba, Karelle DEMO amarillo abajo con animación Mini zoom, stickers de CapCut sincronizados y sonido de click.",
+  "layout": "dual",
+  "top": {
+    "font_name": "Neue Helvena Semibold",
+    "font_path": "NeueHelvena-Semibold-Exfont7e79.otf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 10.0,
+    "y": -0.2293908837228591,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    },
+    "uppercase": false
+  },
+  "bottom": {
+    "font_name": "Karelle DEMO",
+    "font_path": "Karelle DEMO.otf",
+    "color": "#ffdc6d",
+    "rgb_color": [
+      1.0,
+      0.8627451062202454,
+      0.4274509847164154
+    ],
+    "font_size": 12.0,
+    "y": -0.3224052149238329,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "animation": {
+      "enabled": true,
+      "resource_id": "6763469998330483213",
+      "name": "Mini zoom",
+      "path": "",
+      "duration": 466666,
+      "type": "in"
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    },
+    "uppercase": false
+  },
+  "stickers": {
+    "enabled": true,
+    "mode": "cycle",
+    "pool": [
+      {
+        "name": "Doodle EN Hand Drawn Speed Reaction Line",
+        "resource_id": "7562803730404609285",
+        "sticker_id": "7562803730404609285",
+        "path": "",
+        "category_id": "123456",
+        "category_name": "Stickers",
+        "icon_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/b995ae86c7b2416fbac89e15cedce3cd~tplv-j6daoa426t-resize:0:0.webp?x-expires=1815947522&x-signature=89cmgzt1bpxJQSHvMoBVatxwIx0%3D",
+        "preview_cover_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/b995ae86c7b2416fbac89e15cedce3cd~tplv-j6daoa426t-resize:0:0.webp?x-expires=1815947522&x-signature=89cmgzt1bpxJQSHvMoBVatxwIx0%3D",
+        "clip": {
+          "transform": {
+            "x": 0.52,
+            "y": -0.25
+          },
+          "scale": {
+            "x": 0.6407057522655706,
+            "y": 0.6407057522655706
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "name": "Simple Icon En - Curly Line",
+        "resource_id": "7468646543625588021",
+        "sticker_id": "7468646543625588021",
+        "path": "",
+        "category_id": "123456",
+        "category_name": "Stickers",
+        "icon_url": "https://p16-heycan-image-sign-sg.ibyteimg.com/tos-alisg-i-fhsjxsyzit-sg/a8722494ed884789a5c216fedacddcc2~tplv-fhsjxsyzit-resize:0:0.webp?x-expires=1815947422&x-signature=Qu3aks0qMloE1TU%2BsPHDzBijHT8%3D",
+        "preview_cover_url": "https://p16-heycan-image-sign-sg.ibyteimg.com/tos-alisg-i-fhsjxsyzit-sg/a8722494ed884789a5c216fedacddcc2~tplv-fhsjxsyzit-resize:0:0.webp?x-expires=1815947422&x-signature=Qu3aks0qMloE1TU%2BsPHDzBijHT8%3D",
+        "clip": {
+          "transform": {
+            "x": 0.12,
+            "y": -0.4
+          },
+          "scale": {
+            "x": 1.2,
+            "y": 1.2
+          },
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.65
+  },
+  "pacing": {
+    "min_seconds": 3.0,
+    "max_seconds": 4.5
+  },
+  "margins": {
+    "max_chars_per_line": 18,
+    "max_words_per_line": 3
+  }
+}

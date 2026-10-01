@@ -1,0 +1,94 @@
+{
+  "name": "Letra Gala",
+  "description": "Estilo de 2 capas de Gala: Helvetica de CapCut blanco arriba, Things de fuentes del sistema grande blanco abajo con sonido de click sincronizado.",
+  "layout": "dual",
+  "top": {
+    "font_name": "Helvetica",
+    "font_path": "Helvetica Regular.otf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 8.0,
+    "y": -0.109564922934591,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    }
+  },
+  "bottom": {
+    "font_name": "Things",
+    "font_path": "things.otf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 19.246334075927734,
+    "y": -0.208030396080371,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "animation": {
+      "enabled": false,
+      "path": ""
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    }
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.7012964487075806
+  },
+  "pacing": {
+    "min_seconds": 3.0,
+    "max_seconds": 4.5
+  },
+  "margins": {
+    "max_chars_per_line": 18,
+    "max_words_per_line": 3
+  }
+}

@@ -1,0 +1,185 @@
+[
+    {
+        "ClassName": "TextAnim",
+        "Super": "ScriptComponent",
+        "FilePath": "lua/TextAnim.lua",
+        "FileAbsPath": "/Users/hyyy/Desktop/\u5236\u4f5c\u8bb0\u5f55-OnCall\u4fee\u6539/\u7b2c\u4e09\u8f6e/\u5b57\u5e55\u52a8\u753b\u624b\u673a\u7aef\u900f\u660e\u5ea6bug/\u6fc0\u5149\u96d5\u523b 2/lua/TextAnim.lua",
+        "Properties": [
+            {
+                "VarName": "duration",
+                "VarType": "Double",
+                "Comment": ""
+            },
+            {
+                "VarName": "progress",
+                "VarType": "Double",
+                "Comment": "",
+                "AnnoItems": [
+                    {
+                        "ItemType": "UI",
+                        "Attributes": [
+                            {
+                                "AttrType": "Range",
+                                "RawValue": "",
+                                "Values": [
+                                    0.0,
+                                    1.0
+                                ]
+                            },
+                            {
+                                "AttrType": "Slider",
+                                "RawValue": "",
+                                "Values": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "VarName": "autoPlay",
+                "VarType": "Bool",
+                "Comment": ""
+            },
+            {
+                "VarName": "effectMaterial",
+                "VarType": "Material",
+                "Comment": ""
+            }
+        ],
+        "Methods": [
+            {
+                "FuncName": "new",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "constructor",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "setMatToSDFText",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "getTextColor",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "onStart",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "onUpdate",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "seek",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "onEnter",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "resetData",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "setDuration",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "onLeave",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "clear",
+                "Params": [],
+                "Comment": ""
+            }
+        ],
+        "Comment": "",
+        "ExportFiles": []
+    },
+    {
+        "ClassName": "Util",
+        "Super": "",
+        "FilePath": "lua/Util.lua",
+        "FileAbsPath": "/Users/hyyy/Desktop/\u5236\u4f5c\u8bb0\u5f55-OnCall\u4fee\u6539/\u7b2c\u4e09\u8f6e/\u5b57\u5e55\u52a8\u753b\u624b\u673a\u7aef\u900f\u660e\u5ea6bug/\u6fc0\u5149\u96d5\u523b 2/lua/Util.lua",
+        "Properties": [],
+        "Methods": [
+            {
+                "FuncName": "registerParams",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "getRegistedParams",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "setRegistedVal",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "getRootDir",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "registerRootDir",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "bezier",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "remap01",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "mix",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "CreateJsonFile",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "ReadFromJson",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "bezierWithParams",
+                "Params": [],
+                "Comment": ""
+            },
+            {
+                "FuncName": "test",
+                "Params": [],
+                "Comment": ""
+            }
+        ],
+        "Comment": "",
+        "ExportFiles": []
+    }
+]

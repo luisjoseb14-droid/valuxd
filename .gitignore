@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.venv*/
+.cc_subs_pro_config.json
+scratch/
+tests/__pycache__/
+core/__pycache__/
+*.tmp
+*.log

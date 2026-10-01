@@ -1,0 +1,102 @@
+{
+  "name": "Letra Alvaro",
+  "description": "Estilo de 2 capas de Alvaro: GC GRIND blanco arriba, GC GRIND coral abajo con animación Corte con láser y sonido de click sincronizado.",
+  "layout": "dual",
+  "top": {
+    "font_name": "GC GRIND Extra Bold",
+    "font_title": "GC GRIND Extra Bold",
+    "font_path": "GC GRIND.otf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 14.38,
+    "y": 0.0,
+    "scale": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "shadow": {
+      "alpha": 0.5046728849411011,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 3.0,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    },
+    "uppercase": false
+  },
+  "bottom": {
+    "font_name": "GC GRIND Extra Bold",
+    "font_title": "GC GRIND Extra Bold",
+    "font_path": "GC GRIND.otf",
+    "color": "#FDB2A0",
+    "rgb_color": [
+      0.9921568632125854,
+      0.6980392336845398,
+      0.627450980424881
+    ],
+    "font_size": 14.38,
+    "y": -0.09942363202571869,
+    "scale": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "animation": {
+      "enabled": true,
+      "resource_id": "7229621702668325378",
+      "name": "Corte con láser",
+      "path": "",
+      "duration": 500000,
+      "type": "in"
+    },
+    "shadow": {
+      "alpha": 0.5046728849411011,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 3.0,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    },
+    "uppercase": false
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.7
+  },
+  "pacing": {
+    "min_seconds": 3.0,
+    "max_seconds": 4.5
+  },
+  "margins": {
+    "max_chars_per_line": 18,
+    "max_words_per_line": 3
+  }
+}

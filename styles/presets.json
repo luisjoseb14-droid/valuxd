@@ -1,0 +1,6559 @@
+{
+  "gerardo": {
+    "name": "Letra Gerardo",
+    "description": "Estilo de 2 capas de Gerardo: Aloevera blanco arriba, Behind The Nineties turquesa abajo con animación deslizante y sonido de click.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Aloevera Display Regular",
+      "font_path": "AloeveraDisplay-Regular.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 10.0,
+      "y": -0.11892300578826598,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "Behind The Nineties Medium Italic",
+      "font_path": "Behind The Nineties Medium Italic.ttf",
+      "color": "#2F9FA3",
+      "rgb_color": [
+        0.1843137254901961,
+        0.6235294117647059,
+        0.6392156862745098
+      ],
+      "font_size": 21.0,
+      "y": -0.1988648662533823,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371622298914068",
+        "name": "Entrada deslizante desde la izquierda",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.362500011920929,
+        "angle": -45,
+        "diffuse": 0.007638889364898205,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "gala": {
+    "name": "Letra Gala",
+    "description": "Estilo de 2 capas de Gala: Helvetica de CapCut blanco arriba, Things de fuentes del sistema grande blanco abajo con sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Helvetica",
+      "font_path": "Helvetica Regular.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": -0.109564922934591,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "Things",
+      "font_path": "things.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 19.246334075927734,
+      "y": -0.208030396080371,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": false,
+        "path": ""
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7012964487075806
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "laura": {
+    "name": "Letra Laura Pediatra",
+    "description": "Estilo de 2 capas de Laura Pediatra: Josefin Sans Regular blanco arriba con sombra, Josefin Sans SemiBold celeste en mayúsculas abajo con sombra y animación Rebote a la izquierda (sin sonido de click).",
+    "layout": "dual",
+    "top": {
+      "font_name": "JosefinSans-Regular",
+      "font_title": "Josefin Sans",
+      "font_path": "JosefinSans-Regular.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.081159420289855,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "JosefinSans-SemiBold",
+      "font_title": "Josefin Sans SemiBold",
+      "font_path": "JosefinSans-SemiBold.ttf",
+      "color": "#8ED1FC",
+      "rgb_color": [
+        0.556862771511078,
+        0.8196078538894653,
+        0.9882352948188782
+      ],
+      "font_size": 11.0,
+      "y": -0.175,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "uppercase": true,
+      "animation": {
+        "enabled": true,
+        "resource_id": "7314651687149376001",
+        "name": "Rebote a la izquierda",
+        "category_id": "in_fav",
+        "category_name": "in_fav",
+        "type": "in",
+        "duration": 366666,
+        "path": ""
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": false,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.0
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "laura pediatra": {
+    "name": "Letra Laura Pediatra",
+    "description": "Estilo de 2 capas de Laura Pediatra: Josefin Sans Regular blanco arriba con sombra, Josefin Sans SemiBold celeste en mayúsculas abajo con sombra y animación Rebote a la izquierda (sin sonido de click).",
+    "layout": "dual",
+    "top": {
+      "font_name": "JosefinSans-Regular",
+      "font_title": "Josefin Sans",
+      "font_path": "JosefinSans-Regular.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.081159420289855,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "JosefinSans-SemiBold",
+      "font_title": "Josefin Sans SemiBold",
+      "font_path": "JosefinSans-SemiBold.ttf",
+      "color": "#8ED1FC",
+      "rgb_color": [
+        0.556862771511078,
+        0.8196078538894653,
+        0.9882352948188782
+      ],
+      "font_size": 11.0,
+      "y": -0.175,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "uppercase": true,
+      "animation": {
+        "enabled": true,
+        "resource_id": "7314651687149376001",
+        "name": "Rebote a la izquierda",
+        "category_id": "in_fav",
+        "category_name": "in_fav",
+        "type": "in",
+        "duration": 366666,
+        "path": ""
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": false,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.0
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "laura_pediatra": {
+    "name": "Letra Laura Pediatra",
+    "description": "Estilo de 2 capas de Laura Pediatra: Josefin Sans Regular blanco arriba con sombra, Josefin Sans SemiBold celeste en mayúsculas abajo con sombra y animación Rebote a la izquierda (sin sonido de click).",
+    "layout": "dual",
+    "top": {
+      "font_name": "JosefinSans-Regular",
+      "font_title": "Josefin Sans",
+      "font_path": "JosefinSans-Regular.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.081159420289855,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "JosefinSans-SemiBold",
+      "font_title": "Josefin Sans SemiBold",
+      "font_path": "JosefinSans-SemiBold.ttf",
+      "color": "#8ED1FC",
+      "rgb_color": [
+        0.556862771511078,
+        0.8196078538894653,
+        0.9882352948188782
+      ],
+      "font_size": 11.0,
+      "y": -0.175,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "uppercase": true,
+      "animation": {
+        "enabled": true,
+        "resource_id": "7314651687149376001",
+        "name": "Rebote a la izquierda",
+        "category_id": "in_fav",
+        "category_name": "in_fav",
+        "type": "in",
+        "duration": 366666,
+        "path": ""
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": false,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.0
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "alharilla": {
+    "name": "Letra Alharilla",
+    "description": "Estilo de 2 capas de Alharilla: Raleway Medium blanco arriba, Bebas Neue Regular verde menta en mayúsculas abajo con animación Proyección 2 y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Raleway-Medium",
+      "font_path": "Raleway-Medium.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 10.0,
+      "y": -0.063454748826138,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "BebasNeue-Regular",
+      "font_path": "BebasNeue-Regular.ttf",
+      "color": "#83C4BE",
+      "rgb_color": [
+        0.513725519180298,
+        0.7686274647712708,
+        0.745098054409027
+      ],
+      "font_size": 19.322694778442383,
+      "y": -0.206851056032705,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "uppercase": true,
+      "animation": {
+        "enabled": true,
+        "resource_id": "7641260445180939541",
+        "name": "Proyección 2",
+        "duration": 300000,
+        "path": "",
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 1.0
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "dra. alharilla": {
+    "name": "Letra Alharilla",
+    "description": "Estilo de 2 capas de Alharilla: Raleway Medium blanco arriba, Bebas Neue Regular verde menta en mayúsculas abajo con animación Proyección 2 y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Raleway-Medium",
+      "font_path": "Raleway-Medium.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 10.0,
+      "y": -0.063454748826138,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "BebasNeue-Regular",
+      "font_path": "BebasNeue-Regular.ttf",
+      "color": "#83C4BE",
+      "rgb_color": [
+        0.513725519180298,
+        0.7686274647712708,
+        0.745098054409027
+      ],
+      "font_size": 19.322694778442383,
+      "y": -0.206851056032705,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "uppercase": true,
+      "animation": {
+        "enabled": true,
+        "resource_id": "7641260445180939541",
+        "name": "Proyección 2",
+        "duration": 300000,
+        "path": "",
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 1.0
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "jose": {
+    "name": "Letra Jose Podólogo",
+    "description": "Estilo de Jose Podólogo: Aglatia blanco arriba (con palabras en rojo dolor o amarillo clave), Bluemun-SemiBold amarillo abajo en palabras destacadas con descansos, y clicks de audio sincronizados exclusivamente en las destacadas Bluemun.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Aglatia",
+      "font_path": "Aglatia.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "negative_color": "#EC1D1D",
+      "negative_rgb_color": [
+        0.9254902005195618,
+        0.11372549086809158,
+        0.11372549086809158
+      ],
+      "highlight_color": "#F4C70F",
+      "highlight_rgb_color": [
+        0.95686274766922,
+        0.7803921699523926,
+        0.05882352963089943
+      ],
+      "font_size": 9.0,
+      "y": -0.11634766240146056,
+      "letter_spacing": -0.05,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "Bluemun-SemiBold",
+      "font_path": "Bluemun-SemiBold.ttf",
+      "color": "#F4C70F",
+      "rgb_color": [
+        0.95686274766922,
+        0.7803921699523926,
+        0.05882352963089943
+      ],
+      "font_size": 19.5,
+      "y": -0.1988648662533823,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "name": "Aparición progresiva",
+        "resource_id": "6724916044072227332",
+        "category_id": "ruchang",
+        "category_name": "Entrada",
+        "type": "in",
+        "duration": 466666,
+        "path": ""
+      },
+      "video_effect": {
+        "enabled": true,
+        "resource_id": "7409873342792043781",
+        "name": "Brillo 2",
+        "category_id": "100000",
+        "category_name": "Efectos de video",
+        "adjust_params": [
+          {
+            "name": "effects_adjust_luminance",
+            "value": 0.5,
+            "default_value": 0.5
+          },
+          {
+            "name": "effects_adjust_size",
+            "value": 0.5,
+            "default_value": 0.5
+          }
+        ]
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "negative_color": "#EC1D1D",
+      "negative_rgb_color": [
+        0.9254902005195618,
+        0.11372549086809158,
+        0.11372549086809158
+      ]
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5,
+      "min_neutral_segments": 1
+    },
+    "margins": {
+      "max_chars_per_line": 20,
+      "max_words_per_line": 4
+    }
+  },
+  "dr. jose podólogo": {
+    "name": "Letra Jose Podólogo",
+    "description": "Estilo de Jose Podólogo: Aglatia blanco arriba (con palabras en rojo dolor o amarillo clave), Bluemun-SemiBold amarillo abajo en palabras destacadas con descansos, y clicks de audio sincronizados exclusivamente en las destacadas Bluemun.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Aglatia",
+      "font_path": "Aglatia.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "negative_color": "#EC1D1D",
+      "negative_rgb_color": [
+        0.9254902005195618,
+        0.11372549086809158,
+        0.11372549086809158
+      ],
+      "highlight_color": "#F4C70F",
+      "highlight_rgb_color": [
+        0.95686274766922,
+        0.7803921699523926,
+        0.05882352963089943
+      ],
+      "font_size": 9.0,
+      "y": -0.11634766240146056,
+      "letter_spacing": -0.05,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "Bluemun-SemiBold",
+      "font_path": "Bluemun-SemiBold.ttf",
+      "color": "#F4C70F",
+      "rgb_color": [
+        0.95686274766922,
+        0.7803921699523926,
+        0.05882352963089943
+      ],
+      "font_size": 19.5,
+      "y": -0.1988648662533823,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "name": "Aparición progresiva",
+        "resource_id": "6724916044072227332",
+        "category_id": "ruchang",
+        "category_name": "Entrada",
+        "type": "in",
+        "duration": 466666,
+        "path": ""
+      },
+      "video_effect": {
+        "enabled": true,
+        "resource_id": "7409873342792043781",
+        "name": "Brillo 2",
+        "category_id": "100000",
+        "category_name": "Efectos de video",
+        "adjust_params": [
+          {
+            "name": "effects_adjust_luminance",
+            "value": 0.5,
+            "default_value": 0.5
+          },
+          {
+            "name": "effects_adjust_size",
+            "value": 0.5,
+            "default_value": 0.5
+          }
+        ]
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "negative_color": "#EC1D1D",
+      "negative_rgb_color": [
+        0.9254902005195618,
+        0.11372549086809158,
+        0.11372549086809158
+      ]
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5,
+      "min_neutral_segments": 1
+    },
+    "margins": {
+      "max_chars_per_line": 20,
+      "max_words_per_line": 4
+    }
+  },
+  "jose_podologo": {
+    "name": "Letra Jose Podólogo",
+    "description": "Estilo de Jose Podólogo: Aglatia blanco arriba (con palabras en rojo dolor o amarillo clave), Bluemun-SemiBold amarillo abajo en palabras destacadas con descansos, y clicks de audio sincronizados exclusivamente en las destacadas Bluemun.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Aglatia",
+      "font_path": "Aglatia.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "negative_color": "#EC1D1D",
+      "negative_rgb_color": [
+        0.9254902005195618,
+        0.11372549086809158,
+        0.11372549086809158
+      ],
+      "highlight_color": "#F4C70F",
+      "highlight_rgb_color": [
+        0.95686274766922,
+        0.7803921699523926,
+        0.05882352963089943
+      ],
+      "font_size": 9.0,
+      "y": -0.11634766240146056,
+      "letter_spacing": -0.05,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "Bluemun-SemiBold",
+      "font_path": "Bluemun-SemiBold.ttf",
+      "color": "#F4C70F",
+      "rgb_color": [
+        0.95686274766922,
+        0.7803921699523926,
+        0.05882352963089943
+      ],
+      "font_size": 19.5,
+      "y": -0.1988648662533823,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "name": "Aparición progresiva",
+        "resource_id": "6724916044072227332",
+        "category_id": "ruchang",
+        "category_name": "Entrada",
+        "type": "in",
+        "duration": 466666,
+        "path": ""
+      },
+      "video_effect": {
+        "enabled": true,
+        "resource_id": "7409873342792043781",
+        "name": "Brillo 2",
+        "category_id": "100000",
+        "category_name": "Efectos de video",
+        "adjust_params": [
+          {
+            "name": "effects_adjust_luminance",
+            "value": 0.5,
+            "default_value": 0.5
+          },
+          {
+            "name": "effects_adjust_size",
+            "value": 0.5,
+            "default_value": 0.5
+          }
+        ]
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "negative_color": "#EC1D1D",
+      "negative_rgb_color": [
+        0.9254902005195618,
+        0.11372549086809158,
+        0.11372549086809158
+      ]
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5,
+      "min_neutral_segments": 1
+    },
+    "margins": {
+      "max_chars_per_line": 20,
+      "max_words_per_line": 4
+    }
+  },
+  "deditos": {
+    "name": "Letra Deditos Barefoot",
+    "description": "Estilo Deditos Barefoot: Lilita One blanco arriba, Lilita One naranja abajo con animación Mini zoom, sonido de click y soporte para palabras destacadas solas.",
+    "layout": "dual",
+    "allow_solo_highlights": true,
+    "max_solo_highlights": 3,
+    "top": {
+      "font_name": "Lilita One",
+      "font_title": "Lilita One",
+      "font_path": "LilitaOne-Regular.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "y": -0.056567505720824,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "Lilita One",
+      "font_title": "Lilita One",
+      "font_path": "LilitaOne-Regular.ttf",
+      "color": "#FB8E48",
+      "rgb_color": [
+        0.984313726425171,
+        0.556862771511078,
+        0.2823529541492462
+      ],
+      "font_size": 21.0,
+      "y": -0.145812356979405,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "name": "Mini zoom",
+        "resource_id": "6763469998330483213",
+        "category_id": "ruchang",
+        "category_name": "Entrada",
+        "type": "in",
+        "duration": 500000,
+        "path": ""
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7012964487075806
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "deditos barefoot": {
+    "name": "Letra Deditos Barefoot",
+    "description": "Estilo Deditos Barefoot: Lilita One blanco arriba, Lilita One naranja abajo con animación Mini zoom, sonido de click y soporte para palabras destacadas solas.",
+    "layout": "dual",
+    "allow_solo_highlights": true,
+    "max_solo_highlights": 3,
+    "top": {
+      "font_name": "Lilita One",
+      "font_title": "Lilita One",
+      "font_path": "LilitaOne-Regular.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "y": -0.056567505720824,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "Lilita One",
+      "font_title": "Lilita One",
+      "font_path": "LilitaOne-Regular.ttf",
+      "color": "#FB8E48",
+      "rgb_color": [
+        0.984313726425171,
+        0.556862771511078,
+        0.2823529541492462
+      ],
+      "font_size": 21.0,
+      "y": -0.145812356979405,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "name": "Mini zoom",
+        "resource_id": "6763469998330483213",
+        "category_id": "ruchang",
+        "category_name": "Entrada",
+        "type": "in",
+        "duration": 500000,
+        "path": ""
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7012964487075806
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "deditos_barefoot": {
+    "name": "Letra Deditos Barefoot",
+    "description": "Estilo Deditos Barefoot: Lilita One blanco arriba, Lilita One naranja abajo con animación Mini zoom, sonido de click y soporte para palabras destacadas solas.",
+    "layout": "dual",
+    "allow_solo_highlights": true,
+    "max_solo_highlights": 3,
+    "top": {
+      "font_name": "Lilita One",
+      "font_title": "Lilita One",
+      "font_path": "LilitaOne-Regular.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "y": -0.056567505720824,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "bottom": {
+      "font_name": "Lilita One",
+      "font_title": "Lilita One",
+      "font_path": "LilitaOne-Regular.ttf",
+      "color": "#FB8E48",
+      "rgb_color": [
+        0.984313726425171,
+        0.556862771511078,
+        0.2823529541492462
+      ],
+      "font_size": 21.0,
+      "y": -0.145812356979405,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "name": "Mini zoom",
+        "resource_id": "6763469998330483213",
+        "category_id": "ruchang",
+        "category_name": "Entrada",
+        "type": "in",
+        "duration": 500000,
+        "path": ""
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7012964487075806
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "emilia": {
+    "name": "Letra Emilia",
+    "description": "Estilo de 2 capas de Emilia: Neue Helvena blanco arriba, Karelle DEMO amarillo abajo con animación Mini zoom, stickers de CapCut sincronizados y sonido de click.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Neue Helvena Semibold",
+      "font_path": "NeueHelvena-Semibold-Exfont7e79.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 10.0,
+      "y": -0.2293908837228591,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Karelle DEMO",
+      "font_path": "Karelle DEMO.otf",
+      "color": "#ffdc6d",
+      "rgb_color": [
+        1.0,
+        0.8627451062202454,
+        0.4274509847164154
+      ],
+      "font_size": 12.0,
+      "y": -0.3224052149238329,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 466666,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "stickers": {
+      "enabled": true,
+      "mode": "cycle",
+      "pool": [
+        {
+          "name": "Doodle EN Hand Drawn Speed Reaction Line",
+          "resource_id": "7562803730404609285",
+          "sticker_id": "7562803730404609285",
+          "path": "",
+          "category_id": "123456",
+          "category_name": "Stickers",
+          "icon_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/b995ae86c7b2416fbac89e15cedce3cd~tplv-j6daoa426t-resize:0:0.webp?x-expires=1815947522&x-signature=89cmgzt1bpxJQSHvMoBVatxwIx0%3D",
+          "preview_cover_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/b995ae86c7b2416fbac89e15cedce3cd~tplv-j6daoa426t-resize:0:0.webp?x-expires=1815947522&x-signature=89cmgzt1bpxJQSHvMoBVatxwIx0%3D",
+          "clip": {
+            "transform": {
+              "x": 0.52,
+              "y": -0.25
+            },
+            "scale": {
+              "x": 0.6407057522655706,
+              "y": 0.6407057522655706
+            },
+            "rotation": 0.0
+          }
+        },
+        {
+          "name": "Simple Icon En - Curly Line",
+          "resource_id": "7468646543625588021",
+          "sticker_id": "7468646543625588021",
+          "path": "",
+          "category_id": "123456",
+          "category_name": "Stickers",
+          "icon_url": "https://p16-heycan-image-sign-sg.ibyteimg.com/tos-alisg-i-fhsjxsyzit-sg/a8722494ed884789a5c216fedacddcc2~tplv-fhsjxsyzit-resize:0:0.webp?x-expires=1815947422&x-signature=Qu3aks0qMloE1TU%2BsPHDzBijHT8%3D",
+          "preview_cover_url": "https://p16-heycan-image-sign-sg.ibyteimg.com/tos-alisg-i-fhsjxsyzit-sg/a8722494ed884789a5c216fedacddcc2~tplv-fhsjxsyzit-resize:0:0.webp?x-expires=1815947422&x-signature=Qu3aks0qMloE1TU%2BsPHDzBijHT8%3D",
+          "clip": {
+            "transform": {
+              "x": 0.12,
+              "y": -0.4
+            },
+            "scale": {
+              "x": 1.2,
+              "y": 1.2
+            },
+            "rotation": 0.0
+          }
+        }
+      ]
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "letra emilia": {
+    "name": "Letra Emilia",
+    "description": "Estilo de 2 capas de Emilia: Neue Helvena blanco arriba, Karelle DEMO amarillo abajo con animación Mini zoom, stickers de CapCut sincronizados y sonido de click.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Neue Helvena Semibold",
+      "font_path": "NeueHelvena-Semibold-Exfont7e79.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 10.0,
+      "y": -0.2293908837228591,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Karelle DEMO",
+      "font_path": "Karelle DEMO.otf",
+      "color": "#ffdc6d",
+      "rgb_color": [
+        1.0,
+        0.8627451062202454,
+        0.4274509847164154
+      ],
+      "font_size": 12.0,
+      "y": -0.3224052149238329,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 466666,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "stickers": {
+      "enabled": true,
+      "mode": "cycle",
+      "pool": [
+        {
+          "name": "Doodle EN Hand Drawn Speed Reaction Line",
+          "resource_id": "7562803730404609285",
+          "sticker_id": "7562803730404609285",
+          "path": "",
+          "category_id": "123456",
+          "category_name": "Stickers",
+          "icon_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/b995ae86c7b2416fbac89e15cedce3cd~tplv-j6daoa426t-resize:0:0.webp?x-expires=1815947522&x-signature=89cmgzt1bpxJQSHvMoBVatxwIx0%3D",
+          "preview_cover_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/b995ae86c7b2416fbac89e15cedce3cd~tplv-j6daoa426t-resize:0:0.webp?x-expires=1815947522&x-signature=89cmgzt1bpxJQSHvMoBVatxwIx0%3D",
+          "clip": {
+            "transform": {
+              "x": 0.52,
+              "y": -0.25
+            },
+            "scale": {
+              "x": 0.6407057522655706,
+              "y": 0.6407057522655706
+            },
+            "rotation": 0.0
+          }
+        },
+        {
+          "name": "Simple Icon En - Curly Line",
+          "resource_id": "7468646543625588021",
+          "sticker_id": "7468646543625588021",
+          "path": "",
+          "category_id": "123456",
+          "category_name": "Stickers",
+          "icon_url": "https://p16-heycan-image-sign-sg.ibyteimg.com/tos-alisg-i-fhsjxsyzit-sg/a8722494ed884789a5c216fedacddcc2~tplv-fhsjxsyzit-resize:0:0.webp?x-expires=1815947422&x-signature=Qu3aks0qMloE1TU%2BsPHDzBijHT8%3D",
+          "preview_cover_url": "https://p16-heycan-image-sign-sg.ibyteimg.com/tos-alisg-i-fhsjxsyzit-sg/a8722494ed884789a5c216fedacddcc2~tplv-fhsjxsyzit-resize:0:0.webp?x-expires=1815947422&x-signature=Qu3aks0qMloE1TU%2BsPHDzBijHT8%3D",
+          "clip": {
+            "transform": {
+              "x": 0.12,
+              "y": -0.4
+            },
+            "scale": {
+              "x": 1.2,
+              "y": 1.2
+            },
+            "rotation": 0.0
+          }
+        }
+      ]
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "letra_emilia": {
+    "name": "Letra Emilia",
+    "description": "Estilo de 2 capas de Emilia: Neue Helvena blanco arriba, Karelle DEMO amarillo abajo con animación Mini zoom, stickers de CapCut sincronizados y sonido de click.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Neue Helvena Semibold",
+      "font_path": "NeueHelvena-Semibold-Exfont7e79.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 10.0,
+      "y": -0.2293908837228591,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Karelle DEMO",
+      "font_path": "Karelle DEMO.otf",
+      "color": "#ffdc6d",
+      "rgb_color": [
+        1.0,
+        0.8627451062202454,
+        0.4274509847164154
+      ],
+      "font_size": 12.0,
+      "y": -0.3224052149238329,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 466666,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "stickers": {
+      "enabled": true,
+      "mode": "cycle",
+      "pool": [
+        {
+          "name": "Doodle EN Hand Drawn Speed Reaction Line",
+          "resource_id": "7562803730404609285",
+          "sticker_id": "7562803730404609285",
+          "path": "",
+          "category_id": "123456",
+          "category_name": "Stickers",
+          "icon_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/b995ae86c7b2416fbac89e15cedce3cd~tplv-j6daoa426t-resize:0:0.webp?x-expires=1815947522&x-signature=89cmgzt1bpxJQSHvMoBVatxwIx0%3D",
+          "preview_cover_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/b995ae86c7b2416fbac89e15cedce3cd~tplv-j6daoa426t-resize:0:0.webp?x-expires=1815947522&x-signature=89cmgzt1bpxJQSHvMoBVatxwIx0%3D",
+          "clip": {
+            "transform": {
+              "x": 0.52,
+              "y": -0.25
+            },
+            "scale": {
+              "x": 0.6407057522655706,
+              "y": 0.6407057522655706
+            },
+            "rotation": 0.0
+          }
+        },
+        {
+          "name": "Simple Icon En - Curly Line",
+          "resource_id": "7468646543625588021",
+          "sticker_id": "7468646543625588021",
+          "path": "",
+          "category_id": "123456",
+          "category_name": "Stickers",
+          "icon_url": "https://p16-heycan-image-sign-sg.ibyteimg.com/tos-alisg-i-fhsjxsyzit-sg/a8722494ed884789a5c216fedacddcc2~tplv-fhsjxsyzit-resize:0:0.webp?x-expires=1815947422&x-signature=Qu3aks0qMloE1TU%2BsPHDzBijHT8%3D",
+          "preview_cover_url": "https://p16-heycan-image-sign-sg.ibyteimg.com/tos-alisg-i-fhsjxsyzit-sg/a8722494ed884789a5c216fedacddcc2~tplv-fhsjxsyzit-resize:0:0.webp?x-expires=1815947422&x-signature=Qu3aks0qMloE1TU%2BsPHDzBijHT8%3D",
+          "clip": {
+            "transform": {
+              "x": 0.12,
+              "y": -0.4
+            },
+            "scale": {
+              "x": 1.2,
+              "y": 1.2
+            },
+            "rotation": 0.0
+          }
+        }
+      ]
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "alvaro": {
+    "name": "Letra Alvaro",
+    "description": "Estilo de 2 capas de Alvaro: GC GRIND blanco arriba, GC GRIND coral abajo con animación Corte con láser y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "GC GRIND Extra Bold",
+      "font_title": "GC GRIND Extra Bold",
+      "font_path": "GC GRIND.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.38,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5046728849411011,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "GC GRIND Extra Bold",
+      "font_title": "GC GRIND Extra Bold",
+      "font_path": "GC GRIND.otf",
+      "color": "#FDB2A0",
+      "rgb_color": [
+        0.9921568632125854,
+        0.6980392336845398,
+        0.627450980424881
+      ],
+      "font_size": 14.38,
+      "y": -0.09942363202571869,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5046728849411011,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "letra alvaro": {
+    "name": "Letra Alvaro",
+    "description": "Estilo de 2 capas de Alvaro: GC GRIND blanco arriba, GC GRIND coral abajo con animación Corte con láser y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "GC GRIND Extra Bold",
+      "font_title": "GC GRIND Extra Bold",
+      "font_path": "GC GRIND.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.38,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5046728849411011,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "GC GRIND Extra Bold",
+      "font_title": "GC GRIND Extra Bold",
+      "font_path": "GC GRIND.otf",
+      "color": "#FDB2A0",
+      "rgb_color": [
+        0.9921568632125854,
+        0.6980392336845398,
+        0.627450980424881
+      ],
+      "font_size": 14.38,
+      "y": -0.09942363202571869,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5046728849411011,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "pequenos": {
+    "name": "Letra de Pequeños Cuidados",
+    "description": "Estilo de 2 capas de Pequeños Cuidados: Parafina blanco arriba, Chewy Regular amarillo abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Parafina Bold S",
+      "font_title": "Parafina Bold S",
+      "font_path": "Parafina Bold S.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.11634766240146056,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Chewy Regular",
+      "font_title": "Chewy Regular",
+      "font_path": "Chewy-Regular.ttf",
+      "color": "#fee872",
+      "rgb_color": [
+        0.9960784316062927,
+        0.9098039269447327,
+        0.4470588266849518
+      ],
+      "font_size": 21.97653958944279,
+      "y": -0.23921068757903077,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 233333,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.5647059082984924,
+              0.4627451002597809,
+              0.18039216101169586
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.66
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 12
+    }
+  },
+  "pequenos_cuidados": {
+    "name": "Letra de Pequeños Cuidados",
+    "description": "Estilo de 2 capas de Pequeños Cuidados: Parafina blanco arriba, Chewy Regular amarillo abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Parafina Bold S",
+      "font_title": "Parafina Bold S",
+      "font_path": "Parafina Bold S.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.11634766240146056,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Chewy Regular",
+      "font_title": "Chewy Regular",
+      "font_path": "Chewy-Regular.ttf",
+      "color": "#fee872",
+      "rgb_color": [
+        0.9960784316062927,
+        0.9098039269447327,
+        0.4470588266849518
+      ],
+      "font_size": 21.97653958944279,
+      "y": -0.23921068757903077,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 233333,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.5647059082984924,
+              0.4627451002597809,
+              0.18039216101169586
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.66
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 12
+    }
+  },
+  "pequenos cuidados": {
+    "name": "Letra de Pequeños Cuidados",
+    "description": "Estilo de 2 capas de Pequeños Cuidados: Parafina blanco arriba, Chewy Regular amarillo abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Parafina Bold S",
+      "font_title": "Parafina Bold S",
+      "font_path": "Parafina Bold S.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.11634766240146056,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Chewy Regular",
+      "font_title": "Chewy Regular",
+      "font_path": "Chewy-Regular.ttf",
+      "color": "#fee872",
+      "rgb_color": [
+        0.9960784316062927,
+        0.9098039269447327,
+        0.4470588266849518
+      ],
+      "font_size": 21.97653958944279,
+      "y": -0.23921068757903077,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 233333,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.5647059082984924,
+              0.4627451002597809,
+              0.18039216101169586
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.66
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 12
+    }
+  },
+  "pequeños cuidados": {
+    "name": "Letra de Pequeños Cuidados",
+    "description": "Estilo de 2 capas de Pequeños Cuidados: Parafina blanco arriba, Chewy Regular amarillo abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Parafina Bold S",
+      "font_title": "Parafina Bold S",
+      "font_path": "Parafina Bold S.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.11634766240146056,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Chewy Regular",
+      "font_title": "Chewy Regular",
+      "font_path": "Chewy-Regular.ttf",
+      "color": "#fee872",
+      "rgb_color": [
+        0.9960784316062927,
+        0.9098039269447327,
+        0.4470588266849518
+      ],
+      "font_size": 21.97653958944279,
+      "y": -0.23921068757903077,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 233333,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.5647059082984924,
+              0.4627451002597809,
+              0.18039216101169586
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.66
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 12
+    }
+  },
+  "letra de pequenos cuidados": {
+    "name": "Letra de Pequeños Cuidados",
+    "description": "Estilo de 2 capas de Pequeños Cuidados: Parafina blanco arriba, Chewy Regular amarillo abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Parafina Bold S",
+      "font_title": "Parafina Bold S",
+      "font_path": "Parafina Bold S.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.11634766240146056,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Chewy Regular",
+      "font_title": "Chewy Regular",
+      "font_path": "Chewy-Regular.ttf",
+      "color": "#fee872",
+      "rgb_color": [
+        0.9960784316062927,
+        0.9098039269447327,
+        0.4470588266849518
+      ],
+      "font_size": 21.97653958944279,
+      "y": -0.23921068757903077,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 233333,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.5647059082984924,
+              0.4627451002597809,
+              0.18039216101169586
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.66
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 12
+    }
+  },
+  "letra de pequeños cuidados": {
+    "name": "Letra de Pequeños Cuidados",
+    "description": "Estilo de 2 capas de Pequeños Cuidados: Parafina blanco arriba, Chewy Regular amarillo abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Parafina Bold S",
+      "font_title": "Parafina Bold S",
+      "font_path": "Parafina Bold S.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.11634766240146056,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Chewy Regular",
+      "font_title": "Chewy Regular",
+      "font_path": "Chewy-Regular.ttf",
+      "color": "#fee872",
+      "rgb_color": [
+        0.9960784316062927,
+        0.9098039269447327,
+        0.4470588266849518
+      ],
+      "font_size": 21.97653958944279,
+      "y": -0.23921068757903077,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 233333,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.5647059082984924,
+              0.4627451002597809,
+              0.18039216101169586
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.66
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 12
+    }
+  },
+  "letra pequenos cuidados": {
+    "name": "Letra de Pequeños Cuidados",
+    "description": "Estilo de 2 capas de Pequeños Cuidados: Parafina blanco arriba, Chewy Regular amarillo abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Parafina Bold S",
+      "font_title": "Parafina Bold S",
+      "font_path": "Parafina Bold S.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.11634766240146056,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Chewy Regular",
+      "font_title": "Chewy Regular",
+      "font_path": "Chewy-Regular.ttf",
+      "color": "#fee872",
+      "rgb_color": [
+        0.9960784316062927,
+        0.9098039269447327,
+        0.4470588266849518
+      ],
+      "font_size": 21.97653958944279,
+      "y": -0.23921068757903077,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 233333,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.5647059082984924,
+              0.4627451002597809,
+              0.18039216101169586
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.66
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 12
+    }
+  },
+  "letra pequeños cuidados": {
+    "name": "Letra de Pequeños Cuidados",
+    "description": "Estilo de 2 capas de Pequeños Cuidados: Parafina blanco arriba, Chewy Regular amarillo abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Parafina Bold S",
+      "font_title": "Parafina Bold S",
+      "font_path": "Parafina Bold S.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.11634766240146056,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Chewy Regular",
+      "font_title": "Chewy Regular",
+      "font_path": "Chewy-Regular.ttf",
+      "color": "#fee872",
+      "rgb_color": [
+        0.9960784316062927,
+        0.9098039269447327,
+        0.4470588266849518
+      ],
+      "font_size": 21.97653958944279,
+      "y": -0.23921068757903077,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 233333,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.5647059082984924,
+              0.4627451002597809,
+              0.18039216101169586
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.66
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 12
+    }
+  },
+  "ana": {
+    "name": "Letra Ana Otorrino",
+    "description": "Estilo de Ana Otorrino: Plantilla nativa CapCut con animación flotante suave, texto base en Liliana Bold blanco y palabras destacadas en Liliana Black amarillo (#FDE69A) dentro de la misma línea cada 3 a 5 segundos con descansos.",
+    "layout": "template",
+    "template": {
+      "name": "基础上浮",
+      "effect_id": "7331663549263023366",
+      "resource_id": "7331663549263023366",
+      "third_resource_id": "7262313922844168705",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/7331663549263023366/968c3676a4d0c6cd17c59e895224e370",
+      "layer_name": "D6B3869B-42B9-43ED-8435-C814651D7122",
+      "type": "text_template_subtitle"
+    },
+    "animation": {
+      "type": "loop",
+      "duration": 500000,
+      "resource_id": "7258195155394499074",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/55651785/cd586e4d24e5b2b2a499b01d89ac5ad9"
+    },
+    "top": {
+      "font_name": "Liliana Bold",
+      "font_path": "Liliana-Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.049913544668588106,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "highlight": {
+      "font_name": "Liliana Black",
+      "font_path": "Liliana-Black.otf",
+      "color": "#FDE69A",
+      "rgb_color": [
+        0.9921568632125854,
+        0.901960790157318,
+        0.6039215922355652
+      ],
+      "font_size": 11.0,
+      "useLetterColor": true,
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": false,
+      "name": "Title Swoosh",
+      "path": "",
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 5.0,
+      "min_neutral_segments": 1
+    },
+    "margins": {
+      "max_chars_per_line": 28,
+      "max_words_per_line": 5
+    }
+  },
+  "ana_otorrino": {
+    "name": "Letra Ana Otorrino",
+    "description": "Estilo de Ana Otorrino: Plantilla nativa CapCut con animación flotante suave, texto base en Liliana Bold blanco y palabras destacadas en Liliana Black amarillo (#FDE69A) dentro de la misma línea cada 3 a 5 segundos con descansos.",
+    "layout": "template",
+    "template": {
+      "name": "基础上浮",
+      "effect_id": "7331663549263023366",
+      "resource_id": "7331663549263023366",
+      "third_resource_id": "7262313922844168705",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/7331663549263023366/968c3676a4d0c6cd17c59e895224e370",
+      "layer_name": "D6B3869B-42B9-43ED-8435-C814651D7122",
+      "type": "text_template_subtitle"
+    },
+    "animation": {
+      "type": "loop",
+      "duration": 500000,
+      "resource_id": "7258195155394499074",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/55651785/cd586e4d24e5b2b2a499b01d89ac5ad9"
+    },
+    "top": {
+      "font_name": "Liliana Bold",
+      "font_path": "Liliana-Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.049913544668588106,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "highlight": {
+      "font_name": "Liliana Black",
+      "font_path": "Liliana-Black.otf",
+      "color": "#FDE69A",
+      "rgb_color": [
+        0.9921568632125854,
+        0.901960790157318,
+        0.6039215922355652
+      ],
+      "font_size": 11.0,
+      "useLetterColor": true,
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": false,
+      "name": "Title Swoosh",
+      "path": "",
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 5.0,
+      "min_neutral_segments": 1
+    },
+    "margins": {
+      "max_chars_per_line": 28,
+      "max_words_per_line": 5
+    }
+  },
+  "ana otorrino": {
+    "name": "Letra Ana Otorrino",
+    "description": "Estilo de Ana Otorrino: Plantilla nativa CapCut con animación flotante suave, texto base en Liliana Bold blanco y palabras destacadas en Liliana Black amarillo (#FDE69A) dentro de la misma línea cada 3 a 5 segundos con descansos.",
+    "layout": "template",
+    "template": {
+      "name": "基础上浮",
+      "effect_id": "7331663549263023366",
+      "resource_id": "7331663549263023366",
+      "third_resource_id": "7262313922844168705",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/7331663549263023366/968c3676a4d0c6cd17c59e895224e370",
+      "layer_name": "D6B3869B-42B9-43ED-8435-C814651D7122",
+      "type": "text_template_subtitle"
+    },
+    "animation": {
+      "type": "loop",
+      "duration": 500000,
+      "resource_id": "7258195155394499074",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/55651785/cd586e4d24e5b2b2a499b01d89ac5ad9"
+    },
+    "top": {
+      "font_name": "Liliana Bold",
+      "font_path": "Liliana-Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.049913544668588106,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "highlight": {
+      "font_name": "Liliana Black",
+      "font_path": "Liliana-Black.otf",
+      "color": "#FDE69A",
+      "rgb_color": [
+        0.9921568632125854,
+        0.901960790157318,
+        0.6039215922355652
+      ],
+      "font_size": 11.0,
+      "useLetterColor": true,
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": false,
+      "name": "Title Swoosh",
+      "path": "",
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 5.0,
+      "min_neutral_segments": 1
+    },
+    "margins": {
+      "max_chars_per_line": 28,
+      "max_words_per_line": 5
+    }
+  },
+  "letra ana": {
+    "name": "Letra Ana Otorrino",
+    "description": "Estilo de Ana Otorrino: Plantilla nativa CapCut con animación flotante suave, texto base en Liliana Bold blanco y palabras destacadas en Liliana Black amarillo (#FDE69A) dentro de la misma línea cada 3 a 5 segundos con descansos.",
+    "layout": "template",
+    "template": {
+      "name": "基础上浮",
+      "effect_id": "7331663549263023366",
+      "resource_id": "7331663549263023366",
+      "third_resource_id": "7262313922844168705",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/7331663549263023366/968c3676a4d0c6cd17c59e895224e370",
+      "layer_name": "D6B3869B-42B9-43ED-8435-C814651D7122",
+      "type": "text_template_subtitle"
+    },
+    "animation": {
+      "type": "loop",
+      "duration": 500000,
+      "resource_id": "7258195155394499074",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/55651785/cd586e4d24e5b2b2a499b01d89ac5ad9"
+    },
+    "top": {
+      "font_name": "Liliana Bold",
+      "font_path": "Liliana-Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.049913544668588106,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "highlight": {
+      "font_name": "Liliana Black",
+      "font_path": "Liliana-Black.otf",
+      "color": "#FDE69A",
+      "rgb_color": [
+        0.9921568632125854,
+        0.901960790157318,
+        0.6039215922355652
+      ],
+      "font_size": 11.0,
+      "useLetterColor": true,
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": false,
+      "name": "Title Swoosh",
+      "path": "",
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 5.0,
+      "min_neutral_segments": 1
+    },
+    "margins": {
+      "max_chars_per_line": 28,
+      "max_words_per_line": 5
+    }
+  },
+  "letra ana otorrino": {
+    "name": "Letra Ana Otorrino",
+    "description": "Estilo de Ana Otorrino: Plantilla nativa CapCut con animación flotante suave, texto base en Liliana Bold blanco y palabras destacadas en Liliana Black amarillo (#FDE69A) dentro de la misma línea cada 3 a 5 segundos con descansos.",
+    "layout": "template",
+    "template": {
+      "name": "基础上浮",
+      "effect_id": "7331663549263023366",
+      "resource_id": "7331663549263023366",
+      "third_resource_id": "7262313922844168705",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/7331663549263023366/968c3676a4d0c6cd17c59e895224e370",
+      "layer_name": "D6B3869B-42B9-43ED-8435-C814651D7122",
+      "type": "text_template_subtitle"
+    },
+    "animation": {
+      "type": "loop",
+      "duration": 500000,
+      "resource_id": "7258195155394499074",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/55651785/cd586e4d24e5b2b2a499b01d89ac5ad9"
+    },
+    "top": {
+      "font_name": "Liliana Bold",
+      "font_path": "Liliana-Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.049913544668588106,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "highlight": {
+      "font_name": "Liliana Black",
+      "font_path": "Liliana-Black.otf",
+      "color": "#FDE69A",
+      "rgb_color": [
+        0.9921568632125854,
+        0.901960790157318,
+        0.6039215922355652
+      ],
+      "font_size": 11.0,
+      "useLetterColor": true,
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": false,
+      "name": "Title Swoosh",
+      "path": "",
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 5.0,
+      "min_neutral_segments": 1
+    },
+    "margins": {
+      "max_chars_per_line": 28,
+      "max_words_per_line": 5
+    }
+  },
+  "letra_ana": {
+    "name": "Letra Ana Otorrino",
+    "description": "Estilo de Ana Otorrino: Plantilla nativa CapCut con animación flotante suave, texto base en Liliana Bold blanco y palabras destacadas en Liliana Black amarillo (#FDE69A) dentro de la misma línea cada 3 a 5 segundos con descansos.",
+    "layout": "template",
+    "template": {
+      "name": "基础上浮",
+      "effect_id": "7331663549263023366",
+      "resource_id": "7331663549263023366",
+      "third_resource_id": "7262313922844168705",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/7331663549263023366/968c3676a4d0c6cd17c59e895224e370",
+      "layer_name": "D6B3869B-42B9-43ED-8435-C814651D7122",
+      "type": "text_template_subtitle"
+    },
+    "animation": {
+      "type": "loop",
+      "duration": 500000,
+      "resource_id": "7258195155394499074",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/55651785/cd586e4d24e5b2b2a499b01d89ac5ad9"
+    },
+    "top": {
+      "font_name": "Liliana Bold",
+      "font_path": "Liliana-Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.049913544668588106,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "highlight": {
+      "font_name": "Liliana Black",
+      "font_path": "Liliana-Black.otf",
+      "color": "#FDE69A",
+      "rgb_color": [
+        0.9921568632125854,
+        0.901960790157318,
+        0.6039215922355652
+      ],
+      "font_size": 11.0,
+      "useLetterColor": true,
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": false,
+      "name": "Title Swoosh",
+      "path": "",
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 5.0,
+      "min_neutral_segments": 1
+    },
+    "margins": {
+      "max_chars_per_line": 28,
+      "max_words_per_line": 5
+    }
+  },
+  "letra_ana_otorrino": {
+    "name": "Letra Ana Otorrino",
+    "description": "Estilo de Ana Otorrino: Plantilla nativa CapCut con animación flotante suave, texto base en Liliana Bold blanco y palabras destacadas en Liliana Black amarillo (#FDE69A) dentro de la misma línea cada 3 a 5 segundos con descansos.",
+    "layout": "template",
+    "template": {
+      "name": "基础上浮",
+      "effect_id": "7331663549263023366",
+      "resource_id": "7331663549263023366",
+      "third_resource_id": "7262313922844168705",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/7331663549263023366/968c3676a4d0c6cd17c59e895224e370",
+      "layer_name": "D6B3869B-42B9-43ED-8435-C814651D7122",
+      "type": "text_template_subtitle"
+    },
+    "animation": {
+      "type": "loop",
+      "duration": 500000,
+      "resource_id": "7258195155394499074",
+      "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/55651785/cd586e4d24e5b2b2a499b01d89ac5ad9"
+    },
+    "top": {
+      "font_name": "Liliana Bold",
+      "font_path": "Liliana-Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "y": -0.049913544668588106,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "highlight": {
+      "font_name": "Liliana Black",
+      "font_path": "Liliana-Black.otf",
+      "color": "#FDE69A",
+      "rgb_color": [
+        0.9921568632125854,
+        0.901960790157318,
+        0.6039215922355652
+      ],
+      "font_size": 11.0,
+      "useLetterColor": true,
+      "shadow": {
+        "alpha": 0.9206600189208984,
+        "angle": -28.152999877929688,
+        "diffuse": 0.017568999901413918,
+        "feather": 0.017568999901413918,
+        "distance": 4.902493000030518,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      }
+    },
+    "sound_fx": {
+      "enabled": false,
+      "name": "Title Swoosh",
+      "path": "",
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 5.0,
+      "min_neutral_segments": 1
+    },
+    "margins": {
+      "max_chars_per_line": 28,
+      "max_words_per_line": 5
+    }
+  },
+  "cuidus": {
+    "name": "Letra CUIDUS",
+    "description": "Estilo de 2 capas de CUIDUS: Gentium Plus Italic blanco arriba, Gentium Plus Bold rosa suave (#E5C7D2) abajo con animación Descenso y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gentium Plus Italic",
+      "font_title": "Gentium Plus Italic",
+      "font_path": "GentiumPlus-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 15.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Gentium Plus Bold",
+      "font_title": "Gentium Plus Bold",
+      "font_path": "GentiumPlus-Bold.ttf",
+      "color": "#e5c7d2",
+      "rgb_color": [
+        0.898039221763611,
+        0.7803921699523926,
+        0.8235294222831726
+      ],
+      "font_size": 18.0,
+      "y": -0.072675872122094,
+      "scale": {
+        "x": 1.202033821399421,
+        "y": 1.202033821399421
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 100000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.5
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "letra cuidus": {
+    "name": "Letra CUIDUS",
+    "description": "Estilo de 2 capas de CUIDUS: Gentium Plus Italic blanco arriba, Gentium Plus Bold rosa suave (#E5C7D2) abajo con animación Descenso y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gentium Plus Italic",
+      "font_title": "Gentium Plus Italic",
+      "font_path": "GentiumPlus-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 15.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Gentium Plus Bold",
+      "font_title": "Gentium Plus Bold",
+      "font_path": "GentiumPlus-Bold.ttf",
+      "color": "#e5c7d2",
+      "rgb_color": [
+        0.898039221763611,
+        0.7803921699523926,
+        0.8235294222831726
+      ],
+      "font_size": 18.0,
+      "y": -0.072675872122094,
+      "scale": {
+        "x": 1.202033821399421,
+        "y": 1.202033821399421
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 100000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.5
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "letra de cuidus": {
+    "name": "Letra CUIDUS",
+    "description": "Estilo de 2 capas de CUIDUS: Gentium Plus Italic blanco arriba, Gentium Plus Bold rosa suave (#E5C7D2) abajo con animación Descenso y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gentium Plus Italic",
+      "font_title": "Gentium Plus Italic",
+      "font_path": "GentiumPlus-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 15.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Gentium Plus Bold",
+      "font_title": "Gentium Plus Bold",
+      "font_path": "GentiumPlus-Bold.ttf",
+      "color": "#e5c7d2",
+      "rgb_color": [
+        0.898039221763611,
+        0.7803921699523926,
+        0.8235294222831726
+      ],
+      "font_size": 18.0,
+      "y": -0.072675872122094,
+      "scale": {
+        "x": 1.202033821399421,
+        "y": 1.202033821399421
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 100000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.5
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "letra_cuidus": {
+    "name": "Letra CUIDUS",
+    "description": "Estilo de 2 capas de CUIDUS: Gentium Plus Italic blanco arriba, Gentium Plus Bold rosa suave (#E5C7D2) abajo con animación Descenso y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gentium Plus Italic",
+      "font_title": "Gentium Plus Italic",
+      "font_path": "GentiumPlus-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 15.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Gentium Plus Bold",
+      "font_title": "Gentium Plus Bold",
+      "font_path": "GentiumPlus-Bold.ttf",
+      "color": "#e5c7d2",
+      "rgb_color": [
+        0.898039221763611,
+        0.7803921699523926,
+        0.8235294222831726
+      ],
+      "font_size": 18.0,
+      "y": -0.072675872122094,
+      "scale": {
+        "x": 1.202033821399421,
+        "y": 1.202033821399421
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 100000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.5
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "cuidus 17": {
+    "name": "Letra CUIDUS",
+    "description": "Estilo de 2 capas de CUIDUS: Gentium Plus Italic blanco arriba, Gentium Plus Bold rosa suave (#E5C7D2) abajo con animación Descenso y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gentium Plus Italic",
+      "font_title": "Gentium Plus Italic",
+      "font_path": "GentiumPlus-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 15.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Gentium Plus Bold",
+      "font_title": "Gentium Plus Bold",
+      "font_path": "GentiumPlus-Bold.ttf",
+      "color": "#e5c7d2",
+      "rgb_color": [
+        0.898039221763611,
+        0.7803921699523926,
+        0.8235294222831726
+      ],
+      "font_size": 18.0,
+      "y": -0.072675872122094,
+      "scale": {
+        "x": 1.202033821399421,
+        "y": 1.202033821399421
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 100000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.5
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "cuidus 18": {
+    "name": "Letra CUIDUS",
+    "description": "Estilo de 2 capas de CUIDUS: Gentium Plus Italic blanco arriba, Gentium Plus Bold rosa suave (#E5C7D2) abajo con animación Descenso y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gentium Plus Italic",
+      "font_title": "Gentium Plus Italic",
+      "font_path": "GentiumPlus-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 15.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Gentium Plus Bold",
+      "font_title": "Gentium Plus Bold",
+      "font_path": "GentiumPlus-Bold.ttf",
+      "color": "#e5c7d2",
+      "rgb_color": [
+        0.898039221763611,
+        0.7803921699523926,
+        0.8235294222831726
+      ],
+      "font_size": 18.0,
+      "y": -0.072675872122094,
+      "scale": {
+        "x": 1.202033821399421,
+        "y": 1.202033821399421
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 100000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.5
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "cuidus_17": {
+    "name": "Letra CUIDUS",
+    "description": "Estilo de 2 capas de CUIDUS: Gentium Plus Italic blanco arriba, Gentium Plus Bold rosa suave (#E5C7D2) abajo con animación Descenso y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gentium Plus Italic",
+      "font_title": "Gentium Plus Italic",
+      "font_path": "GentiumPlus-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 15.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Gentium Plus Bold",
+      "font_title": "Gentium Plus Bold",
+      "font_path": "GentiumPlus-Bold.ttf",
+      "color": "#e5c7d2",
+      "rgb_color": [
+        0.898039221763611,
+        0.7803921699523926,
+        0.8235294222831726
+      ],
+      "font_size": 18.0,
+      "y": -0.072675872122094,
+      "scale": {
+        "x": 1.202033821399421,
+        "y": 1.202033821399421
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 100000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.5
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "cuidus_18": {
+    "name": "Letra CUIDUS",
+    "description": "Estilo de 2 capas de CUIDUS: Gentium Plus Italic blanco arriba, Gentium Plus Bold rosa suave (#E5C7D2) abajo con animación Descenso y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gentium Plus Italic",
+      "font_title": "Gentium Plus Italic",
+      "font_path": "GentiumPlus-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 15.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Gentium Plus Bold",
+      "font_title": "Gentium Plus Bold",
+      "font_path": "GentiumPlus-Bold.ttf",
+      "color": "#e5c7d2",
+      "rgb_color": [
+        0.898039221763611,
+        0.7803921699523926,
+        0.8235294222831726
+      ],
+      "font_size": 18.0,
+      "y": -0.072675872122094,
+      "scale": {
+        "x": 1.202033821399421,
+        "y": 1.202033821399421
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 100000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.5010438561439514,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.5
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "laura burgos": {
+    "name": "Letra Laura Burgos",
+    "description": "Estilo de 2 capas de Laura Burgos: Indivisible Regular blanco arriba, Indivisible Bold verde azulado claro (#ABC8CC) abajo con animación Aparición progresiva y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Indivisible",
+      "font_title": "Indivisible",
+      "font_path": "fonnts.com-Indivisible.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Indivisible Bold",
+      "font_title": "Indivisible Bold",
+      "font_path": "fonnts.com-Indivisible_Bold.otf",
+      "color": "#abc8cc",
+      "rgb_color": [
+        0.670588254928589,
+        0.7843137383461,
+        0.800000011920929
+      ],
+      "font_size": 14.0,
+      "y": -0.08642400801181793,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "letra laura burgos": {
+    "name": "Letra Laura Burgos",
+    "description": "Estilo de 2 capas de Laura Burgos: Indivisible Regular blanco arriba, Indivisible Bold verde azulado claro (#ABC8CC) abajo con animación Aparición progresiva y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Indivisible",
+      "font_title": "Indivisible",
+      "font_path": "fonnts.com-Indivisible.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Indivisible Bold",
+      "font_title": "Indivisible Bold",
+      "font_path": "fonnts.com-Indivisible_Bold.otf",
+      "color": "#abc8cc",
+      "rgb_color": [
+        0.670588254928589,
+        0.7843137383461,
+        0.800000011920929
+      ],
+      "font_size": 14.0,
+      "y": -0.08642400801181793,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "laura_burgos": {
+    "name": "Letra Laura Burgos",
+    "description": "Estilo de 2 capas de Laura Burgos: Indivisible Regular blanco arriba, Indivisible Bold verde azulado claro (#ABC8CC) abajo con animación Aparición progresiva y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Indivisible",
+      "font_title": "Indivisible",
+      "font_path": "fonnts.com-Indivisible.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Indivisible Bold",
+      "font_title": "Indivisible Bold",
+      "font_path": "fonnts.com-Indivisible_Bold.otf",
+      "color": "#abc8cc",
+      "rgb_color": [
+        0.670588254928589,
+        0.7843137383461,
+        0.800000011920929
+      ],
+      "font_size": 14.0,
+      "y": -0.08642400801181793,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "dra. laura burgos": {
+    "name": "Letra Laura Burgos",
+    "description": "Estilo de 2 capas de Laura Burgos: Indivisible Regular blanco arriba, Indivisible Bold verde azulado claro (#ABC8CC) abajo con animación Aparición progresiva y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Indivisible",
+      "font_title": "Indivisible",
+      "font_path": "fonnts.com-Indivisible.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Indivisible Bold",
+      "font_title": "Indivisible Bold",
+      "font_path": "fonnts.com-Indivisible_Bold.otf",
+      "color": "#abc8cc",
+      "rgb_color": [
+        0.670588254928589,
+        0.7843137383461,
+        0.800000011920929
+      ],
+      "font_size": 14.0,
+      "y": -0.08642400801181793,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "dra laura burgos": {
+    "name": "Letra Laura Burgos",
+    "description": "Estilo de 2 capas de Laura Burgos: Indivisible Regular blanco arriba, Indivisible Bold verde azulado claro (#ABC8CC) abajo con animación Aparición progresiva y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Indivisible",
+      "font_title": "Indivisible",
+      "font_path": "fonnts.com-Indivisible.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Indivisible Bold",
+      "font_title": "Indivisible Bold",
+      "font_path": "fonnts.com-Indivisible_Bold.otf",
+      "color": "#abc8cc",
+      "rgb_color": [
+        0.670588254928589,
+        0.7843137383461,
+        0.800000011920929
+      ],
+      "font_size": 14.0,
+      "y": -0.08642400801181793,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "laura 10": {
+    "name": "Letra Laura Burgos",
+    "description": "Estilo de 2 capas de Laura Burgos: Indivisible Regular blanco arriba, Indivisible Bold verde azulado claro (#ABC8CC) abajo con animación Aparición progresiva y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Indivisible",
+      "font_title": "Indivisible",
+      "font_path": "fonnts.com-Indivisible.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Indivisible Bold",
+      "font_title": "Indivisible Bold",
+      "font_path": "fonnts.com-Indivisible_Bold.otf",
+      "color": "#abc8cc",
+      "rgb_color": [
+        0.670588254928589,
+        0.7843137383461,
+        0.800000011920929
+      ],
+      "font_size": 14.0,
+      "y": -0.08642400801181793,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "letra de laura burgos": {
+    "name": "Letra Laura Burgos",
+    "description": "Estilo de 2 capas de Laura Burgos: Indivisible Regular blanco arriba, Indivisible Bold verde azulado claro (#ABC8CC) abajo con animación Aparición progresiva y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Indivisible",
+      "font_title": "Indivisible",
+      "font_path": "fonnts.com-Indivisible.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Indivisible Bold",
+      "font_title": "Indivisible Bold",
+      "font_path": "fonnts.com-Indivisible_Bold.otf",
+      "color": "#abc8cc",
+      "rgb_color": [
+        0.670588254928589,
+        0.7843137383461,
+        0.800000011920929
+      ],
+      "font_size": 14.0,
+      "y": -0.08642400801181793,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "letra_laura_burgos": {
+    "name": "Letra Laura Burgos",
+    "description": "Estilo de 2 capas de Laura Burgos: Indivisible Regular blanco arriba, Indivisible Bold verde azulado claro (#ABC8CC) abajo con animación Aparición progresiva y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Indivisible",
+      "font_title": "Indivisible",
+      "font_path": "fonnts.com-Indivisible.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Indivisible Bold",
+      "font_title": "Indivisible Bold",
+      "font_path": "fonnts.com-Indivisible_Bold.otf",
+      "color": "#abc8cc",
+      "rgb_color": [
+        0.670588254928589,
+        0.7843137383461,
+        0.800000011920929
+      ],
+      "font_size": 14.0,
+      "y": -0.08642400801181793,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "enfocavision": {
+    "name": "Letra Doctores Enfocavision",
+    "description": "Estilo de 2 capas de Doctores Enfocavision: ITC Avant Garde Demi blanco arriba, ITC Avant Garde Bold verde menta (#85FFD6) abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "ITC Avant Garde Gothic Std Demi",
+      "font_title": "ITC Avant Garde Gothic Std Demi",
+      "font_path": "ITC Avant Garde Gothic Std Demi.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 7.0,
+      "y": -0.111725608022547,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "ITC Avant Garde Gothic Std Bold",
+      "font_title": "ITC Avant Garde Gothic Std Bold",
+      "font_path": "ITC Avant Garde Gothic Std Bold.otf",
+      "color": "#85FFD6",
+      "rgb_color": [
+        0.5215686559677124,
+        1.0,
+        0.8392156958580017
+      ],
+      "font_size": 12.0,
+      "y": -0.207018040767503,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371622298914068",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 18
+    }
+  },
+  "doctores enfocavision": {
+    "name": "Letra Doctores Enfocavision",
+    "description": "Estilo de 2 capas de Doctores Enfocavision: ITC Avant Garde Demi blanco arriba, ITC Avant Garde Bold verde menta (#85FFD6) abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "ITC Avant Garde Gothic Std Demi",
+      "font_title": "ITC Avant Garde Gothic Std Demi",
+      "font_path": "ITC Avant Garde Gothic Std Demi.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 7.0,
+      "y": -0.111725608022547,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "ITC Avant Garde Gothic Std Bold",
+      "font_title": "ITC Avant Garde Gothic Std Bold",
+      "font_path": "ITC Avant Garde Gothic Std Bold.otf",
+      "color": "#85FFD6",
+      "rgb_color": [
+        0.5215686559677124,
+        1.0,
+        0.8392156958580017
+      ],
+      "font_size": 12.0,
+      "y": -0.207018040767503,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371622298914068",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 18
+    }
+  },
+  "doctores_enfocavision": {
+    "name": "Letra Doctores Enfocavision",
+    "description": "Estilo de 2 capas de Doctores Enfocavision: ITC Avant Garde Demi blanco arriba, ITC Avant Garde Bold verde menta (#85FFD6) abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "ITC Avant Garde Gothic Std Demi",
+      "font_title": "ITC Avant Garde Gothic Std Demi",
+      "font_path": "ITC Avant Garde Gothic Std Demi.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 7.0,
+      "y": -0.111725608022547,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "ITC Avant Garde Gothic Std Bold",
+      "font_title": "ITC Avant Garde Gothic Std Bold",
+      "font_path": "ITC Avant Garde Gothic Std Bold.otf",
+      "color": "#85FFD6",
+      "rgb_color": [
+        0.5215686559677124,
+        1.0,
+        0.8392156958580017
+      ],
+      "font_size": 12.0,
+      "y": -0.207018040767503,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371622298914068",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 18
+    }
+  },
+  "letra enfocavision": {
+    "name": "Letra Doctores Enfocavision",
+    "description": "Estilo de 2 capas de Doctores Enfocavision: ITC Avant Garde Demi blanco arriba, ITC Avant Garde Bold verde menta (#85FFD6) abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "ITC Avant Garde Gothic Std Demi",
+      "font_title": "ITC Avant Garde Gothic Std Demi",
+      "font_path": "ITC Avant Garde Gothic Std Demi.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 7.0,
+      "y": -0.111725608022547,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "ITC Avant Garde Gothic Std Bold",
+      "font_title": "ITC Avant Garde Gothic Std Bold",
+      "font_path": "ITC Avant Garde Gothic Std Bold.otf",
+      "color": "#85FFD6",
+      "rgb_color": [
+        0.5215686559677124,
+        1.0,
+        0.8392156958580017
+      ],
+      "font_size": 12.0,
+      "y": -0.207018040767503,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371622298914068",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 18
+    }
+  },
+  "letra doctores enfocavision": {
+    "name": "Letra Doctores Enfocavision",
+    "description": "Estilo de 2 capas de Doctores Enfocavision: ITC Avant Garde Demi blanco arriba, ITC Avant Garde Bold verde menta (#85FFD6) abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "ITC Avant Garde Gothic Std Demi",
+      "font_title": "ITC Avant Garde Gothic Std Demi",
+      "font_path": "ITC Avant Garde Gothic Std Demi.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 7.0,
+      "y": -0.111725608022547,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "ITC Avant Garde Gothic Std Bold",
+      "font_title": "ITC Avant Garde Gothic Std Bold",
+      "font_path": "ITC Avant Garde Gothic Std Bold.otf",
+      "color": "#85FFD6",
+      "rgb_color": [
+        0.5215686559677124,
+        1.0,
+        0.8392156958580017
+      ],
+      "font_size": 12.0,
+      "y": -0.207018040767503,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371622298914068",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 18
+    }
+  },
+  "letra_doctores_enfocavision": {
+    "name": "Letra Doctores Enfocavision",
+    "description": "Estilo de 2 capas de Doctores Enfocavision: ITC Avant Garde Demi blanco arriba, ITC Avant Garde Bold verde menta (#85FFD6) abajo con animación Mini zoom y sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "ITC Avant Garde Gothic Std Demi",
+      "font_title": "ITC Avant Garde Gothic Std Demi",
+      "font_path": "ITC Avant Garde Gothic Std Demi.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 7.0,
+      "y": -0.111725608022547,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "ITC Avant Garde Gothic Std Bold",
+      "font_title": "ITC Avant Garde Gothic Std Bold",
+      "font_path": "ITC Avant Garde Gothic Std Bold.otf",
+      "color": "#85FFD6",
+      "rgb_color": [
+        0.5215686559677124,
+        1.0,
+        0.8392156958580017
+      ],
+      "font_size": 12.0,
+      "y": -0.207018040767503,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371622298914068",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 18
+    }
+  },
+  "juan": {
+    "name": "Letra Juan",
+    "description": "Estilo de 2 capas de Juan: Gotham Bold blanco arriba, Anton morado (#7F1CCC) grande abajo con sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gotham Bold",
+      "font_title": "Gotham-Bold",
+      "font_path": "Gotham Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": -0.24717639768147692,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Anton",
+      "font_title": "Anton",
+      "font_path": "Anton-Regular.ttf",
+      "color": "#7F1CCC",
+      "rgb_color": [
+        0.49803921580314636,
+        0.10980392247438431,
+        0.800000011920929
+      ],
+      "font_size": 22.706745147705078,
+      "y": -0.3610103890473271,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": false,
+        "resource_id": "7646371622298914068",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.64
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "letra juan": {
+    "name": "Letra Juan",
+    "description": "Estilo de 2 capas de Juan: Gotham Bold blanco arriba, Anton morado (#7F1CCC) grande abajo con sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gotham Bold",
+      "font_title": "Gotham-Bold",
+      "font_path": "Gotham Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": -0.24717639768147692,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Anton",
+      "font_title": "Anton",
+      "font_path": "Anton-Regular.ttf",
+      "color": "#7F1CCC",
+      "rgb_color": [
+        0.49803921580314636,
+        0.10980392247438431,
+        0.800000011920929
+      ],
+      "font_size": 22.706745147705078,
+      "y": -0.3610103890473271,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": false,
+        "resource_id": "7646371622298914068",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.64
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "letra_juan": {
+    "name": "Letra Juan",
+    "description": "Estilo de 2 capas de Juan: Gotham Bold blanco arriba, Anton morado (#7F1CCC) grande abajo con sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gotham Bold",
+      "font_title": "Gotham-Bold",
+      "font_path": "Gotham Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": -0.24717639768147692,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Anton",
+      "font_title": "Anton",
+      "font_path": "Anton-Regular.ttf",
+      "color": "#7F1CCC",
+      "rgb_color": [
+        0.49803921580314636,
+        0.10980392247438431,
+        0.800000011920929
+      ],
+      "font_size": 22.706745147705078,
+      "y": -0.3610103890473271,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": false,
+        "resource_id": "7646371622298914068",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.64
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "preset juan": {
+    "name": "Letra Juan",
+    "description": "Estilo de 2 capas de Juan: Gotham Bold blanco arriba, Anton morado (#7F1CCC) grande abajo con sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gotham Bold",
+      "font_title": "Gotham-Bold",
+      "font_path": "Gotham Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": -0.24717639768147692,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Anton",
+      "font_title": "Anton",
+      "font_path": "Anton-Regular.ttf",
+      "color": "#7F1CCC",
+      "rgb_color": [
+        0.49803921580314636,
+        0.10980392247438431,
+        0.800000011920929
+      ],
+      "font_size": 22.706745147705078,
+      "y": -0.3610103890473271,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": false,
+        "resource_id": "7646371622298914068",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.64
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "juan 1-2": {
+    "name": "Letra Juan",
+    "description": "Estilo de 2 capas de Juan: Gotham Bold blanco arriba, Anton morado (#7F1CCC) grande abajo con sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gotham Bold",
+      "font_title": "Gotham-Bold",
+      "font_path": "Gotham Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": -0.24717639768147692,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Anton",
+      "font_title": "Anton",
+      "font_path": "Anton-Regular.ttf",
+      "color": "#7F1CCC",
+      "rgb_color": [
+        0.49803921580314636,
+        0.10980392247438431,
+        0.800000011920929
+      ],
+      "font_size": 22.706745147705078,
+      "y": -0.3610103890473271,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": false,
+        "resource_id": "7646371622298914068",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.64
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "juan_1_2": {
+    "name": "Letra Juan",
+    "description": "Estilo de 2 capas de Juan: Gotham Bold blanco arriba, Anton morado (#7F1CCC) grande abajo con sonido de click sincronizado.",
+    "layout": "dual",
+    "top": {
+      "font_name": "Gotham Bold",
+      "font_title": "Gotham-Bold",
+      "font_path": "Gotham Bold.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 8.0,
+      "y": -0.24717639768147692,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Anton",
+      "font_title": "Anton",
+      "font_path": "Anton-Regular.ttf",
+      "color": "#7F1CCC",
+      "rgb_color": [
+        0.49803921580314636,
+        0.10980392247438431,
+        0.800000011920929
+      ],
+      "font_size": 22.706745147705078,
+      "y": -0.3610103890473271,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": false,
+        "resource_id": "7646371622298914068",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.4952380955219269,
+        "angle": -45,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45,
+        "thickness_projection_distance": 0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.64
+    },
+    "pacing": {
+      "min_seconds": 3.0,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  }
+}

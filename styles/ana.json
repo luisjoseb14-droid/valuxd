@@ -1,0 +1,103 @@
+{
+  "name": "Letra Ana Otorrino",
+  "description": "Estilo de Ana Otorrino: Plantilla nativa CapCut con animación flotante suave, texto base en Liliana Bold blanco y palabras destacadas en Liliana Black amarillo (#FDE69A) dentro de la misma línea cada 3 a 5 segundos con descansos.",
+  "layout": "template",
+  "template": {
+    "name": "基础上浮",
+    "effect_id": "7331663549263023366",
+    "resource_id": "7331663549263023366",
+    "third_resource_id": "7262313922844168705",
+    "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/7331663549263023366/968c3676a4d0c6cd17c59e895224e370",
+    "layer_name": "D6B3869B-42B9-43ED-8435-C814651D7122",
+    "type": "text_template_subtitle"
+  },
+  "animation": {
+    "type": "loop",
+    "duration": 500000,
+    "resource_id": "7258195155394499074",
+    "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/55651785/cd586e4d24e5b2b2a499b01d89ac5ad9"
+  },
+  "top": {
+    "font_name": "Liliana Bold",
+    "font_path": "Liliana-Bold.otf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 9.0,
+    "y": -0.049913544668588106,
+    "scale": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "shadow": {
+      "alpha": 0.9206600189208984,
+      "angle": -28.152999877929688,
+      "diffuse": 0.017568999901413918,
+      "feather": 0.017568999901413918,
+      "distance": 4.902493000030518,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    }
+  },
+  "highlight": {
+    "font_name": "Liliana Black",
+    "font_path": "Liliana-Black.otf",
+    "color": "#FDE69A",
+    "rgb_color": [
+      0.99215686321258545,
+      0.901960790157318,
+      0.60392159223556519
+    ],
+    "font_size": 11.0,
+    "useLetterColor": true,
+    "shadow": {
+      "alpha": 0.9206600189208984,
+      "angle": -28.152999877929688,
+      "diffuse": 0.017568999901413918,
+      "feather": 0.017568999901413918,
+      "distance": 4.902493000030518,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    }
+  },
+  "sound_fx": {
+    "enabled": false,
+    "name": "Title Swoosh",
+    "path": "",
+    "volume": 0.65
+  },
+  "pacing": {
+    "min_seconds": 3.0,
+    "max_seconds": 5.0,
+    "min_neutral_segments": 1
+  },
+  "margins": {
+    "max_chars_per_line": 28,
+    "max_words_per_line": 5
+  }
+}

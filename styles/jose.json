@@ -1,0 +1,120 @@
+{
+  "name": "Letra Jose Podólogo",
+  "description": "Estilo de Jose Podólogo: Aglatia blanco arriba (con palabras en rojo dolor o amarillo clave), Bluemun-SemiBold amarillo abajo en palabras destacadas con descansos, y clicks de audio sincronizados exclusivamente en las destacadas Bluemun.",
+  "layout": "dual",
+  "top": {
+    "font_name": "Aglatia",
+    "font_path": "Aglatia.ttf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "negative_color": "#EC1D1D",
+    "negative_rgb_color": [
+      0.9254902005195618,
+      0.11372549086809158,
+      0.11372549086809158
+    ],
+    "highlight_color": "#F4C70F",
+    "highlight_rgb_color": [
+      0.95686274766922,
+      0.7803921699523926,
+      0.05882352963089943
+    ],
+    "font_size": 9.0,
+    "y": -0.11634766240146056,
+    "letter_spacing": -0.05,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    }
+  },
+  "bottom": {
+    "font_name": "Bluemun-SemiBold",
+    "font_path": "Bluemun-SemiBold.ttf",
+    "color": "#F4C70F",
+    "rgb_color": [
+      0.95686274766922,
+      0.7803921699523926,
+      0.05882352963089943
+    ],
+    "negative_color": "#EC1D1D",
+    "negative_rgb_color": [
+      0.9254902005195618,
+      0.11372549086809158,
+      0.11372549086809158
+    ],
+    "font_size": 19.5,
+    "y": -0.1988648662533823,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "animation": {
+      "enabled": true,
+      "name": "Aparición progresiva",
+      "resource_id": "6724916044072227332",
+      "category_id": "ruchang",
+      "category_name": "Entrada",
+      "type": "in",
+      "duration": 466666,
+      "path": ""
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    }
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.65
+  },
+  "pacing": {
+    "min_seconds": 3.0,
+    "max_seconds": 4.5,
+    "min_neutral_segments": 1
+  },
+  "margins": {
+    "max_chars_per_line": 20,
+    "max_words_per_line": 4
+  }
+}

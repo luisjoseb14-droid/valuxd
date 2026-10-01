@@ -1,0 +1,146 @@
+{
+    "LumiAITool": true,
+    "commit": "7f74cb188",
+    "proj": {
+        "connections": [
+            {
+                "inPortIndex": 0,
+                "intNodeId": 4,
+                "outNodeId": 3,
+                "outPortIndex": 0
+            },
+            {
+                "inPortIndex": 0,
+                "intNodeId": 3,
+                "outNodeId": 0,
+                "outPortIndex": 0
+            }
+        ],
+        "nodes": [
+            {
+                "id": 0,
+                "internal-data": {
+                    "baseTypeName": "TextInputNode",
+                    "caption": "TextInput",
+                    "duration": [
+                        0,
+                        3
+                    ],
+                    "fontSize": 40,
+                    "model-name": "TextInput",
+                    "params": {
+                        "enablePosition": false,
+                        "enableRotate": false,
+                        "enableScale": false,
+                        "px": 0,
+                        "py": 0,
+                        "pz": 0,
+                        "rx": 0,
+                        "ry": 0,
+                        "rz": 0,
+                        "sx": 1,
+                        "sy": 1,
+                        "sz": 1
+                    },
+                    "textEditStorage": "ABC123"
+                },
+                "position": {
+                    "x": -200,
+                    "y": 0
+                }
+            },
+            {
+                "id": 3,
+                "internal-data": {
+                    "baseTypeName": "TextSelectorNode",
+                    "caption": "Text_范围选择器",
+                    "duration": [
+                        0,
+                        3
+                    ],
+                    "model-name": "Text_BaseSelector",
+                    "nPorts": 1,
+                    "params": {
+                        "basedOn": 0,
+                        "constrained": 1,
+                        "customShape": 0,
+                        "enableIntensity": false,
+                        "end": 1,
+                        "intensity": 1,
+                        "intensityEnd": 1,
+                        "intensityStart": 0,
+                        "offset": 0,
+                        "randomSeed": 50,
+                        "randomSort": false,
+                        "shape": 0,
+                        "smooth": 0,
+                        "start": 0
+                    },
+                    "portNames": {
+                        "0": "in"
+                    },
+                    "priority": 1
+                },
+                "position": {
+                    "x": 200,
+                    "y": 0
+                }
+            },
+            {
+                "id": 4,
+                "internal-data": {
+                    "baseTypeName": "TextAttrNode",
+                    "caption": "Text_基本文字属性",
+                    "duration": [
+                        0,
+                        3
+                    ],
+                    "model-name": "Text_BaseAttrs",
+                    "nPorts": 1,
+                    "params": {
+                        "alpha": 1,
+                        "anchor#based": 0,
+                        "anchor#mode": 0,
+                        "anchor#x": 0,
+                        "anchor#y": 0,
+                        "color": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ],
+                        "custom_script#isRelativePath": false,
+                        "custom_script#path": "/Users/bytedance/Desktop/AI-project/AIGLE/.tmp/script/20260528_211605_38c8.js",
+                        "enableAlpha": false,
+                        "enableAnchor": false,
+                        "enableColor": false,
+                        "enableFontSizeScale": false,
+                        "enablePosition": false,
+                        "enableRotate": false,
+                        "enableScale": false,
+                        "enableScript": true,
+                        "fontSizeScale": 1,
+                        "position#distance": 0,
+                        "position#type": 0,
+                        "position#x": 0,
+                        "position#y": 0,
+                        "rotate#x": 0,
+                        "rotate#y": 0,
+                        "rotate#z": 0,
+                        "scale#separation": false,
+                        "scale#x": 1,
+                        "scale#y": 1
+                    },
+                    "portNames": {
+                        "0": "Input"
+                    }
+                },
+                "position": {
+                    "x": 450,
+                    "y": 0
+                }
+            }
+        ]
+    },
+    "version": "0.9.0"
+}

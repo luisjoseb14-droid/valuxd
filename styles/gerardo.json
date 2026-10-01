@@ -1,0 +1,98 @@
+{
+  "name": "Letra Gerardo",
+  "description": "Estilo de 2 capas de Gerardo: Aloevera blanco arriba, Behind The Nineties turquesa abajo con animación deslizante y sonido de click.",
+  "layout": "dual",
+  "top": {
+    "font_name": "Aloevera Display Regular",
+    "font_path": "AloeveraDisplay-Regular.otf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 10.0,
+    "y": -0.11892300578826598,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    }
+  },
+  "bottom": {
+    "font_name": "Behind The Nineties Medium Italic",
+    "font_path": "Behind The Nineties Medium Italic.ttf",
+    "color": "#2F9FA3",
+    "rgb_color": [
+      0.1843137254901961,
+      0.6235294117647059,
+      0.6392156862745098
+    ],
+    "font_size": 21.0,
+    "y": -0.1988648662533823,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "animation": {
+      "enabled": true,
+      "resource_id": "7646371622298914068",
+      "name": "Entrada deslizante desde la izquierda",
+      "path": "",
+      "duration": 500000,
+      "type": "in"
+    },
+    "shadow": {
+      "alpha": 0.362500011920929,
+      "angle": -45,
+      "diffuse": 0.007638889364898205,
+      "distance": 3.0,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45,
+      "thickness_projection_distance": 0,
+      "thickness_projection_enable": false
+    }
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.65
+  },
+  "pacing": {
+    "min_seconds": 3.0,
+    "max_seconds": 4.5
+  },
+  "margins": {
+    "max_chars_per_line": 18,
+    "max_words_per_line": 3
+  }
+}

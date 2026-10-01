@@ -1,0 +1,8 @@
+{
+  "version": "1.0.0",
+  "version_code": 1,
+  "date": "2026-09-30",
+  "description": "Preset Juan integrado con fuentes Gotham Bold y Anton, y auto-actualizador GitHub.",
+  "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
+  "branch": "main"
+}
