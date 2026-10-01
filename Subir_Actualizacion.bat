@@ -1,50 +1,46 @@
 @echo off
-chcp 65001 >nul
-title Subir Actualización a GitHub - CC Subs Pro
+setlocal
+title Subir Actualizacion a GitHub - CC Subs Pro
 cd /d "%~dp0"
 
 echo =======================================================
-echo     CC SUBS PRO - SUBIR ACTUALIZACIÓN A GITHUB
+echo     CC SUBS PRO - SUBIR ACTUALIZACION A GITHUB
 echo =======================================================
 echo.
-echo Este script guardará tus últimos cambios (presets nuevos,
-echo fuentes agregadas, etc.) y los subirá a tu repositorio:
-echo https://github.com/luisjoseb14-droid/valuxd
+echo Repositorio: https://github.com/luisjoseb14-droid/valuxd
 echo.
-echo De esta forma, tus amigos solo tendrán que pulsar el botón
-echo 'Actualizar' dentro de CC Subs Pro para recibir la nueva letra.
-echo.
-echo -------------------------------------------------------
 set /p "DESC=Describe los cambios (ej: Nuevo preset Juan): "
-if "%DESC%"=="" set "DESC=Actualización de presets y mejoras en CC Subs Pro"
+if "%DESC%"=="" set "DESC=Actualizacion de presets y mejoras"
 
 echo.
-echo [*] Incrementando número de versión en version.json...
+echo [*] Guardando archivos y version en Git...
 python core\updater.py --bump "%DESC%"
-
-echo.
-echo [*] Agregando archivos a Git...
 git add -A
+git commit -m "%DESC%" >nul 2>&1
 
 echo.
-echo [*] Creando commit...
-git commit -m "%DESC%"
-
-echo.
-echo [*] Subiendo a GitHub (rama main)...
+echo [*] Subiendo a GitHub...
 git push -u origin main
 
-if %ERRORLEVEL% EQU 0 (
-    echo.
-    echo =======================================================
-    echo   ¡ÉXITO! Los cambios ya están disponibles en GitHub.
-    echo   Tus amigos ya pueden pulsar 'Actualizar' en la app.
-    echo =======================================================
-) else (
-    echo.
-    echo [!] Hubo un error al subir a GitHub. Revisa si necesitas
-    echo     autenticar tu cuenta de GitHub o si tienes conexión.
-)
+if errorlevel 1 goto :fallo
 
+echo.
+echo =======================================================
+echo   EXITO: Los cambios se subieron correctamente a GitHub!
+echo   Tus amigos ya pueden pulsar 'Actualizar' en la app.
+echo =======================================================
+goto :fin
+
+:fallo
+echo.
+echo =======================================================
+echo   [!] NO SE PUDO SUBIR A GITHUB
+echo =======================================================
+echo Posibles causas:
+echo 1. Falta autorizar tu cuenta de GitHub en la ventana emergente.
+echo 2. No hay conexion a internet.
+echo =======================================================
+
+:fin
 echo.
 pause
