@@ -88,7 +88,7 @@ class TestCarrilloPreset(unittest.TestCase):
             self.assertIn("Gotham Book.otf", styler.default_style["font_path"])
             self.assertIn("Gotham Bold.otf", styler.highlight_style["font_path"])
             self.assertEqual(styler.default_style["font_size"], 10.0)
-            self.assertEqual(styler.highlight_style["font_size"], 9.0)
+            self.assertEqual(styler.highlight_style["font_size"], 15.0)
             self.assertEqual(styler.highlight_style["color"].lower(), "#ccc3b1")
             self.assertFalse(styler.highlight_style.get("animation", {}).get("enabled", True))
             self.assertEqual(styler.sound_fx["name"], "Click_Mouse_Click_02(864360)")

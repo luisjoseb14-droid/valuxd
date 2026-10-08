@@ -244,9 +244,15 @@ def clean_spanish_casing(text: str, is_sentence_start: bool = True) -> str:
     - Fixes random title-casing of common words mid-sentence (e.g. 'y por qué Evita' -> 'y por qué evita',
       'para tu Pueblo' -> 'para tu pueblo').
     - Preserves proper sentence and question initial capitalization.
+    - Strictly preserves intentional ALL-CAPS text (e.g. presets like Dr. Carrillo).
     """
     if not text:
         return ""
+    # If text is already fully uppercase (or has no lowercase characters), do not downcase!
+    # Intentional ALL-CAPS must be respected (e.g. presets like Dr. Carrillo).
+    if not any(c.islower() for c in text):
+        return text
+
     words = text.split()
     if not words:
         return ""
@@ -304,13 +310,13 @@ def clean_spanish_casing(text: str, is_sentence_start: bool = True) -> str:
     return " ".join(out)
 
 
-def clean_subtitle_text(text: str, is_sentence_start: bool = True) -> str:
+def clean_subtitle_text(text: str, is_sentence_start: bool = True, preserve_case: bool = False) -> str:
     """
     Cleans subtitle text by removing commas (,), periods (.), and colons (:),
     including ellipses (...), and normalizing whitespace.
     
     Also automatically corrects known CapCut speech-to-text uppercase glitches
-    and erratic casing using clean_spanish_casing.
+    and erratic casing using clean_spanish_casing when text is not already all-caps.
     
     Preserves question marks (¿?), exclamation marks (¡!), hyphens, quotes,
     letters, accents, and numbers.
@@ -318,8 +324,11 @@ def clean_subtitle_text(text: str, is_sentence_start: bool = True) -> str:
     if not text:
         return ""
     
-    # Clean Spanish casing first (so periods/colons accurately signal sentence boundaries)
-    cleaned = clean_spanish_casing(str(text), is_sentence_start=is_sentence_start)
+    # If preserve_case is requested or text is fully uppercase, do not apply clean_spanish_casing
+    if preserve_case or not any(c.islower() for c in text):
+        cleaned = str(text)
+    else:
+        cleaned = clean_spanish_casing(str(text), is_sentence_start=is_sentence_start)
     
     # Remove commas, periods, colons
     cleaned = re.sub(r'[,.:]+', '', cleaned)

@@ -238,7 +238,10 @@ def download_and_apply_update(
                 os.makedirs(dst_fonts, exist_ok=True)
                 for f in os.listdir(src_fonts):
                     if f.lower().endswith(('.ttf', '.otf')):
-                        _safe_copy_file(os.path.join(src_fonts, f), os.path.join(dst_fonts, f))
+                        try:
+                            _safe_copy_file(os.path.join(src_fonts, f), os.path.join(dst_fonts, f))
+                        except Exception as fe:
+                            logger.warning(f"Aviso al copiar fuente {f}: {fe}")
 
             # audio
             src_audio = os.path.join(src_assets, 'audio')

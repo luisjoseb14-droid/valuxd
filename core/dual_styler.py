@@ -143,30 +143,56 @@ class DualStyler:
             preset_dict = preset_name_or_data
         elif isinstance(preset_name_or_data, str):
             norm = preset_name_or_data.lower().strip()
-            presets_file = os.path.join(script_dir, 'styles', 'presets.json')
-            if os.path.isfile(presets_file):
-                try:
-                    with open(presets_file, 'r', encoding='utf-8') as f:
-                        presets = json.load(f)
-                    if norm in presets:
-                        preset_dict = presets[norm]
-                    else:
-                        p_name = norm.replace("letra ", "").replace("letra_", "").strip()
-                        if p_name in presets:
+            p_name = (norm.replace("letra ", "").replace("letra_", "")
+                          .replace("preset ", "").replace("preset_", "")
+                          .replace("dr. ", "").replace("dr ", "")
+                          .replace("dra. ", "").replace("dra ", "")
+                          .replace("de ", "").replace("de_", "").strip())
+
+            # 1. ALWAYS PRIORITIZE INDIVIDUAL FILE IN styles/
+            candidates = [p_name, norm]
+            if 'carrillo' in norm or 'carillo' in norm:
+                candidates.insert(0, 'carrillo')
+            if 'juan' in norm:
+                candidates.insert(0, 'juan')
+
+            for cand in candidates:
+                cand_clean = cand.replace(" ", "_").strip()
+                cand_file = os.path.join(script_dir, 'styles', f'{cand_clean}.json')
+                if os.path.isfile(cand_file):
+                    try:
+                        with open(cand_file, 'r', encoding='utf-8') as f:
+                            preset_dict = json.load(f)
+                            if preset_dict:
+                                break
+                    except Exception:
+                        pass
+                cand_file2 = os.path.join(script_dir, 'styles', f'{cand}.json')
+                if not preset_dict and os.path.isfile(cand_file2):
+                    try:
+                        with open(cand_file2, 'r', encoding='utf-8') as f:
+                            preset_dict = json.load(f)
+                            if preset_dict:
+                                break
+                    except Exception:
+                        pass
+
+            # 2. Fall back to styles/presets.json
+            if not preset_dict:
+                presets_file = os.path.join(script_dir, 'styles', 'presets.json')
+                if os.path.isfile(presets_file):
+                    try:
+                        with open(presets_file, 'r', encoding='utf-8') as f:
+                            presets = json.load(f)
+                        if norm in presets:
+                            preset_dict = presets[norm]
+                        elif p_name in presets:
                             preset_dict = presets[p_name]
                         else:
-                            p_no_de = p_name.replace("de ", "").replace("de_", "").strip()
-                            if p_no_de in presets:
-                                preset_dict = presets[p_no_de]
-                except Exception:
-                    pass
-            if not preset_dict:
-                p_name = norm.replace("letra ", "").replace("letra_", "").strip().replace("de ", "").strip()
-                indiv_file = os.path.join(script_dir, 'styles', f'{p_name}.json')
-                if os.path.isfile(indiv_file):
-                    try:
-                        with open(indiv_file, 'r', encoding='utf-8') as f:
-                            preset_dict = json.load(f)
+                            for k, v in presets.items():
+                                if k == norm or k == p_name or norm in k:
+                                    preset_dict = v
+                                    break
                     except Exception:
                         pass
 
@@ -291,6 +317,7 @@ class DualStyler:
             "id": mat_id,
             "type": "subtitle",
             "recognize_task_id": "manual_styled",
+            "recognize_text": text_str,
             "name": "",
             "content": json.dumps(inner_content, ensure_ascii=False, separators=(',', ':')),
             "base_content": json.dumps(inner_content, ensure_ascii=False, separators=(',', ':')),
@@ -541,12 +568,14 @@ class DualStyler:
 
                     top_scale = copy.deepcopy(self.top_scale)
                     if is_top_hl:
-                        char_count = len(top_text.strip())
-                        if char_count > 11:
-                            shrink_factor = max(0.75, 11.0 / char_count)
-                            if isinstance(top_scale, dict) and 'x' in top_scale and 'y' in top_scale:
-                                top_scale['x'] = float(top_scale['x']) * shrink_factor
-                                top_scale['y'] = float(top_scale['y']) * shrink_factor
+                        dyn_top_font = self.highlight_style.get('dynamic_font_size') or self.default_style.get('dynamic_font_size')
+                        if not (dyn_top_font and dyn_top_font.get('enabled', True)):
+                            char_count = len(top_text.strip())
+                            if char_count > 11:
+                                shrink_factor = max(0.75, 11.0 / char_count)
+                                if isinstance(top_scale, dict) and 'x' in top_scale and 'y' in top_scale:
+                                    top_scale['x'] = float(top_scale['x']) * shrink_factor
+                                    top_scale['y'] = float(top_scale['y']) * shrink_factor
 
                     top_seg = {
                         "id": str(uuid.uuid4()).upper(),
@@ -599,14 +628,16 @@ class DualStyler:
                     anim_ref = self._create_animation(data, dur)
                     extra_refs = [anim_ref] if anim_ref else []
 
-                    # Safe margin safeguard: dynamically scale down highlight if text length exceeds safe threshold
+                    # Safe margin safeguard: dynamically scale down highlight only when dynamic_font_size is NOT active
                     bot_scale = copy.deepcopy(self.bot_scale)
-                    char_count = len(bot_text.strip())
-                    if char_count > 11:
-                        shrink_factor = max(0.75, 11.0 / char_count)
-                        if isinstance(bot_scale, dict) and 'x' in bot_scale and 'y' in bot_scale:
-                            bot_scale['x'] = float(bot_scale['x']) * shrink_factor
-                            bot_scale['y'] = float(bot_scale['y']) * shrink_factor
+                    dyn_font = self.highlight_style.get('dynamic_font_size')
+                    if not (dyn_font and dyn_font.get('enabled', True)):
+                        char_count = len(bot_text.strip())
+                        if char_count > 11:
+                            shrink_factor = max(0.75, 11.0 / char_count)
+                            if isinstance(bot_scale, dict) and 'x' in bot_scale and 'y' in bot_scale:
+                                bot_scale['x'] = float(bot_scale['x']) * shrink_factor
+                                bot_scale['y'] = float(bot_scale['y']) * shrink_factor
 
                     bot_seg = {
                         "id": str(uuid.uuid4()).upper(),
@@ -710,6 +741,31 @@ class DualStyler:
             if not snd_path or not os.path.isfile(snd_path):
                 snd_path = get_default_click_sound_path()
             self._add_click_sound_fx(data, bot_starts, volume=vol, sound_name=snd_name, sound_path=snd_path)
+
+        is_upper_required = (
+            (self.default_style.get('uppercase', False) and self.highlight_style.get('uppercase', False))
+            or (self.preset_data and self.preset_data.get('uppercase', False))
+            or self.default_style.get('uppercase', False)
+        )
+        if is_upper_required:
+            for t_mat in data.get('materials', {}).get('texts', []):
+                rec_txt = t_mat.get('recognize_text', '')
+                if rec_txt:
+                    t_mat['recognize_text'] = rec_txt.upper()
+                c_raw = t_mat.get('content', '')
+                if c_raw:
+                    try:
+                        c_obj = json.loads(c_raw)
+                        c_obj['text'] = c_obj.get('text', '').upper()
+                        if 'styles' in c_obj and len(c_obj['styles']) == 1:
+                            c_obj['styles'][0]['range'] = [0, len(c_obj['text'])]
+                        new_c = json.dumps(c_obj, ensure_ascii=False, separators=(',', ':'))
+                        t_mat['content'] = new_c
+                        t_mat['base_content'] = new_c
+                    except Exception:
+                        pass
+                if 'words' in t_mat and isinstance(t_mat['words'], dict) and 'text' in t_mat['words']:
+                    t_mat['words']['text'] = [w.upper() for w in t_mat['words']['text']]
 
         project._parse_subtitles()
         return total_top, total_bot
@@ -988,6 +1044,7 @@ class DualStyler:
                     'index': idx,
                     'item': s,
                     'text': txt,
+                    'orig_text': s.text,
                     'start': s.start_us,
                     'end': s.start_us + s.duration_us,
                     'duration': s.duration_us,
@@ -1076,6 +1133,15 @@ class DualStyler:
                     sanitized_phrases.append(p_san)
         phrases_to_highlight = sanitized_phrases
 
+        if is_all_uppercase:
+            for item in raw_items:
+                item['text'] = item['text'].upper()
+                if item.get('item') and hasattr(item['item'], 'text'):
+                    item['item'].text = item['item'].text.upper()
+            for entry in phrases_to_highlight:
+                if isinstance(entry, dict):
+                    entry['phrase'] = entry['phrase'].upper()
+
         plan = []
         last_highlight_us = -int(min_pacing_sec * 1e6)
         solo_count = 0
@@ -1154,8 +1220,11 @@ class DualStyler:
                 clean_lower_hl = matched_highlight.lower()
                 hl_idx = clean_lower_curr.find(clean_lower_hl)
 
-                prefix = clean_subtitle_text(curr_text[:hl_idx]) if hl_idx > 0 else ""
-                suffix = clean_subtitle_text(curr_text[hl_idx + len(matched_highlight):])
+                prefix = clean_subtitle_text(curr_text[:hl_idx], preserve_case=is_all_uppercase) if hl_idx > 0 else ""
+                suffix = clean_subtitle_text(curr_text[hl_idx + len(matched_highlight):], preserve_case=is_all_uppercase)
+                if is_all_uppercase:
+                    prefix = prefix.upper() if prefix else ""
+                    suffix = suffix.upper() if suffix else ""
 
                 # Build sticker entry if preset has stickers enabled
                 stk_entry = None
@@ -1179,7 +1248,9 @@ class DualStyler:
                         'rotation': float(stk_template.get('clip', {}).get('rotation', 0.0))
                     }
 
-                bot_text = clean_subtitle_text(matched_highlight)
+                bot_text = clean_subtitle_text(matched_highlight, preserve_case=is_all_uppercase)
+                if is_all_uppercase:
+                    bot_text = bot_text.upper()
                 if suffix:
                     # Highlight finishes strictly when the keyword ends, so it doesn't linger while suffix is spoken
                     if (curr_end - hl_end) < 150000 and (curr_end - hl_start) >= 300000:
@@ -1246,14 +1317,14 @@ class DualStyler:
                             is_sentence_start = True
                         elif last_prev_word in UNFINISHED_ENDINGS:
                             is_sentence_start = False
-                        elif curr_text and curr_text[0].isupper() and last_prev_word not in UNFINISHED_ENDINGS:
+                        orig_curr = curr.get('orig_text', curr_text).strip()
+                        if orig_curr and orig_curr[0].isupper() and last_prev_word not in UNFINISHED_ENDINGS:
                             is_sentence_start = True
                         else:
                             is_sentence_start = False
 
                     if is_sentence_start:
-                        # User rule: NEVER place highlight on bottom track with previous sentence text lingering above.
-                        # Instead, place highlight higher up (TOP track, solo), used sparingly.
+                        # User rule: Solo highlights higher up (TOP track), used sparingly.
                         time_since_last_solo = hl_start - last_solo_us
                         can_use_solo = (allow_solo and solo_count < max_solo and time_since_last_solo >= min_solo_interval_us)
 
@@ -1282,17 +1353,36 @@ class DualStyler:
                                     'bot': None,
                                     'sticker': None
                                 })
+                        elif suffix:
+                            # Render dual layer: top general suffix + bottom highlight
+                            bot_entry = {
+                                'text': bot_text,
+                                'start': hl_start,
+                                'end': bot_end,
+                                'tone': matched_tone
+                            }
+                            top_entry = {
+                                'text': clean_subtitle_text(suffix),
+                                'start': bot_end,
+                                'end': curr_end
+                            }
+                            plan.append({'top': top_entry, 'bot': bot_entry, 'sticker': stk_entry})
+                            last_highlight_us = hl_start
                         else:
-                            # Solo quota reached or too close: render as standard neutral top text.
-                            plan.append({
-                                'top': {
-                                    'text': clean_subtitle_text(curr_text),
-                                    'start': curr_start,
-                                    'end': curr_end
-                                },
-                                'bot': None,
-                                'sticker': None
-                            })
+                            # Full segment is the highlight: create top + bottom dual layer
+                            bot_entry = {
+                                'text': bot_text,
+                                'start': hl_start,
+                                'end': bot_end,
+                                'tone': matched_tone
+                            }
+                            top_entry = {
+                                'text': clean_subtitle_text(curr_text),
+                                'start': curr_start,
+                                'end': curr_end
+                            }
+                            plan.append({'top': top_entry, 'bot': bot_entry, 'sticker': stk_entry})
+                            last_highlight_us = hl_start
                     else:
                         # Mid-sentence continuation from preceding segment (same grammatical phrase).
                         if plan and plan[-1].get('top') and plan[-1]['top'].get('text'):
@@ -1753,6 +1843,31 @@ class DualStyler:
                     tmat['has_shadow'] = False
                     tmat['shadow'] = None
                     repaired_bot += 1
+
+        is_upper_required = (
+            (self.default_style.get('uppercase', False) and self.highlight_style.get('uppercase', False))
+            or (self.preset_data and self.preset_data.get('uppercase', False))
+            or self.default_style.get('uppercase', False)
+        )
+        if is_upper_required:
+            for t_mat in texts.values():
+                rec_txt = t_mat.get('recognize_text', '')
+                if rec_txt:
+                    t_mat['recognize_text'] = rec_txt.upper()
+                c_raw = t_mat.get('content', '')
+                if c_raw:
+                    try:
+                        c_obj = json.loads(c_raw)
+                        c_obj['text'] = c_obj.get('text', '').upper()
+                        if 'styles' in c_obj and len(c_obj['styles']) == 1:
+                            c_obj['styles'][0]['range'] = [0, len(c_obj['text'])]
+                        new_c = json.dumps(c_obj, ensure_ascii=False, separators=(',', ':'))
+                        t_mat['content'] = new_c
+                        t_mat['base_content'] = new_c
+                    except Exception:
+                        pass
+                if 'words' in t_mat and isinstance(t_mat['words'], dict) and 'text' in t_mat['words']:
+                    t_mat['words']['text'] = [w.upper() for w in t_mat['words']['text']]
 
         project._parse_subtitles()
         return repaired_top, repaired_bot

@@ -48,14 +48,19 @@ class SubtitleItem:
             self.text_material['base_content'] = serialized
 
     def set_text(self, new_text: str) -> str:
-        """Sets new text for the subtitle item, ensuring clean punctuation and style range sync."""
-        cleaned = clean_subtitle_text(new_text)
+        """Sets new text for the subtitle item, ensuring clean punctuation, style range sync, and uppercase preservation."""
+        is_already_upper = not any(c.islower() for c in new_text) if new_text else False
+        cleaned = clean_subtitle_text(new_text, preserve_case=is_already_upper)
+        if is_already_upper:
+            cleaned = cleaned.upper()
         self.parsed_content['text'] = cleaned
         styles = self.parsed_content.get('styles', [])
         if len(styles) == 1:
             styles[0]['range'] = [0, len(cleaned)]
         if 'words' in self.text_material and isinstance(self.text_material['words'], dict):
             self.text_material['words']['text'] = [cleaned]
+        if 'recognize_text' in self.text_material:
+            self.text_material['recognize_text'] = cleaned
         self.sync_content_to_material()
         return cleaned
 
@@ -147,6 +152,7 @@ class CapCutProject:
 
     def clean_all_subtitles(self) -> int:
         """Cleans commas, periods, and colons from all subtitles in the project."""
+        self._parse_subtitles()
         count = 0
         for sub in self.subtitles:
             sub.clean_text()
@@ -183,6 +189,7 @@ class CapCutProject:
         if create_backup:
             self.create_backup()
 
+        self._parse_subtitles()
         for sub in self.subtitles:
             sub.sync_content_to_material()
 
