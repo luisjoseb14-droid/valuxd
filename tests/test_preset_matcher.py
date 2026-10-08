@@ -60,6 +60,12 @@ class TestPresetMatcher(unittest.TestCase):
         self.assertEqual(detect_preset_from_name("Letra Juan"), "juan")
         self.assertEqual(detect_preset_from_name(r"B:\capc\Juan 1-2"), "juan")
 
+        self.assertEqual(detect_preset_from_name("Carillo 6-7-8"), "carrillo")
+        self.assertEqual(detect_preset_from_name("Carillo 5etc"), "carrillo")
+        self.assertEqual(detect_preset_from_name("Dr Carrillo"), "carrillo")
+        self.assertEqual(detect_preset_from_name("SEP Carillo 1"), "carrillo")
+        self.assertEqual(detect_preset_from_name(r"B:\capc\Carillo 6-7-8"), "carrillo")
+
     def test_unmatched_returns_none(self):
         self.assertIsNone(detect_preset_from_name("Mi Video de Vacaciones"))
         self.assertIsNone(detect_preset_from_name("Proyecto 123"))

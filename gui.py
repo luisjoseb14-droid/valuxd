@@ -356,6 +356,15 @@ class CCSubsProGUI(tk.Tk):
         )
         r_juan.grid(row=6, column=1, sticky=tk.W, pady=2)
 
+        r_carrillo = ttk.Radiobutton(
+            presets_frame,
+            text="🩺 Dr. Carrillo  (Gotham Book blanco | Gotham Bold arena #CCC3B1)",
+            variable=self.doctor_preset,
+            value="carrillo",
+            command=self._on_preset_change
+        )
+        r_carrillo.grid(row=7, column=0, sticky=tk.W, pady=2, padx=(0, 10))
+
         # Dynamic detail line for the selected doctor
         self.lbl_preset_detail = tk.Label(
             preset_card,
@@ -462,7 +471,8 @@ class CCSubsProGUI(tk.Tk):
             "laura burgos": "🩺 Dra. Laura Burgos: Indivisible Regular blanco arriba | Indivisible Bold verde azulado (#ABC8CC) abajo + Aparición progresiva + Click fx",
             "laura_burgos": "🩺 Dra. Laura Burgos: Indivisible Regular blanco arriba | Indivisible Bold verde azulado (#ABC8CC) abajo + Aparición progresiva + Click fx",
             "enfocavision": "👁️ Doctores Enfocavisión: ITC Avant Garde Demi blanco arriba | ITC Avant Garde Bold menta (#85FFD6) abajo + Mini zoom + Click fx",
-            "juan": "🌿 Juan: Gotham Bold blanco arriba | Anton morado (#7F1CCC) grande abajo + Click fx"
+            "juan": "🌿 Juan: Gotham Bold blanco arriba | Anton morado (#7F1CCC) grande abajo + Click fx",
+            "carrillo": "🩺 Dr. Carrillo: Gotham Book blanco arriba (-0.175) | Gotham Bold arena (#CCC3B1) abajo (-0.255) en MAYÚSCULAS + Click fx"
         }
         if hasattr(self, 'lbl_preset_detail'):
             self.lbl_preset_detail.config(text=details.get(p, ""))

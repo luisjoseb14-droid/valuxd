@@ -44,6 +44,7 @@ FONT_REGISTRY_MAP = {
     'ITC Avant Garde Gothic Std Demi.otf': 'ITCAvantGardeStd-Demi (TrueType)',
     'ITC Avant Garde Gothic Std Bold.otf': 'ITCAvantGardeStd-Bold (TrueType)',
     'Gotham Bold.otf': 'Gotham-Bold (TrueType)',
+    'Gotham Book.otf': 'Gotham-Book (TrueType)',
     'Anton-Regular.ttf': 'Anton Regular (TrueType)',
 }
 

@@ -69,6 +69,10 @@ PRESET_PATTERNS: List[Tuple[str, List[str]]] = [
     ("juan", [
         r'\bjuan\b',
     ]),
+    # 15. Dr. Carrillo
+    ("carrillo", [
+        r'\b(carrillo|carillo)\b',
+    ]),
 ]
 
 
