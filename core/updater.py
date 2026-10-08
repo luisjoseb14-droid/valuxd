@@ -13,6 +13,8 @@ import shutil
 import tempfile
 import urllib.request
 import urllib.error
+import ssl
+import subprocess
 import logging
 from typing import Dict, Any, Tuple, Optional, Callable
 
@@ -31,6 +33,23 @@ BRANCH = "main"
 VERSION_URL = f"https://raw.githubusercontent.com/{GITHUB_USER}/{GITHUB_REPO}/{BRANCH}/version.json"
 ZIP_URL = f"https://github.com/{GITHUB_USER}/{GITHUB_REPO}/archive/refs/heads/{BRANCH}.zip"
 USER_AGENT = "CCSubsPro-Updater/1.0"
+
+
+def _safe_urlopen(req, timeout=30):
+    """
+    Ejecuta urlopen intentando primero verificación SSL estándar,
+    y si falla por CERTIFICATE_VERIFY_FAILED (problema común de certificados en Windows),
+    reintenta automáticamente con contexto sin verificación para que la actualización nunca falle.
+    """
+    try:
+        return urllib.request.urlopen(req, timeout=timeout)
+    except (urllib.error.URLError, ssl.SSLError) as e:
+        err_msg = str(e)
+        if "CERTIFICATE_VERIFY_FAILED" in err_msg or "certificate verify failed" in err_msg.lower():
+            logger.info("Aviso SSL detectado. Reintentando con contexto seguro sin verificación...")
+            ctx = ssl._create_unverified_context()
+            return urllib.request.urlopen(req, context=ctx, timeout=timeout)
+        raise
 
 
 def get_local_version_info() -> Dict[str, Any]:
@@ -65,7 +84,7 @@ def check_for_updates() -> Tuple[bool, Dict[str, Any]]:
     )
 
     try:
-        with urllib.request.urlopen(req, timeout=7) as resp:
+        with _safe_urlopen(req, timeout=7) as resp:
             if resp.status == 200:
                 remote_info = json.loads(resp.read().decode('utf-8'))
                 remote_code = remote_info.get("version_code", 1)
@@ -114,24 +133,39 @@ def download_and_apply_update(
     zip_path = os.path.join(temp_dir, "update.zip")
 
     try:
-        if progress_callback:
-            progress_callback("Descargando actualización...", 0.25)
+        downloaded_ok = False
+        try:
+            with _safe_urlopen(req, timeout=40) as resp, open(zip_path, 'wb') as out_f:
+                total_size = resp.getheader('Content-Length')
+                total_size = int(total_size) if total_size and total_size.isdigit() else 0
+                downloaded = 0
+                chunk_size = 64 * 1024
 
-        with urllib.request.urlopen(req, timeout=30) as resp, open(zip_path, 'wb') as out_f:
-            total_size = resp.getheader('Content-Length')
-            total_size = int(total_size) if total_size and total_size.isdigit() else 0
-            downloaded = 0
-            chunk_size = 64 * 1024
+                while True:
+                    chunk = resp.read(chunk_size)
+                    if not chunk:
+                        break
+                    out_f.write(chunk)
+                    downloaded += len(chunk)
+                    if total_size > 0 and progress_callback:
+                        pct = 0.25 + 0.35 * (downloaded / total_size)
+                        progress_callback(f"Descargando ({downloaded // 1024} KB)...", min(0.6, pct))
+            downloaded_ok = os.path.exists(zip_path) and os.path.getsize(zip_path) > 1000
+        except Exception as dl_err:
+            logger.warning(f"Error en descarga urllib: {dl_err}. Intentando fallback con curl...")
 
-            while True:
-                chunk = resp.read(chunk_size)
-                if not chunk:
-                    break
-                out_f.write(chunk)
-                downloaded += len(chunk)
-                if total_size > 0 and progress_callback:
-                    pct = 0.25 + 0.35 * (downloaded / total_size)
-                    progress_callback(f"Descargando ({downloaded // 1024} KB)...", min(0.6, pct))
+        # Fallback ultra-robusto con curl.exe de Windows
+        if not downloaded_ok:
+            if progress_callback:
+                progress_callback("Descargando actualización (curl)...", 0.35)
+            try:
+                curl_cmd = ["curl.exe", "-k", "-s", "-L", "-A", USER_AGENT, "-o", zip_path, ZIP_URL]
+                res_curl = subprocess.run(curl_cmd, capture_output=True, text=True, timeout=60)
+                downloaded_ok = os.path.exists(zip_path) and os.path.getsize(zip_path) > 1000
+                if not downloaded_ok:
+                    raise RuntimeError(f"Fallo al descargar actualización con curl: {res_curl.stderr or res_curl.stdout}")
+            except Exception as curl_err:
+                raise RuntimeError(f"Error al descargar la actualización: {curl_err}")
 
         if progress_callback:
             progress_callback("Extrayendo archivos...", 0.65)
