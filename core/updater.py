@@ -53,22 +53,22 @@ def _safe_urlopen(req, timeout=30):
         raise
 
 
-def _safe_copy_file(src: str, dst: str) -> bool:
+def _safe_copy_file(src: str, dst: str, is_font: bool = False) -> bool:
     """
     Copia un archivo de src a dst de manera resiliente en Windows.
-    - Si el archivo destino ya existe y tiene el mismo tamaño, no hace nada (evita bloqueos de Windows).
-    - Si falla por PermissionError (típico de fuentes .otf/.ttf en uso por el sistema o CapCut),
-      remueve atributos de solo lectura y reintenta.
-    - Si sigue bloqueado pero el archivo destino ya existía previamente, continúa sin error fatal.
-    - Si el archivo destino no existía, sí propaga el error.
+    - Si es una fuente (is_font=True) y el archivo destino ya existe y tiene el mismo tamaño,
+      no hace nada (evita bloqueos de Windows por fuentes en uso).
+    - Para archivos de código, presets y configuración, SIEMPRE sobreescribe.
+    - Si falla por PermissionError, remueve atributos de solo lectura y reintenta.
     """
     try:
         if os.path.exists(dst):
-            try:
-                if os.path.getsize(src) == os.path.getsize(dst):
-                    return True
-            except Exception:
-                pass
+            if is_font:
+                try:
+                    if os.path.getsize(src) == os.path.getsize(dst):
+                        return True
+                except Exception:
+                    pass
             try:
                 os.chmod(dst, stat.S_IWRITE)
             except Exception:
@@ -78,7 +78,6 @@ def _safe_copy_file(src: str, dst: str) -> bool:
     except (PermissionError, OSError) as pe:
         logger.warning(f"No se pudo sobreescribir {dst} (bloqueado o en uso por Windows/CapCut): {pe}")
         if os.path.exists(dst):
-            # El archivo ya existe previamente (fuente o recurso ya disponible), no se interrumpe la actualización
             return False
         raise
 
@@ -239,7 +238,7 @@ def download_and_apply_update(
                 for f in os.listdir(src_fonts):
                     if f.lower().endswith(('.ttf', '.otf')):
                         try:
-                            _safe_copy_file(os.path.join(src_fonts, f), os.path.join(dst_fonts, f))
+                            _safe_copy_file(os.path.join(src_fonts, f), os.path.join(dst_fonts, f), is_font=True)
                         except Exception as fe:
                             logger.warning(f"Aviso al copiar fuente {f}: {fe}")
 

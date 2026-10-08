@@ -1,5 +1,6 @@
 {
   "name": "Letra Dr Carrillo",
+  "version": "1.0.5",
   "description": "Estilo de 2 capas del Dr. Carrillo: Gotham Book blanco arriba (tamaño 10), Gotham Bold arena (#CCC3B1) abajo en MAYÚSCULAS completas más grande (tamaño 15-16 palabras cortas, 13 palabras largas) con sombra cálida y click sincronizado.",
   "layout": "dual",
   "uppercase": true,
