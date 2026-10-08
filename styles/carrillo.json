@@ -1,7 +1,8 @@
 {
   "name": "Letra Dr Carrillo",
-  "description": "Estilo de 2 capas del Dr. Carrillo: Gotham Book blanco arriba, Gotham Bold arena (#CCC3B1) abajo en MAYÚSCULAS completas con sombra cálida y click sincronizado.",
+  "description": "Estilo de 2 capas del Dr. Carrillo: Gotham Book blanco arriba (tamaño 10), Gotham Bold arena (#CCC3B1) abajo en MAYÚSCULAS completas más grande (tamaño 15-16 palabras cortas, 13 palabras largas) con sombra cálida y click sincronizado.",
   "layout": "dual",
+  "uppercase": true,
   "top": {
     "font_name": "Gotham Book",
     "font_title": "Gotham-Book",
@@ -13,7 +14,7 @@
       1.0
     ],
     "font_size": 10.0,
-    "y": -0.17527505764971218,
+    "y": -0.175,
     "scale": {
       "x": 1.0,
       "y": 1.0
@@ -21,7 +22,7 @@
     "shadow": {
       "alpha": 0.5,
       "angle": -45.0,
-      "diffuse": 0.02500000037252903,
+      "diffuse": 0.025,
       "distance": 3.0,
       "content": {
         "render_type": "solid",
@@ -49,11 +50,22 @@
       0.7647058963775635,
       0.6941176652908325
     ],
-    "font_size": 9.0,
-    "y": -0.2550457781234874,
+    "font_size": 15.0,
+    "font_size_short": 16.0,
+    "font_size_medium": 14.5,
+    "font_size_long": 13.0,
+    "dynamic_font_size": {
+      "enabled": true,
+      "short": 16.0,
+      "medium": 14.5,
+      "long": 13.0,
+      "short_max_chars": 5,
+      "medium_max_chars": 8
+    },
+    "y": -0.27,
     "scale": {
-      "x": 1.3550004042363974,
-      "y": 1.3550004042363974
+      "x": 1.0,
+      "y": 1.0
     },
     "animation": {
       "enabled": false,

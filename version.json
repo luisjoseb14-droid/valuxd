@@ -1,8 +1,8 @@
 {
-  "version": "1.0.3",
-  "version_code": 4,
+  "version": "1.0.4",
+  "version_code": 5,
   "date": "2026-10-08",
-  "description": "Nuevo preset Dr. Carrillo (Gotham Book blanco + Gotham Bold arena)",
+  "description": "Dr. Carrillo actualizado: Mayúsculas completas y tamaño dinámico de destacada (15-16 palabras cortas, 13 palabras largas)",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

@@ -30,6 +30,45 @@ NEGATIVE_KEYWORDS = {
     'roto', 'rotura', 'pronación', 'pronas', 'supinación'
 }
 
+def get_effective_font_size(style_cfg: Dict[str, Any], text_str: str) -> float:
+    """
+    Calcula el tamaño de fuente efectivo en CapCut:
+    - Si el preset tiene dynamic_font_size o font_size_short/font_size_long,
+      asigna tamaño grande (15-16) para palabras cortas (<=5 caracteres)
+      y tamaño menor (al menos 13) para palabras largas.
+    - De lo contrario, retorna el font_size estándar del preset.
+    """
+    if not style_cfg:
+        return 10.0
+    base_size = float(style_cfg.get('font_size', 10.0))
+    clean_text = text_str.strip() if text_str else ""
+    clean_len = len(clean_text)
+
+    dyn_cfg = style_cfg.get('dynamic_font_size')
+    if dyn_cfg and dyn_cfg.get('enabled', True):
+        s_max = dyn_cfg.get('short_max_chars', 5)
+        m_max = dyn_cfg.get('medium_max_chars', 8)
+        if clean_len <= s_max:
+            return float(dyn_cfg.get('short', 16.0))
+        elif clean_len <= m_max:
+            return float(dyn_cfg.get('medium', 14.5))
+        else:
+            return float(dyn_cfg.get('long', 13.0))
+
+    if 'font_size_short' in style_cfg and 'font_size_long' in style_cfg:
+        if clean_len <= 5:
+            return float(style_cfg['font_size_short'])
+        elif clean_len <= 8:
+            med = style_cfg.get('font_size_medium')
+            if med is not None:
+                return float(med)
+            return (float(style_cfg['font_size_short']) + float(style_cfg['font_size_long'])) / 2.0
+        else:
+            return float(style_cfg['font_size_long'])
+
+    return base_size
+
+
 class DualStyler:
     """
     Engine for creating two-layer stacked subtitles (arriba / abajo):
@@ -65,7 +104,9 @@ class DualStyler:
             self.highlight_cfg = preset_data.get('highlight', bot_cfg)
             self.y_top = top_cfg.get('y', y_top)
             self.y_bottom = bot_cfg.get('y', y_bottom)
-            self.scale = top_cfg.get('scale', scale or SCALE_DEFAULT)
+            self.top_scale = top_cfg.get('scale', scale or SCALE_DEFAULT)
+            self.bot_scale = bot_cfg.get('scale', self.top_scale)
+            self.scale = self.top_scale
             self.sound_fx = preset_data.get('sound_fx', {'enabled': True, 'volume': 0.65})
             self.pacing = preset_data.get('pacing', {'min_seconds': 3.0, 'max_seconds': 4.5})
             self.margins = preset_data.get('margins', {'max_chars_per_line': 18, 'max_words_per_line': 3})
@@ -85,6 +126,8 @@ class DualStyler:
 
             self.y_top = y_top
             self.y_bottom = y_bottom
+            self.top_scale = scale or SCALE_DEFAULT
+            self.bot_scale = scale or SCALE_DEFAULT
             self.scale = scale or SCALE_DEFAULT
             self.sound_fx = {'enabled': True, 'volume': 0.65, 'name': 'Click_Mouse_Click_02(864360)'}
             self.pacing = {'min_seconds': 3.0, 'max_seconds': 4.5}
@@ -137,7 +180,7 @@ class DualStyler:
 
     def _create_text_material(self, draft_data: Dict[str, Any], text_str: str, style_cfg: Dict[str, Any], is_highlight: bool = False) -> str:
         text_str = clean_subtitle_text(text_str)
-        if style_cfg.get('uppercase', False):
+        if style_cfg.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False)):
             text_str = text_str.upper()
         materials = draft_data.setdefault('materials', {})
         texts = materials.setdefault('texts', [])
@@ -146,7 +189,7 @@ class DualStyler:
         font_info = style_cfg.get('font', {})
         font_name = font_info.get('name') or style_cfg.get('font_name', 'none')
         font_path = resolve_font_path(font_info.get('path') or style_cfg.get('font_path', ''))
-        font_size = float(style_cfg.get('font_size', 10.0))
+        font_size = get_effective_font_size(style_cfg, text_str)
         base_rgb = style_cfg.get('rgb_color', [1.0, 1.0, 1.0])
         shadow_cfg = style_cfg.get('shadow')
 
@@ -471,6 +514,8 @@ class DualStyler:
 
             if top_info and top_info.get('text'):
                 top_text = clean_subtitle_text(top_info['text'])
+                if self.default_style.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False)):
+                    top_text = top_text.upper()
                 t_start = top_info.get('start', 0)
                 t_end = top_info.get('end', 0)
                 is_top_hl = top_info.get('is_highlight', False)
@@ -494,7 +539,7 @@ class DualStyler:
                         top_mat_id = self._create_text_material(data, top_text, self.default_style, is_highlight=False)
                         extra_refs = []
 
-                    top_scale = copy.deepcopy(self.scale)
+                    top_scale = copy.deepcopy(self.top_scale)
                     if is_top_hl:
                         char_count = len(top_text.strip())
                         if char_count > 11:
@@ -531,7 +576,7 @@ class DualStyler:
             bot_info = item.get('bot')
             if bot_info and bot_info.get('text'):
                 bot_text = clean_subtitle_text(bot_info['text'])
-                if self.highlight_style.get('uppercase', False):
+                if self.highlight_style.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False)):
                     bot_text = bot_text.upper()
                 b_start = bot_info.get('start', 0)
                 b_end = bot_info.get('end', 0)
@@ -555,7 +600,7 @@ class DualStyler:
                     extra_refs = [anim_ref] if anim_ref else []
 
                     # Safe margin safeguard: dynamically scale down highlight if text length exceeds safe threshold
-                    bot_scale = copy.deepcopy(self.scale)
+                    bot_scale = copy.deepcopy(self.bot_scale)
                     char_count = len(bot_text.strip())
                     if char_count > 11:
                         shrink_factor = max(0.75, 11.0 / char_count)
@@ -918,6 +963,11 @@ class DualStyler:
             'y', 'e', 'ni', 'o', 'u', 'que', 'pero', 'aunque', 'porque', 'como', 'cuando', 'donde', 'si'
         }
 
+        is_all_uppercase = (
+            (self.default_style.get('uppercase', False) and self.highlight_style.get('uppercase', False))
+            or (self.preset_data and self.preset_data.get('uppercase', False))
+        )
+
         raw_items = []
         for idx, s in enumerate(subs):
             is_start = True
@@ -927,6 +977,12 @@ class DualStyler:
                 if prev_words and prev_words[-1].lower().rstrip('?!,.:;') in UNFINISHED_ENDINGS:
                     is_start = False
             txt = clean_subtitle_text(s.text, is_sentence_start=is_start)
+            if is_all_uppercase:
+                txt = txt.upper()
+            w_data = s.text_material.get('words')
+            if is_all_uppercase and w_data and isinstance(w_data, dict) and 'text' in w_data:
+                w_data = copy.deepcopy(w_data)
+                w_data['text'] = [w.upper() for w in w_data.get('text', [])]
             if txt and s.duration_us > 0:
                 raw_items.append({
                     'index': idx,
@@ -935,7 +991,7 @@ class DualStyler:
                     'start': s.start_us,
                     'end': s.start_us + s.duration_us,
                     'duration': s.duration_us,
-                    'words': s.text_material.get('words')
+                    'words': w_data
                 })
 
         if not raw_items:
@@ -1532,14 +1588,22 @@ class DualStyler:
                 bot_font_info = self.highlight_style.get('font', {})
                 bot_font_name = bot_font_info.get('name') or self.highlight_style.get('font_name', 'none')
                 bot_font_path = resolve_font_path(bot_font_info.get('path') or self.highlight_style.get('font_path', ''))
-                bot_font_size = float(self.highlight_style.get('font_size', 21.0))
                 bot_rgb = self.highlight_style.get('rgb_color', [0.9843137, 0.5568628, 0.282353])
+
+                is_bot_upper = self.highlight_style.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False))
+                if is_bot_upper:
+                    current_text = current_text.upper()
+                    cj['text'] = current_text
+                    if 'words' in tmat and isinstance(tmat['words'], dict):
+                        tmat['words']['text'] = [w.upper() for w in tmat['words'].get('text', [])]
+
+                bot_font_size = get_effective_font_size(self.highlight_style, current_text)
 
                 seg['clip'] = {
                     'alpha': 1.0,
                     'flip': {'horizontal': False, 'vertical': False},
                     'rotation': 0.0,
-                    'scale': copy.deepcopy(self.scale),
+                    'scale': copy.deepcopy(self.bot_scale),
                     'transform': {'x': 0.0, 'y': self.y_top}
                 }
                 seg['uniform_scale'] = {'on': True, 'value': 1.0}
@@ -1558,6 +1622,7 @@ class DualStyler:
                     style_entry["shadows"] = [copy.deepcopy(self.highlight_style['shadow'])]
                 cj['styles'] = [style_entry]
                 tmat['content'] = json.dumps(cj, ensure_ascii=False, separators=(',', ':'))
+                tmat['base_content'] = json.dumps(cj, ensure_ascii=False, separators=(',', ':'))
                 tmat['font_path'] = bot_font_path
                 tmat['font_title'] = bot_font_name
                 tmat['font_size'] = bot_font_size
@@ -1569,11 +1634,20 @@ class DualStyler:
                 'alpha': 1.0,
                 'flip': {'horizontal': False, 'vertical': False},
                 'rotation': 0.0,
-                'scale': copy.deepcopy(self.scale),
+                'scale': copy.deepcopy(self.top_scale),
                 'transform': {'x': 0.0, 'y': self.y_top}
             }
             seg['uniform_scale'] = {'on': True, 'value': 1.0}
             seg['extra_material_refs'] = []
+
+            is_top_upper = self.default_style.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False))
+            if is_top_upper:
+                current_text = current_text.upper()
+                cj['text'] = current_text
+                if 'words' in tmat and isinstance(tmat['words'], dict):
+                    tmat['words']['text'] = [w.upper() for w in tmat['words'].get('text', [])]
+
+            top_font_size = get_effective_font_size(self.default_style, current_text)
 
             style_entry = {
                 "fill": {
@@ -1594,6 +1668,7 @@ class DualStyler:
 
             cj['styles'] = [style_entry]
             tmat['content'] = json.dumps(cj, ensure_ascii=False, separators=(',', ':'))
+            tmat['base_content'] = json.dumps(cj, ensure_ascii=False, separators=(',', ':'))
             tmat['font_path'] = top_font_path
             tmat['font_title'] = top_font_name
             tmat['font_size'] = top_font_size
@@ -1607,10 +1682,8 @@ class DualStyler:
             bot_font_info = self.highlight_style.get('font', {})
             bot_font_name = bot_font_info.get('name') or self.highlight_style.get('font_name', 'none')
             bot_font_path = resolve_font_path(bot_font_info.get('path') or self.highlight_style.get('font_path', ''))
-            bot_font_size = float(self.highlight_style.get('font_size', 19.25))
             bot_rgb = self.highlight_style.get('rgb_color', [1.0, 1.0, 1.0])
             anim_cfg = self.highlight_style.get('animation', {})
-            is_uppercase = self.highlight_style.get('uppercase', False)
 
             for bot_track in text_tracks[1:]:
                 for seg in bot_track.get('segments', []):
@@ -1618,7 +1691,7 @@ class DualStyler:
                         'alpha': 1.0,
                         'flip': {'horizontal': False, 'vertical': False},
                         'rotation': 0.0,
-                        'scale': copy.deepcopy(self.scale),
+                        'scale': copy.deepcopy(self.bot_scale),
                         'transform': {'x': 0.0, 'y': self.y_bottom}
                     }
                     seg['uniform_scale'] = {'on': True, 'value': 1.0}
@@ -1643,11 +1716,14 @@ class DualStyler:
                         cj = {'text': raw_c}
 
                     current_text = cj.get('text', '')
-                    if is_uppercase:
+                    is_bot_upper = self.highlight_style.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False))
+                    if is_bot_upper:
                         current_text = current_text.upper()
                         cj['text'] = current_text
                         if 'words' in tmat and isinstance(tmat['words'], dict):
                             tmat['words']['text'] = [w.upper() for w in tmat['words'].get('text', [])]
+
+                    bot_font_size = get_effective_font_size(self.highlight_style, current_text)
 
                     style_entry = {
                         "fill": {
