@@ -15,6 +15,7 @@ import urllib.request
 import urllib.error
 import ssl
 import subprocess
+import stat
 import logging
 from typing import Dict, Any, Tuple, Optional, Callable
 
@@ -49,6 +50,36 @@ def _safe_urlopen(req, timeout=30):
             logger.info("Aviso SSL detectado. Reintentando con contexto seguro sin verificación...")
             ctx = ssl._create_unverified_context()
             return urllib.request.urlopen(req, context=ctx, timeout=timeout)
+        raise
+
+
+def _safe_copy_file(src: str, dst: str) -> bool:
+    """
+    Copia un archivo de src a dst de manera resiliente en Windows.
+    - Si el archivo destino ya existe y tiene el mismo tamaño, no hace nada (evita bloqueos de Windows).
+    - Si falla por PermissionError (típico de fuentes .otf/.ttf en uso por el sistema o CapCut),
+      remueve atributos de solo lectura y reintenta.
+    - Si sigue bloqueado pero el archivo destino ya existía previamente, continúa sin error fatal.
+    - Si el archivo destino no existía, sí propaga el error.
+    """
+    try:
+        if os.path.exists(dst):
+            try:
+                if os.path.getsize(src) == os.path.getsize(dst):
+                    return True
+            except Exception:
+                pass
+            try:
+                os.chmod(dst, stat.S_IWRITE)
+            except Exception:
+                pass
+        shutil.copy2(src, dst)
+        return True
+    except (PermissionError, OSError) as pe:
+        logger.warning(f"No se pudo sobreescribir {dst} (bloqueado o en uso por Windows/CapCut): {pe}")
+        if os.path.exists(dst):
+            # El archivo ya existe previamente (fuente o recurso ya disponible), no se interrumpe la actualización
+            return False
         raise
 
 
@@ -194,7 +225,7 @@ def download_and_apply_update(
             os.makedirs(dst_styles, exist_ok=True)
             for f in os.listdir(src_styles):
                 if f.endswith('.json'):
-                    shutil.copy2(os.path.join(src_styles, f), os.path.join(dst_styles, f))
+                    _safe_copy_file(os.path.join(src_styles, f), os.path.join(dst_styles, f))
 
         # 4. Copiar assets/
         src_assets = os.path.join(src_root, 'assets')
@@ -207,7 +238,7 @@ def download_and_apply_update(
                 os.makedirs(dst_fonts, exist_ok=True)
                 for f in os.listdir(src_fonts):
                     if f.lower().endswith(('.ttf', '.otf')):
-                        shutil.copy2(os.path.join(src_fonts, f), os.path.join(dst_fonts, f))
+                        _safe_copy_file(os.path.join(src_fonts, f), os.path.join(dst_fonts, f))
 
             # audio
             src_audio = os.path.join(src_assets, 'audio')
@@ -215,7 +246,7 @@ def download_and_apply_update(
             if os.path.isdir(src_audio):
                 os.makedirs(dst_audio, exist_ok=True)
                 for f in os.listdir(src_audio):
-                    shutil.copy2(os.path.join(src_audio, f), os.path.join(dst_audio, f))
+                    _safe_copy_file(os.path.join(src_audio, f), os.path.join(dst_audio, f))
 
             # effects
             src_effects = os.path.join(src_assets, 'effects')
@@ -226,7 +257,10 @@ def download_and_apply_update(
                     src_eff = os.path.join(src_effects, eff_id)
                     dst_eff = os.path.join(dst_effects, eff_id)
                     if os.path.isdir(src_eff) and not os.path.exists(dst_eff):
-                        shutil.copytree(src_eff, dst_eff)
+                        try:
+                            shutil.copytree(src_eff, dst_eff)
+                        except Exception as e:
+                            logger.warning(f"Error al copiar efecto {eff_id}: {e}")
 
             # stickers
             src_stickers = os.path.join(src_assets, 'stickers')
@@ -237,7 +271,10 @@ def download_and_apply_update(
                     src_stk = os.path.join(src_stickers, stk_id)
                     dst_stk = os.path.join(dst_stickers, stk_id)
                     if os.path.isdir(src_stk) and not os.path.exists(dst_stk):
-                        shutil.copytree(src_stk, dst_stk)
+                        try:
+                            shutil.copytree(src_stk, dst_stk)
+                        except Exception as e:
+                            logger.warning(f"Error al copiar sticker {stk_id}: {e}")
 
         # 5. Copiar core/
         src_core = os.path.join(src_root, 'core')
@@ -246,13 +283,13 @@ def download_and_apply_update(
             os.makedirs(dst_core, exist_ok=True)
             for f in os.listdir(src_core):
                 if f.endswith('.py'):
-                    shutil.copy2(os.path.join(src_core, f), os.path.join(dst_core, f))
+                    _safe_copy_file(os.path.join(src_core, f), os.path.join(dst_core, f))
 
         # 6. Copiar gui.py y archivos clave
         for root_file in ['gui.py', 'cc_subs_pro.py', 'version.json', 'README.md']:
             src_file = os.path.join(src_root, root_file)
             if os.path.isfile(src_file):
-                shutil.copy2(src_file, os.path.join(base_dir, root_file))
+                _safe_copy_file(src_file, os.path.join(base_dir, root_file))
 
         if progress_callback:
             progress_callback("Instalando fuentes en el sistema Windows...", 0.88)
