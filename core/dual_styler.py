@@ -2503,10 +2503,10 @@ class DualStyler:
         layer_name = tmpl_cfg.get('layer_name', 'D6B3869B-42B9-43ED-8435-C814651D7122')
         effect_id = tmpl_cfg.get('effect_id', '7331663549263023366')
         tmpl_name = tmpl_cfg.get('name', '基础上浮')
-        tmpl_path = tmpl_cfg.get('path', 'C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/7331663549263023366/968c3676a4d0c6cd17c59e895224e370')
+        tmpl_path = resolve_effect_path(effect_id, tmpl_cfg.get('path', ''))
 
         anim_res_id = anim_cfg.get('resource_id', '7258195155394499074')
-        anim_path = anim_cfg.get('path', 'C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/effect/55651785/cd586e4d24e5b2b2a499b01d89ac5ad9')
+        anim_path = resolve_effect_path('55651785', anim_cfg.get('path', ''))
         anim_duration = int(anim_cfg.get('duration', 500000))
 
         shadow_obj = top_style.get('shadow', {
