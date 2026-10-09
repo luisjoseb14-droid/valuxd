@@ -313,7 +313,7 @@ class CCSubsProGUI(tk.Tk):
 
         r_ana = ttk.Radiobutton(
             presets_frame,
-            text="👂 Dra. Ana  (Liliana Bold | Liliana Black + Flotación)",
+            text="👂 Dra. Ana Otorrino  (Liliana Bold | Liliana Black + Flotación)",
             variable=self.doctor_preset,
             value="ana",
             command=self._on_preset_change
@@ -466,7 +466,9 @@ class CCSubsProGUI(tk.Tk):
             "emilia": "✨ Emilia: Neue Helvena blanco arriba | Karelle DEMO amarillo abajo + Mini zoom + Stickers CapCut + Click fx",
             "alvaro": "🩺 Dr. Álvaro: GC GRIND blanco arriba | GC GRIND coral abajo + Corte con láser + Click fx",
             "pequenos": "👶 Pequeños Cuidados: Parafina blanco arriba | Chewy amarillo abajo + Mini zoom + Click fx",
-            "ana": "👂 Dra. Ana: Plantilla CapCut flotante | Liliana Bold blanco + Liliana Black amarillo (#FDE69A) en la misma línea",
+            "ana": "👂 Dra. Ana Otorrino: Plantilla CapCut flotante | Liliana Bold blanco + Liliana Black amarillo (#FDE69A) en la misma línea",
+            "ana otorrino": "👂 Dra. Ana Otorrino: Plantilla CapCut flotante | Liliana Bold blanco + Liliana Black amarillo (#FDE69A) en la misma línea",
+            "ana_otorrino": "👂 Dra. Ana Otorrino: Plantilla CapCut flotante | Liliana Bold blanco + Liliana Black amarillo (#FDE69A) en la misma línea",
             "cuidus": "🌸 CUIDUS: Gentium Plus Italic blanco arriba | Gentium Plus Bold rosa suave (#E5C7D2) abajo + Descenso + Click fx",
             "laura burgos": "🩺 Dra. Laura Burgos: Indivisible Regular blanco arriba | Indivisible Bold verde azulado (#ABC8CC) abajo + Aparición progresiva + Click fx",
             "laura_burgos": "🩺 Dra. Laura Burgos: Indivisible Regular blanco arriba | Indivisible Bold verde azulado (#ABC8CC) abajo + Aparición progresiva + Click fx",
