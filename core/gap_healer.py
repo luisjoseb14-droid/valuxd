@@ -42,6 +42,8 @@ class SubtitleGap:
     max_volume_db: float = -99.0
     mean_volume_db: float = -99.0
     suggested_text: str = ""
+    prev_sub: Any = None
+    next_sub: Any = None
 
     @property
     def start_time_str(self) -> str:
@@ -120,8 +122,8 @@ def find_subtitle_gaps(
             matched_media_path = ""
             matched_file_start_sec = 0.0
 
-            # Prefer video with valid path that covers the gap
-            for m in media_segments:
+            # 1. Prefer video track media with valid path that covers the gap
+            for m in [x for x in media_segments if x['track_type'] == 'video']:
                 if m['path'] and os.path.exists(m['path']):
                     # Check overlap with gap
                     if m['start_us'] <= curr_end_us and m['end_us'] >= next_start_us:
@@ -130,11 +132,26 @@ def find_subtitle_gaps(
                         matched_file_start_sec = max(0.0, offset_us / 1_000_000.0)
                         break
 
-            # Fallback to closest partial overlap if no complete container
+            # 2. Prefer video track with partial overlap
             if not matched_media_path:
-                for m in media_segments:
+                for m in [x for x in media_segments if x['track_type'] == 'video']:
                     if m['path'] and os.path.exists(m['path']):
                         if m['start_us'] < next_start_us and m['end_us'] > curr_end_us:
+                            matched_media_path = m['path']
+                            offset_us = m['source_start_us'] + max(0, curr_end_us - m['start_us'])
+                            matched_file_start_sec = max(0.0, offset_us / 1_000_000.0)
+                            break
+
+            # 3. Fallback to audio track if no video segment covered the gap
+            if not matched_media_path:
+                for m in [x for x in media_segments if x['track_type'] == 'audio']:
+                    if m['path'] and os.path.exists(m['path']):
+                        if m['start_us'] <= curr_end_us and m['end_us'] >= next_start_us:
+                            matched_media_path = m['path']
+                            offset_us = m['source_start_us'] + (curr_end_us - m['start_us'])
+                            matched_file_start_sec = max(0.0, offset_us / 1_000_000.0)
+                            break
+                        elif m['start_us'] < next_start_us and m['end_us'] > curr_end_us:
                             matched_media_path = m['path']
                             offset_us = m['source_start_us'] + max(0, curr_end_us - m['start_us'])
                             matched_file_start_sec = max(0.0, offset_us / 1_000_000.0)
@@ -149,7 +166,9 @@ def find_subtitle_gaps(
                 next_text=next_sub.text,
                 media_path=matched_media_path,
                 file_start_sec=matched_file_start_sec,
-                duration_sec=gap_duration_us / 1_000_000.0
+                duration_sec=gap_duration_us / 1_000_000.0,
+                prev_sub=curr_sub,
+                next_sub=next_sub
             )
             gaps.append(gap_item)
             gap_idx += 1
@@ -355,6 +374,24 @@ def insert_healed_subtitles(
 
         serialized_content = json.dumps(text_content_dict, ensure_ascii=False, separators=(',', ':'))
 
+        toks = [tok for tok in re.split(r'(\s+)', cleaned_text) if tok]
+        non_space = [tok for tok in toks if not tok.isspace()]
+        dur_ms = int(duration_us // 1000)
+        n_words = len(non_space) or 1
+        step_ms = dur_ms / n_words
+        w_starts = []
+        w_ends = []
+        w_idx = 0
+        for tok in toks:
+            if not tok.isspace():
+                w_starts.append(int(w_idx * step_ms))
+                w_ends.append(int((w_idx + 1) * step_ms))
+                w_idx += 1
+            else:
+                prev_e = w_ends[-1] if w_ends else 0
+                w_starts.append(prev_e)
+                w_ends.append(prev_e)
+
         text_material = {
             "id": mat_id,
             "name": "",
@@ -370,9 +407,9 @@ def insert_healed_subtitles(
             "alignment": 1,
             "line_feed": 1,
             "words": {
-                "start_time": [0],
-                "end_time": [duration_us],
-                "text": [cleaned_text]
+                "start_time": w_starts,
+                "end_time": w_ends,
+                "text": toks
             }
         }
         texts.append(text_material)
@@ -476,15 +513,38 @@ def auto_heal_project_gaps(
 
             if transcribed:
                 g.suggested_text = transcribed
-                healed_items.append({
-                    'start_us': g.start_us,
-                    'duration_us': g.duration_us,
-                    'text': transcribed
-                })
-                _log(f"  🩹 [Hueco Reparado en {g.start_time_str}] Voz activa ({max_v:.1f} dB): '{transcribed}'")
+
+                prev_text_clean = clean_subtitle_text(g.prev_text).lower()
+                next_text_clean = clean_subtitle_text(g.next_text).lower()
+                clean_t = clean_subtitle_text(transcribed).lower()
+                words_t = clean_t.split()
+
+                is_duplicate_tail = False
+                if clean_t in prev_text_clean or clean_t in next_text_clean:
+                    is_duplicate_tail = True
+                elif len(words_t) == 1 and (words_t[0] in prev_text_clean or any(w.endswith(words_t[0]) for w in prev_text_clean.split())):
+                    is_duplicate_tail = True
+                elif words_t and all(w in prev_text_clean for w in words_t):
+                    is_duplicate_tail = True
+
+                if is_duplicate_tail:
+                    _log(f"  [i] [Hueco en {g.start_time_str}] La voz ('{transcribed}') ya está incluida en el subtítulo adyacente. Sincronizando duración...")
+                    if g.prev_sub and hasattr(g.prev_sub, 'segment'):
+                        seg_tr = g.prev_sub.segment.get('target_timerange', {})
+                        seg_start = seg_tr.get('start', 0)
+                        gap_end = g.start_us + g.duration_us
+                        new_dur = max(seg_tr.get('duration', 0), gap_end - seg_start)
+                        seg_tr['duration'] = new_dur
+                else:
+                    healed_items.append({
+                        'start_us': g.start_us,
+                        'duration_us': g.duration_us,
+                        'text': transcribed
+                    })
+                    _log(f"  [+] [Hueco Reparado en {g.start_time_str}] Voz activa ({max_v:.1f} dB): '{transcribed}'")
             else:
                 unhealed_voice_gaps.append(g)
-                _log(f"  ⚠️ [Voz detectada sin texto en {g.start_time_str}] ({max_v:.1f} dB, {g.duration_str})")
+                _log(f"  [!] [Voz detectada sin texto en {g.start_time_str}] ({max_v:.1f} dB, {g.duration_str})")
 
         count_inserted = 0
         if healed_items:

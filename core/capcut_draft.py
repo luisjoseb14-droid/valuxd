@@ -58,7 +58,14 @@ class SubtitleItem:
         if len(styles) == 1:
             styles[0]['range'] = [0, len(cleaned)]
         if 'words' in self.text_material and isinstance(self.text_material['words'], dict):
-            self.text_material['words']['text'] = [cleaned]
+            w_dict = self.text_material['words']
+            w_texts = w_dict.get('text', [])
+            if len(w_texts) <= 1:
+                w_dict['text'] = [cleaned]
+            else:
+                tokens = [t for t in re.split(r'(\s+)', cleaned) if t]
+                if len(tokens) == len(w_texts):
+                    w_dict['text'] = tokens
         if 'recognize_text' in self.text_material:
             self.text_material['recognize_text'] = cleaned
         self.sync_content_to_material()

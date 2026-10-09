@@ -2208,7 +2208,7 @@ class DualStyler:
         min_neutral = int(pacing_cfg.get('min_neutral_segments', 1))
 
         margin_cfg = getattr(self, 'margins', {})
-        eff_max_chars = max_chars_per_line if (max_chars_per_line is not None and max_chars_per_line != 18) else int(margin_cfg.get('max_chars_per_line', 28))
+        eff_max_chars = max_chars_per_line if (max_chars_per_line is not None and max_chars_per_line != 18) else int(margin_cfg.get('max_chars_per_line', 21))
 
         # 1. Read Track 0 speech subtitles
         text_track_indices = [i for i, t in enumerate(project.data.get('tracks', [])) if t.get('type') == 'text']
@@ -2266,27 +2266,174 @@ class DualStyler:
         if not raw_items:
             return 0, 0
 
+        # Helper: never allow isolated single words / connectors as independent segments
+        ORPHAN_CONNECTORS = {
+            'que', 'la', 'lo', 'el', 'de', 'y', 'en', 'un', 'una', 'a', 'por', 'con', 'o',
+            'pero', 'si', 'es', 'se', 'te', 'me', 'su', 'al', 'del', 'los', 'las', 'unos', 'unas'
+        }
+
+        def merge_orphan_subtitles(items):
+            merged = []
+            i = 0
+            while i < len(items):
+                curr = items[i]
+                words = curr['text'].split()
+                is_orphan = (len(words) <= 1 and (not words or words[0].lower() in ORPHAN_CONNECTORS)) or (len(words) == 1 and curr['duration'] < 700000)
+                if is_orphan:
+                    if i + 1 < len(items):
+                        nxt = items[i+1]
+                        nxt['text'] = curr['text'] + ' ' + nxt['text']
+                        c_w = curr.get('words') or {}
+                        n_w = nxt.get('words') or {}
+                        if c_w and n_w:
+                            nxt_shift_ms = int((nxt['start'] - curr['start']) // 1000)
+                            shifted_n_starts = [s + nxt_shift_ms for s in n_w.get('start_time', [])]
+                            shifted_n_ends = [e + nxt_shift_ms for e in n_w.get('end_time', [])]
+                            nxt['words'] = {
+                                'text': c_w.get('text', []) + [' '] + n_w.get('text', []),
+                                'start_time': c_w.get('start_time', []) + [0] + shifted_n_starts,
+                                'end_time': c_w.get('end_time', []) + [0] + shifted_n_ends
+                            }
+                        nxt['duration'] = (nxt['start'] + nxt['duration']) - curr['start']
+                        nxt['start'] = curr['start']
+                    elif merged:
+                        prev = merged[-1]
+                        prev['text'] = prev['text'] + ' ' + curr['text']
+                        prev['duration'] = (curr['start'] + curr['duration']) - prev['start']
+                    i += 1
+                    continue
+                merged.append(curr)
+                i += 1
+            return merged
+
+        def split_long_subtitles(items, max_chars=44, max_words=9):
+            final_items = []
+
+            def _split_item(item):
+                txt = item['text']
+                words_list = txt.split()
+                if len(words_list) <= max_words and len(txt) <= max_chars:
+                    return [item]
+
+                w_dict = item.get('words') or {}
+                tokens = w_dict.get('text', [])
+                starts = w_dict.get('start_time', [])
+                ends = w_dict.get('end_time', [])
+
+                word_indices = [idx for idx, t in enumerate(tokens) if t.strip()]
+                if len(word_indices) <= 3:
+                    return [item]
+
+                mid_idx = len(word_indices) // 2
+                best_split_k = mid_idx
+                best_penalty = float('inf')
+
+                for k in range(max(2, mid_idx - 2), min(len(word_indices) - 1, mid_idx + 3)):
+                    w_before = tokens[word_indices[k-1]].lower()
+                    w_after = tokens[word_indices[k]].lower()
+                    pen = abs(k - mid_idx) * 6
+                    if w_before in {'un', 'una', 'el', 'la', 'los', 'las', 'de', 'del', 'al', 'su', 'mi', 'tu', 'y', 'o'}:
+                        pen += 50
+                    if w_after in {'y', 'pero', 'que', 'cuando', 'donde', 'porque', 'aunque', 'para', 'de', 'en'}:
+                        pen -= 15
+                    if pen < best_penalty:
+                        best_penalty = pen
+                        best_split_k = k
+
+                split_tok_idx = word_indices[best_split_k]
+                split_time_ms = ends[word_indices[best_split_k - 1]] if best_split_k - 1 < len(ends) else int((item['duration'] // 2000))
+                split_time_us = int(split_time_ms * 1000)
+
+                toks_a = tokens[:split_tok_idx]
+                starts_a = starts[:split_tok_idx]
+                ends_a = ends[:split_tok_idx]
+                txt_a = "".join(toks_a).strip()
+                dur_a_us = max(400000, min(item['duration'] - 400000, split_time_us))
+
+                item_a = {
+                    'text': txt_a,
+                    'start': item['start'],
+                    'duration': dur_a_us,
+                    'words': {'text': toks_a, 'start_time': starts_a, 'end_time': ends_a}
+                }
+
+                toks_b = tokens[split_tok_idx:]
+                shift_ms = int(dur_a_us // 1000)
+                starts_b = [max(0, s - shift_ms) for s in starts[split_tok_idx:]]
+                ends_b = [max(0, e - shift_ms) for e in ends[split_tok_idx:]]
+                txt_b = "".join(toks_b).strip()
+                start_b_us = item['start'] + dur_a_us
+                dur_b_us = max(400000, item['duration'] - dur_a_us)
+
+                item_b = {
+                    'text': txt_b,
+                    'start': start_b_us,
+                    'duration': dur_b_us,
+                    'words': {'text': toks_b, 'start_time': starts_b, 'end_time': ends_b}
+                }
+
+                out = []
+                out.extend(_split_item(item_a))
+                out.extend(_split_item(item_b))
+                return out
+
+            for it in items:
+                final_items.extend(_split_item(it))
+            return final_items
+
         def balance_line(text: str, max_len: int = eff_max_chars) -> str:
             words = text.split()
-            if len(words) <= 3 or len(text) <= max_len:
+            if not words:
                 return text
-            mid = len(text) // 2
-            best_diff = 999
+            if len(text) <= max_len or len(words) <= 2:
+                return text
+
             best_split = len(words) // 2
-            curr_len = 0
-            for i, w in enumerate(words[:-1]):
-                curr_len += len(w) + 1
-                diff = abs(curr_len - mid)
-                if diff < best_diff:
-                    best_diff = diff
-                    best_split = i + 1
-            line1 = " ".join(words[:best_split])
-            line2 = " ".join(words[best_split:])
-            return f"{line1}\n{line2}"
+            best_penalty = float('inf')
+
+            for i in range(1, len(words)):
+                l1 = ' '.join(words[:i])
+                l2 = ' '.join(words[i:])
+
+                p_len1 = max(0, len(l1) - max_len) * 25
+                p_len2 = max(0, len(l2) - max_len) * 25
+                p_diff = abs(len(l1) - len(l2)) * 1.5
+
+                if len(words[:i]) == 1:
+                    p_len1 += 120
+                if len(words[i:]) == 1:
+                    p_len2 += 120
+
+                if words[i-1].lower() in {'de', 'que', 'en', 'a', 'la', 'el', 'un', 'una', 'y', 'al', 'del'}:
+                    p_len1 += 35
+
+                total_p = p_len1 + p_len2 + p_diff
+                if total_p < best_penalty:
+                    best_penalty = total_p
+                    best_split = i
+
+            line1 = ' '.join(words[:best_split])
+            line2 = ' '.join(words[best_split:])
+            return f'{line1}\n{line2}'
+
+        # Preprocessing: merge orphan single words and split long overflowing cards
+        raw_items = merge_orphan_subtitles(raw_items)
+        raw_items = split_long_subtitles(raw_items, max_chars=44, max_words=9)
+        for idx, it in enumerate(raw_items):
+            it['index'] = idx
 
         # 2. AI Processing with OpenRouter or Heuristic Highlighter
         ai_phrases = []
         effective_key = openrouter_key or (getattr(highlighter, 'api_key', None) if getattr(highlighter, 'provider', None) == 'openrouter' else None) or os.environ.get('OPENROUTER_API_KEY')
+        if not effective_key:
+            cfg_p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.cc_subs_pro_config.json')
+            if os.path.isfile(cfg_p):
+                try:
+                    with open(cfg_p, 'r', encoding='utf-8') as f:
+                        cfg_d = json.load(f)
+                        effective_key = cfg_d.get('openrouter_key') or cfg_d.get('api_key')
+                except Exception:
+                    pass
         if effective_key:
             try:
                 m = model or getattr(highlighter, 'model', None) or DEFAULT_MODEL
@@ -2305,7 +2452,7 @@ class DualStyler:
                                 p = convert_spanish_numbers_to_digits(clean_subtitle_text(idx_to_text.get(t_idx, '')))
                         if p:
                             ai_phrases.append({'phrase': p, 'tone': tone})
-                    msg = f"[✓] OpenRouter procesó subtítulos y curó {len(ai_phrases)} palabras destacadas para la plantilla."
+                    msg = f"[+] OpenRouter procesó subtítulos y curó {len(ai_phrases)} palabras destacadas para la plantilla."
                     logger.info(msg)
                     if log_fn:
                         log_fn(msg)
@@ -2373,14 +2520,93 @@ class DualStyler:
         new_texts = []
         new_tmpls = []
         new_anims = []
+        new_segments = []
 
         # 4. Process each subtitle segment
-        for curr in raw_items:
+        for item_idx, curr in enumerate(raw_items):
             clean_text = clean_subtitle_text(curr['text'])
             formatted_text = balance_line(clean_text)
             curr_start = curr['start']
             curr_dur = curr['duration']
-            old_t_mat = curr['text_material']
+            old_t_mat = curr.get('text_material')
+
+            # Acoustic healing & lead-out duration calculation
+            nxt_start = raw_items[item_idx + 1]['start'] if item_idx + 1 < len(raw_items) else curr_start + curr_dur + 5000000
+
+            old_w = curr.get('words') or (old_t_mat.get('words', {}) if (old_t_mat and isinstance(old_t_mat.get('words'), dict)) else {})
+            old_words_list = []
+            for txt, ws, we in zip(old_w.get('text', []), old_w.get('start_time', []), old_w.get('end_time', [])):
+                if txt.strip():
+                    old_words_list.append((txt.strip(), ws, we))
+
+            max_wend_us = (max(we for _, _, we in old_words_list) * 1000) if old_words_list else curr_dur
+            eff_dur = max(curr_dur, max_wend_us)
+            if curr_start + eff_dur > nxt_start - 50000 and item_idx + 1 < len(raw_items):
+                eff_dur = max(curr_dur, nxt_start - curr_start - 50000)
+
+            gap_after = nxt_start - (curr_start + eff_dur)
+            padding_us = min(500000, gap_after - 80000) if gap_after > 150000 else 0
+            final_dur_us = eff_dur + padding_us
+            final_dur_ms = int(final_dur_us // 1000)
+
+            # Tokenize preserving spaces and newlines so letter indexing never drifts
+            tokens = [tok for tok in re.split(r'(\s+)', formatted_text) if tok]
+            text_words = [tok for tok in tokens if not tok.isspace()]
+            
+            matched_timings = []
+            if len(old_words_list) <= 1 and len(text_words) > 1:
+                step_ms = final_dur_ms / len(text_words)
+                for k, tw in enumerate(text_words):
+                    ws = int(k * step_ms)
+                    we = int((k + 1) * step_ms)
+                    matched_timings.append((tw, ws, we))
+            else:
+                old_idx = 0
+                for tw in text_words:
+                    clean_tw = re.sub(r'[^\w]', '', tw.lower())
+                    found = False
+                    while old_idx < len(old_words_list):
+                        ow, ow_s, ow_e = old_words_list[old_idx]
+                        old_idx += 1
+                        clean_ow = re.sub(r'[^\w]', '', ow.lower())
+                        if clean_tw == clean_ow or clean_tw in clean_ow or clean_ow in clean_tw:
+                            matched_timings.append((tw, ow_s, ow_e))
+                            found = True
+                            break
+                    if not found:
+                        prev_e = matched_timings[-1][2] if matched_timings else 0
+                        matched_timings.append((tw, prev_e, min(prev_e + 250, final_dur_ms)))
+
+            if matched_timings and matched_timings[-1][2] > final_dur_ms:
+                max_t = matched_timings[-1][2]
+                matched_timings = [
+                    (tw, int(s * final_dur_ms / max_t), int(e * final_dur_ms / max_t))
+                    for (tw, s, e) in matched_timings
+                ]
+
+            token_texts = []
+            token_starts = []
+            token_ends = []
+            word_k = 0
+            for tok in tokens:
+                token_texts.append(tok)
+                if not tok.isspace():
+                    tw, ws, we = matched_timings[word_k]
+                    ws_ms = int(ws)
+                    we_ms = int(we)
+                    if word_k == len(text_words) - 1:
+                        we_ms = max(we_ms, final_dur_ms)
+                        if final_dur_ms - ws_ms < 300:
+                            prev_w_s = matched_timings[word_k - 1][1] if word_k > 0 else 0
+                            ws_ms = max(int(prev_w_s) + 150, max(0, final_dur_ms - 300))
+                    token_starts.append(ws_ms)
+                    token_ends.append(we_ms)
+                    word_k += 1
+                else:
+                    prev_e = token_ends[-1] if token_ends else 0
+                    nxt_s = int(matched_timings[word_k][1]) if word_k < len(matched_timings) else prev_e
+                    token_starts.append(prev_e)
+                    token_ends.append(max(prev_e, nxt_s))
 
             time_since_last_sec = (curr_start - last_highlight_us) / 1e6
             can_highlight = (time_since_last_sec >= effective_min_pacing) and (neutral_segments >= min_neutral)
@@ -2487,8 +2713,7 @@ class DualStyler:
                 "shadow_point": {"x": 0.0, "y": 0.0},
                 "shadow_thickness_projection_enable": False,
                 "shadow_thickness_projection_angle": 0.0,
-                "shadow_thickness_projection_distance": 0.0,
-                "words": copy.deepcopy(old_t_mat['words']) if (old_t_mat and 'words' in old_t_mat and old_t_mat['words']) else {"start_time": [], "end_time": [], "text": []},
+                "words": {"text": token_texts, "start_time": token_starts, "end_time": token_ends},
                 "current_words": {"start_time": [], "end_time": [], "text": []},
                 "global_alpha": 1.0,
                 "combo_info": {"text_templates": []},
@@ -2646,7 +2871,7 @@ class DualStyler:
                     "id": new_info_id,
                     "attach_info": {
                         "start_time": 0,
-                        "duration": curr_dur,
+                        "duration": final_dur_us,
                         "original_size_width": float(max_line_len * 22.0),
                         "original_size_height": 105.0 if '\n' in formatted_text else 52.0,
                         "clip": {
@@ -2692,21 +2917,39 @@ class DualStyler:
             }
             new_tmpls.append(tmpl_mat)
 
-            # Update segment in track
-            seg = curr['segment']
-            seg['material_id'] = new_tmpl_id
-            seg['extra_material_refs'] = [new_anim_id]
-            seg['render_index'] = 14000
-            seg['track_render_index'] = first_text_idx
-            seg_clip = seg.setdefault('clip', {})
-            seg_clip['scale'] = {"x": 1.0, "y": 1.0}
-            seg_trans = seg_clip.setdefault('transform', {})
-            seg_trans['x'] = 0.0
-            seg_trans['y'] = y_pos
-            seg['uniform_scale'] = {"on": True, "value": 1.0}
-            seg['render_timerange'] = {"start": 0, "duration": 0}
+            # Build segment in track
+            new_seg = {
+                "id": str(uuid.uuid4()).upper(),
+                "material_id": new_tmpl_id,
+                "target_timerange": {
+                    "start": curr_start,
+                    "duration": final_dur_us
+                },
+                "source_timerange": None,
+                "render_timerange": {"start": 0, "duration": 0},
+                "speed": 1.0,
+                "volume": 1.0,
+                "extra_material_refs": [new_anim_id],
+                "render_index": 14000,
+                "track_render_index": first_text_idx,
+                "clip": {
+                    "scale": {"x": 1.0, "y": 1.0},
+                    "transform": {"x": 0.0, "y": y_pos},
+                    "rotation": 0.0,
+                    "flip": {"vertical": False, "horizontal": False},
+                    "alpha": 1.0
+                },
+                "uniform_scale": {"on": True, "value": 1.0},
+                "visible": True,
+                "enable_color_curves": True,
+                "enable_hsl_curves": True,
+                "enable_color_wheels": True,
+                "enable_video_mask": True
+            }
+            new_segments.append(new_seg)
 
-        # 5. Update materials in project
+        # 5. Update track segments and materials in project
+        text_track['segments'] = new_segments
         materials['texts'] = new_texts
         materials['text_templates'] = new_tmpls
 
@@ -2727,7 +2970,6 @@ class DualStyler:
                 snd_path = get_default_click_sound_path()
             self._add_click_sound_fx(project.data, click_starts, volume=vol, sound_name=snd_name, sound_path=snd_path)
 
-        project.clean_all_subtitles()
         project._parse_subtitles()
         return len(raw_items), highlight_count
 

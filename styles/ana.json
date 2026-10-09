@@ -97,7 +97,7 @@
     "min_neutral_segments": 1
   },
   "margins": {
-    "max_chars_per_line": 28,
+    "max_chars_per_line": 21,
     "max_words_per_line": 5
   }
 }
