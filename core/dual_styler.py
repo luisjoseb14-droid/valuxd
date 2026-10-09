@@ -2082,6 +2082,15 @@ class DualStyler:
                 lower_curr = curr_text.lower()
                 p_idx = lower_curr.find(matched_phrase.lower())
                 p_end = p_idx + len(matched_phrase)
+                if len(matched_phrase) >= 4:
+                    while p_idx > 0 and not curr_text[p_idx - 1].isspace():
+                        p_idx -= 1
+                    while p_end < len(curr_text) and not curr_text[p_end].isspace():
+                        p_end += 1
+                    while p_end > p_idx and curr_text[p_end - 1] in '.,;:!?¿¡"\'':
+                        p_end -= 1
+                    while p_idx < p_end and curr_text[p_idx] in '.,;:!?¿¡"\'':
+                        p_idx += 1
                 actual_phrase = curr_text[p_idx:p_end]
 
                 is_neg = (matched_tone == 'negative') or self._is_negative_term(actual_phrase)
@@ -2577,12 +2586,41 @@ class DualStyler:
                         prev_e = matched_timings[-1][2] if matched_timings else 0
                         matched_timings.append((tw, prev_e, min(prev_e + 250, final_dur_ms)))
 
-            if matched_timings and matched_timings[-1][2] > final_dur_ms:
-                max_t = matched_timings[-1][2]
-                matched_timings = [
-                    (tw, int(s * final_dur_ms / max_t), int(e * final_dur_ms / max_t))
-                    for (tw, s, e) in matched_timings
-                ]
+            # Accelerate word entrance timings so final words appear earlier and have ample display time
+            if matched_timings:
+                last_idx = len(matched_timings) - 1
+                last_w, last_s, last_e = matched_timings[last_idx]
+
+                min_last_hold = max(550, int(final_dur_ms * 0.42))
+                if final_dur_ms < 1100:
+                    min_last_hold = max(420, int(final_dur_ms * 0.45))
+                min_last_hold = min(min_last_hold, max(300, final_dur_ms - 200))
+
+                target_last_start = max(0, final_dur_ms - min_last_hold)
+
+                if last_s > target_last_start and last_s > 0:
+                    alpha = target_last_start / float(last_s)
+                    new_matched = []
+                    for k_idx, (tw, s_val, e_val) in enumerate(matched_timings):
+                        if k_idx == last_idx:
+                            new_s = target_last_start
+                            new_e = final_dur_ms
+                        else:
+                            new_s = int(s_val * alpha)
+                            nxt_s_scaled = int(matched_timings[k_idx + 1][1] * alpha) if k_idx + 1 < last_idx else target_last_start
+                            scaled_e = int(e_val * alpha)
+                            new_e = max(new_s, min(scaled_e, nxt_s_scaled))
+                        new_matched.append((tw, new_s, new_e))
+                    matched_timings = new_matched
+                else:
+                    matched_timings[last_idx] = (last_w, min(last_s, target_last_start), final_dur_ms)
+
+                if matched_timings[-1][2] > final_dur_ms:
+                    max_t = matched_timings[-1][2]
+                    matched_timings = [
+                        (tw, int(s * final_dur_ms / max_t), int(e * final_dur_ms / max_t))
+                        for (tw, s, e) in matched_timings
+                    ]
 
             token_texts = []
             token_starts = []
@@ -2596,9 +2634,6 @@ class DualStyler:
                     we_ms = int(we)
                     if word_k == len(text_words) - 1:
                         we_ms = max(we_ms, final_dur_ms)
-                        if final_dur_ms - ws_ms < 300:
-                            prev_w_s = matched_timings[word_k - 1][1] if word_k > 0 else 0
-                            ws_ms = max(int(prev_w_s) + 150, max(0, final_dur_ms - 300))
                     token_starts.append(ws_ms)
                     token_ends.append(we_ms)
                     word_k += 1
@@ -2621,19 +2656,36 @@ class DualStyler:
                     cand_clean = clean_subtitle_text(cand_str)
                     if not cand_clean:
                         continue
-                    
-                    idx_match = clean_lower.find(cand_clean.lower())
-                    if idx_match != -1:
+
+                    cand_words = cand_clean.split()
+                    if not cand_words:
+                        continue
+
+                    # 1. Whole-word regex match
+                    pattern = r'\b' + r'\s+'.join(re.escape(w) for w in cand_words) + r'\b'
+                    m = re.search(pattern, formatted_text, re.IGNORECASE)
+                    if m:
                         matched_phrase = cand_clean
-                        hl_range = (idx_match, idx_match + len(cand_clean))
+                        hl_range = (m.start(), m.end())
                         break
-                    else:
-                        cand_words = cand_clean.split()
-                        pattern = r'\s+'.join(re.escape(w) for w in cand_words)
-                        m = re.search(pattern, formatted_text, re.IGNORECASE)
-                        if m:
+
+                    # 2. Substring match expanded to full word boundaries (e.g. "composición" -> "recomposición")
+                    if len(cand_clean) >= 4:
+                        idx_match = clean_lower.find(cand_clean.lower())
+                        if idx_match != -1:
                             matched_phrase = cand_clean
-                            hl_range = (m.start(), m.end())
+                            raw_start = idx_match
+                            raw_end = idx_match + len(cand_clean)
+                            # Expand to full word boundaries so we never split prefixes/suffixes like "re-"
+                            while raw_start > 0 and not formatted_text[raw_start - 1].isspace():
+                                raw_start -= 1
+                            while raw_end < len(formatted_text) and not formatted_text[raw_end].isspace():
+                                raw_end += 1
+                            while raw_end > raw_start and formatted_text[raw_end - 1] in '.,;:!?¿¡"\'':
+                                raw_end -= 1
+                            while raw_start < raw_end and formatted_text[raw_start] in '.,;:!?¿¡"\'':
+                                raw_start += 1
+                            hl_range = (raw_start, raw_end)
                             break
 
             # Build styles
