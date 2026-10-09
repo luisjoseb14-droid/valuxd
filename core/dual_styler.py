@@ -97,11 +97,13 @@ class DualStyler:
         if preset_data:
             self.preset_data = preset_data
             self.layout = preset_data.get('layout', 'dual')
-            top_cfg = preset_data.get('top', {})
-            bot_cfg = preset_data.get('bottom', {})
+            top_cfg = preset_data.get('top') or preset_data.get('general', {})
+            bot_cfg = preset_data.get('bottom') or preset_data.get('escalera', {})
             self.default_style = top_cfg
             self.highlight_style = bot_cfg
             self.highlight_cfg = preset_data.get('highlight', bot_cfg)
+            self.general_cfg = preset_data.get('general', top_cfg)
+            self.escalera_cfg = preset_data.get('escalera', bot_cfg)
             self.y_top = top_cfg.get('y', y_top)
             self.y_bottom = bot_cfg.get('y', y_bottom)
             self.top_scale = top_cfg.get('scale', scale or SCALE_DEFAULT)
@@ -968,6 +970,18 @@ class DualStyler:
             )
         elif getattr(self, 'layout', 'dual') == 'template':
             return self.auto_template_process(
+                project=project,
+                highlighter=highlighter,
+                openrouter_key=openrouter_key,
+                model=model,
+                min_pacing_sec=min_pacing_sec,
+                max_pacing_sec=max_pacing_sec,
+                max_chars_per_line=max_chars_per_line,
+                max_words_per_line=max_words_per_line,
+                log_fn=log_fn
+            )
+        elif getattr(self, 'layout', 'dual') in ('dentok', 'escalera'):
+            return self.auto_dentok_process(
                 project=project,
                 highlighter=highlighter,
                 openrouter_key=openrouter_key,
@@ -3025,3 +3039,584 @@ class DualStyler:
         project._parse_subtitles()
         return len(raw_items), highlight_count
 
+    @staticmethod
+    def _chunk_dentok_escalera(text: str) -> List[str]:
+        """
+        Particiona una tarjeta de subtítulo (hook o punchline clave) en 2 a 4 peldaños
+        en formato escalera para el estilo Dentok.
+        Evita cortar en conectores/preposiciones finales y respeta la sintaxis natural española.
+        """
+        words = text.split()
+        n = len(words)
+        if n <= 1:
+            return [text]
+        if n == 2:
+            return [words[0], words[1]]
+
+        CONNECTING_END_WORDS = {
+            'de', 'del', 'en', 'a', 'al', 'con', 'por', 'para', 'sin', 'sobre',
+            'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas',
+            'y', 'e', 'ni', 'o', 'u', 'que', 'su', 'sus', 'mi', 'mis', 'tu', 'tus',
+            'te', 'me', 'se', 'nos', 'le', 'les', 'como', 'tan', 'más'
+        }
+        NATURAL_START_WORDS = {
+            'un', 'una', 'el', 'la', 'los', 'las', 'de', 'del', 'en', 'para', 'por', 'con', 'sin', 'ni', 'y'
+        }
+
+        if n in (3, 4):
+            target_k_options = [2, 3]
+        elif n in (5, 6):
+            target_k_options = [3, 4]
+        else:
+            target_k_options = [4, 3]
+
+        best_chunks = None
+        best_penalty = float('inf')
+
+        for k in target_k_options:
+            def get_partitions(remaining_words, parts_left):
+                if parts_left == 1:
+                    if 1 <= len(remaining_words) <= 4:
+                        yield [remaining_words]
+                    return
+                for sz in range(1, min(4, len(remaining_words) - parts_left + 2)):
+                    chunk = remaining_words[:sz]
+                    rest = remaining_words[sz:]
+                    for sub in get_partitions(rest, parts_left - 1):
+                        yield [chunk] + sub
+
+            for partition in get_partitions(words, k):
+                pen = 0
+                for idx_p, part in enumerate(partition[:-1]):
+                    last_w = part[-1].lower().strip('.,!?')
+                    next_first_w = partition[idx_p + 1][0].lower().strip('.,!?')
+                    if last_w in CONNECTING_END_WORDS:
+                        pen += 120
+                    if next_first_w in NATURAL_START_WORDS:
+                        pen -= 35
+                    if len(part) > 3:
+                        pen += 30
+                    if len(part) == 1 and last_w in CONNECTING_END_WORDS:
+                        pen += 80
+
+                punch = partition[-1]
+                last_w = punch[-1].lower().strip('.,!?')
+                if last_w in CONNECTING_END_WORDS:
+                    pen += 150
+                if len(punch) > 3:
+                    pen += 40
+
+                sizes = [len(p) for p in partition]
+                pen += (max(sizes) - min(sizes)) * 6
+                if n >= 7 and k == 4:
+                    pen -= 30
+
+                if pen < best_penalty:
+                    best_penalty = pen
+                    best_chunks = partition
+
+        if not best_chunks:
+            step_sz = max(1, n // 3)
+            best_chunks = [words[i:i + step_sz] for i in range(0, n, step_sz)]
+
+        res = []
+        for i, p in enumerate(best_chunks):
+            s = ' '.join(p)
+            if i == 0:
+                s = s[0].upper() + s[1:] if len(s) > 1 else s.upper()
+            res.append(s)
+        return res
+
+    def auto_dentok_process(
+        self,
+        project: Any,
+        highlighter: Optional[Any] = None,
+        openrouter_key: Optional[str] = None,
+        model: Optional[str] = None,
+        min_pacing_sec: float = 20.0,
+        max_pacing_sec: float = 30.0,
+        max_chars_per_line: int = 26,
+        max_words_per_line: int = 6,
+        log_fn: Optional[Callable[[str], None]] = None
+    ) -> Tuple[int, int]:
+        """
+        Procesa subtítulos según las especificaciones del preset Dentok:
+        - Hook (Segmento 0) SIEMPRE en formato escalera con Playfair Display Italic (#FFFFFF).
+        - Momentos clave muy escasos (espaciados >= 20s, máx 2-3 en todo el video) en formato escalera.
+        - Peldaños 0..(K-2) en tamaño 14.08, peldaño punchline en 18.08.
+        - Tiempos de entrada progresivos por peldaño y salida simultánea al final de la tarjeta.
+        - Subtítulos generales largos y elegantes sin animación en Helvetica Regular (#FFFFFF),
+          tamaño 6.2, y=-0.167.
+        - Pista 0 (flag=1) aloja subtítulos generales; Pistas 1..4 (flag=0) alojan los 4 peldaños de escalera.
+        """
+        # 1. Extraer subtítulos de todas las pistas de texto
+        text_track_indices = [i for i, t in enumerate(project.data.get('tracks', [])) if t.get('type') == 'text']
+        if not text_track_indices:
+            logger.warning("No text track found in project.")
+            return 0, 0
+
+        materials = project.data.setdefault('materials', {})
+        texts_list = materials.setdefault('texts', [])
+        texts_by_id = {t['id']: t for t in texts_list if isinstance(t, dict) and 'id' in t}
+        templates_by_id = {t['id']: t for t in materials.setdefault('text_templates', []) if isinstance(t, dict) and 'id' in t}
+
+        all_segments = []
+        for t_idx in text_track_indices:
+            t = project.data['tracks'][t_idx]
+            for seg in t.get('segments', []):
+                all_segments.append(seg)
+
+        all_segments.sort(key=lambda s: s.get('target_timerange', {}).get('start', 0))
+
+        raw_items = []
+        seen_starts = set()
+        for seg in all_segments:
+            st = seg.get('target_timerange', {}).get('start', 0)
+            mat_id = seg.get('material_id')
+            t_mat = None
+            if mat_id in texts_by_id:
+                t_mat = texts_by_id[mat_id]
+            elif mat_id in templates_by_id:
+                res_list = templates_by_id[mat_id].get('text_info_resources', [])
+                if res_list and res_list[0].get('text_material_id') in texts_by_id:
+                    t_mat = texts_by_id[res_list[0]['text_material_id']]
+
+            raw_text = ''
+            if t_mat:
+                c_str = t_mat.get('content', '')
+                try:
+                    c_obj = json.loads(c_str)
+                    raw_text = c_obj.get('text', '')
+                except Exception:
+                    raw_text = t_mat.get('recognize_text', '')
+
+            txt = clean_subtitle_text(raw_text)
+            if not txt:
+                continue
+
+            if st in seen_starts:
+                continue
+            seen_starts.add(st)
+
+            tr = seg.get('target_timerange', {})
+            start_us = tr.get('start', 0)
+            dur_us = tr.get('duration', 0)
+
+            raw_items.append({
+                'index': len(raw_items),
+                'segment': seg,
+                'text_material': t_mat,
+                'text': txt,
+                'start': start_us,
+                'end': start_us + dur_us,
+                'duration': dur_us,
+                'words': t_mat.get('words') if t_mat else None
+            })
+
+        if not raw_items:
+            return 0, 0
+
+        # Helper para evitar conectores o palabras sueltas aisladas
+        ORPHAN_CONNECTORS = {
+            'que', 'la', 'lo', 'el', 'de', 'y', 'en', 'un', 'una', 'a', 'por', 'con', 'o',
+            'pero', 'si', 'es', 'se', 'te', 'me', 'su', 'al', 'del', 'los', 'las', 'unos', 'unas'
+        }
+
+        def merge_orphan_subtitles(items):
+            merged = []
+            i = 0
+            while i < len(items):
+                curr = items[i]
+                words = curr['text'].split()
+                is_orphan = (len(words) <= 1 and (not words or words[0].lower() in ORPHAN_CONNECTORS)) or (len(words) == 1 and curr['duration'] < 700000)
+                if is_orphan:
+                    if i + 1 < len(items):
+                        nxt = items[i+1]
+                        nxt['text'] = curr['text'] + ' ' + nxt['text']
+                        c_w = curr.get('words') or {}
+                        n_w = nxt.get('words') or {}
+                        if c_w and n_w:
+                            nxt_shift_ms = int((nxt['start'] - curr['start']) // 1000)
+                            shifted_n_starts = [s + nxt_shift_ms for s in n_w.get('start_time', [])]
+                            shifted_n_ends = [e + nxt_shift_ms for e in n_w.get('end_time', [])]
+                            nxt['words'] = {
+                                'text': c_w.get('text', []) + [' '] + n_w.get('text', []),
+                                'start_time': c_w.get('start_time', []) + [0] + shifted_n_starts,
+                                'end_time': c_w.get('end_time', []) + [0] + shifted_n_ends
+                            }
+                        nxt['duration'] = (nxt['start'] + nxt['duration']) - curr['start']
+                        nxt['start'] = curr['start']
+                    elif merged:
+                        prev = merged[-1]
+                        prev['text'] = prev['text'] + ' ' + curr['text']
+                        prev['duration'] = (curr['start'] + curr['duration']) - prev['start']
+                    i += 1
+                    continue
+                merged.append(curr)
+                i += 1
+            return merged
+
+        raw_items = merge_orphan_subtitles(raw_items)
+        for idx, it in enumerate(raw_items):
+            it['index'] = idx
+
+        # Helper para equilibrar líneas de subtítulos generales
+        eff_max_chars = max_chars_per_line or 26
+
+        def balance_line(text: str, max_len: int = eff_max_chars) -> str:
+            words = text.split()
+            if not words:
+                return text
+            if len(text) <= max_len or len(words) <= 2:
+                t = ' '.join(words)
+                return t[0].upper() + t[1:] if len(t) > 1 else t.upper()
+
+            best_split = len(words) // 2
+            best_penalty = float('inf')
+
+            for i in range(1, len(words)):
+                l1 = ' '.join(words[:i])
+                l2 = ' '.join(words[i:])
+
+                p_len1 = max(0, len(l1) - max_len) * 25
+                p_len2 = max(0, len(l2) - max_len) * 25
+                p_diff = abs(len(l1) - len(l2)) * 1.5
+
+                if len(words[:i]) == 1:
+                    p_len1 += 120
+                if len(words[i:]) == 1:
+                    p_len2 += 120
+
+                if words[i-1].lower() in {'de', 'que', 'en', 'a', 'la', 'el', 'un', 'una', 'y', 'al', 'del'}:
+                    p_len1 += 35
+
+                total_p = p_len1 + p_len2 + p_diff
+                if total_p < best_penalty:
+                    best_penalty = total_p
+                    best_split = i
+
+            line1 = ' '.join(words[:best_split])
+            line2 = ' '.join(words[best_split:])
+            line1 = line1[0].upper() + line1[1:] if len(line1) > 1 else line1.upper()
+            return f'{line1}\n{line2}'
+
+        # 2. Selección de tarjetas en Formato Escalera
+        # Regla central: El Hook (índice 0) SIEMPRE es Escalera.
+        # Momentos clave posteriores muy espaciados (>= 20s, máximo 2-3 en total).
+        pacing_cfg = getattr(self, 'pacing', {})
+        min_sec_between = float(pacing_cfg.get('min_seconds_between_highlights', min_pacing_sec or 20.0))
+        max_hl = int(pacing_cfg.get('max_highlights_per_video', 3))
+
+        escalera_indices = {0}
+        last_hl_time_us = raw_items[0]['start']
+
+        ai_phrases = []
+        effective_key = openrouter_key or (getattr(highlighter, 'api_key', None) if getattr(highlighter, 'provider', None) == 'openrouter' else None) or os.environ.get('OPENROUTER_API_KEY')
+        if not effective_key:
+            cfg_p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.cc_subs_pro_config.json')
+            if os.path.isfile(cfg_p):
+                try:
+                    with open(cfg_p, 'r', encoding='utf-8') as f:
+                        cfg_d = json.load(f)
+                        effective_key = cfg_d.get('openrouter_key') or cfg_d.get('api_key')
+                except Exception:
+                    pass
+
+        if effective_key:
+            try:
+                m = model or getattr(highlighter, 'model', None) or DEFAULT_MODEL
+                if log_fn:
+                    log_fn(f"[*] Conectando con OpenRouter ({m}) para identificar momentos clave...")
+                client = OpenRouterClient(api_key=effective_key, model=m)
+                ai_res = client.process_subtitles(raw_items)
+                if ai_res:
+                    for h in ai_res.get('highlights', []):
+                        p = clean_subtitle_text(h.get('phrase', ''))
+                        if p:
+                            ai_phrases.append(p.lower())
+            except Exception as e:
+                logger.warning(f"OpenRouter highlight check skipped: {e}")
+
+        for it in raw_items[1:]:
+            if len(escalera_indices) >= max_hl:
+                break
+            time_gap = (it['start'] - last_hl_time_us) / 1e6
+            if time_gap < min_sec_between:
+                continue
+
+            it_lower = it['text'].lower()
+            is_key_moment = False
+
+            for p in ai_phrases:
+                if p in it_lower or it_lower in p:
+                    is_key_moment = True
+                    break
+
+            if not is_key_moment:
+                if any(w in it_lower for w in ['somos dentok', 'dentok', 'ranking', 'importante', 'atención']):
+                    is_key_moment = True
+
+            if is_key_moment:
+                escalera_indices.add(it['index'])
+                last_hl_time_us = it['start']
+
+        # 3. Configuraciones de estilo
+        general_cfg = getattr(self, 'general_cfg', {}) or getattr(self, 'default_style', {})
+        escalera_cfg = getattr(self, 'escalera_cfg', {}) or getattr(self, 'highlight_style', {})
+
+        gen_font_path = resolve_font_path(general_cfg.get('font_path', 'Helvetica Regular.otf'))
+        gen_font_title = general_cfg.get('font_title', 'Helvetica')
+        gen_font_size = float(general_cfg.get('font_size', 6.2))
+        gen_y = float(general_cfg.get('y', -0.167))
+        gen_scale = general_cfg.get('scale', {"x": 1.316435, "y": 1.316435})
+        gen_shadow = general_cfg.get('shadow', {
+            "alpha": 0.5, "angle": -45.0, "diffuse": 0.025, "distance": 3.0,
+            "content": {"render_type": "solid", "solid": {"color": [0, 0, 0]}},
+            "thickness_projection_angle": -45.0, "thickness_projection_distance": 0.0,
+            "thickness_projection_enable": False
+        })
+
+        esc_font_path = resolve_font_path(escalera_cfg.get('font_path', 'PlayfairDisplay-Italic.ttf'))
+        esc_font_title = escalera_cfg.get('font_title', 'Playfair Display')
+        esc_base_size = float(escalera_cfg.get('font_size', 14.08))
+        esc_punch_size = float(escalera_cfg.get('font_size_punchline', 18.08))
+        esc_scale = escalera_cfg.get('scale', {"x": 1.316435, "y": 1.316435})
+        esc_shadow = escalera_cfg.get('shadow', {
+            "alpha": 0.4963, "angle": -45.0, "diffuse": 0.025, "distance": 3.0,
+            "content": {"render_type": "solid", "solid": {"color": [0, 0, 0]}},
+            "thickness_projection_angle": -45.0, "thickness_projection_distance": 0.0,
+            "thickness_projection_enable": False
+        })
+
+        staircase_cfg = escalera_cfg.get('staircase', {})
+        start_x = float(staircase_cfg.get('start_x', -0.16))
+        step_x = float(staircase_cfg.get('step_x', 0.12))
+        start_y = float(staircase_cfg.get('start_y', -0.14))
+        step_y = float(staircase_cfg.get('step_y', -0.095))
+
+        new_texts = []
+        general_segments = []
+        escalera_segments_by_step: Dict[int, List[Dict[str, Any]]] = {0: [], 1: [], 2: [], 3: []}
+        highlight_count = 0
+
+        # 4. Generación de segmentos
+        for it in raw_items:
+            seg_start_us = it['start']
+            seg_dur_us = it['duration']
+            seg_end_us = it['end']
+
+            if it['index'] in escalera_indices:
+                highlight_count += 1
+                chunks = self._chunk_dentok_escalera(it['text'])
+                K = len(chunks)
+
+                coords = []
+                for k in range(K):
+                    y_k = start_y + k * step_y
+                    if K == 2:
+                        x_k = -0.12 if k == 0 else 0.08
+                    elif K == 3:
+                        x_k = start_x if k == 0 else (-0.02 if k == 1 else 0.12)
+                    else:
+                        x_k = [-0.1636, -0.0273, -0.0795, -0.0526][min(k, 3)]
+                    coords.append((x_k, y_k))
+
+                w_info = it.get('words') or {}
+                raw_toks = w_info.get('text', [])
+                raw_starts = w_info.get('start_time', [])
+
+                tok_words = []
+                for idx_tok, tok in enumerate(raw_toks):
+                    if tok.strip() and idx_tok < len(raw_starts):
+                        tok_words.append((tok.strip().lower(), raw_starts[idx_tok]))
+
+                for k, chunk_text in enumerate(chunks):
+                    is_punchline = (k == K - 1)
+                    f_size = esc_punch_size if is_punchline else esc_base_size
+                    pos_x, pos_y = coords[k]
+
+                    if k == 0:
+                        step_st_us = seg_start_us
+                    else:
+                        first_chunk_w = chunk_text.split()[0].lower().strip('.,!?')
+                        matched_ms = None
+                        for tw, t_ms in tok_words:
+                            if tw == first_chunk_w or first_chunk_w in tw:
+                                matched_ms = t_ms
+                                break
+                        if matched_ms is not None and matched_ms > 0:
+                            step_st_us = seg_start_us + int(matched_ms * 1000)
+                        else:
+                            step_st_us = seg_start_us + int((k / K) * seg_dur_us * 0.75)
+
+                    step_st_us = max(seg_start_us, min(seg_end_us - 350000, step_st_us))
+                    step_dur_us = seg_end_us - step_st_us
+
+                    formatted_step_text = chunk_text + ' '
+                    mat_id = str(uuid.uuid4()).upper()
+
+                    content_obj = {
+                        "text": formatted_step_text,
+                        "styles": [{
+                            "fill": {"content": {"render_type": "solid", "solid": {"color": [1.0, 1.0, 1.0]}}},
+                            "font": {"path": esc_font_path, "id": ""},
+                            "size": f_size,
+                            "shadows": [copy.deepcopy(esc_shadow)],
+                            "range": [0, len(formatted_step_text)]
+                        }]
+                    }
+                    new_texts.append({
+                        "id": mat_id,
+                        "type": "subtitle",
+                        "recognize_task_id": "manual_styled",
+                        "recognize_text": formatted_step_text,
+                        "name": "",
+                        "content": json.dumps(content_obj, ensure_ascii=False, separators=(',', ':')),
+                        "base_content": json.dumps(content_obj, ensure_ascii=False, separators=(',', ':')),
+                        "font_path": esc_font_path,
+                        "font_title": esc_font_title,
+                        "font_id": "",
+                        "font_resource_id": "",
+                        "font_source_platform": 0,
+                        "fonts": [],
+                        "letter_spacing": 0.0,
+                        "font_size": f_size,
+                        "text_color": "#FFFFFF",
+                        "is_rich_text": False,
+                        "has_shadow": False,
+                        "words": {"start_time": [0], "end_time": [int(step_dur_us // 1000)], "text": [formatted_step_text]}
+                    })
+
+                    step_seg = {
+                        "id": str(uuid.uuid4()).upper(),
+                        "material_id": mat_id,
+                        "source_timerange": None,
+                        "target_timerange": {
+                            "start": step_st_us,
+                            "duration": step_dur_us
+                        },
+                        "render_timerange": {"start": 0, "duration": 0},
+                        "clip": {
+                            "scale": copy.deepcopy(esc_scale),
+                            "transform": {"x": pos_x, "y": pos_y},
+                            "rotation": 0.0,
+                            "flip": {"vertical": False, "horizontal": False},
+                            "alpha": 1.0
+                        },
+                        "uniform_scale": {"on": True, "value": 1.0},
+                        "visible": True,
+                        "speed": 1.0,
+                        "volume": 1.0,
+                        "extra_material_refs": [],
+                        "render_index": 14000,
+                        "enable_color_curves": True,
+                        "enable_hsl_curves": True,
+                        "enable_color_wheels": True,
+                        "enable_video_mask": True
+                    }
+                    escalera_step_idx = min(k, 3)
+                    escalera_segments_by_step[escalera_step_idx].append(step_seg)
+            else:
+                gen_text = balance_line(it['text'], max_len=eff_max_chars)
+                mat_id = str(uuid.uuid4()).upper()
+
+                content_obj = {
+                    "text": gen_text,
+                    "styles": [{
+                        "fill": {"content": {"render_type": "solid", "solid": {"color": [1.0, 1.0, 1.0]}}},
+                        "font": {"path": gen_font_path, "id": ""},
+                        "size": gen_font_size,
+                        "shadows": [copy.deepcopy(gen_shadow)],
+                        "range": [0, len(gen_text)]
+                    }]
+                }
+                new_texts.append({
+                    "id": mat_id,
+                    "type": "subtitle",
+                    "recognize_task_id": "manual_styled",
+                    "recognize_text": gen_text,
+                    "name": "",
+                    "content": json.dumps(content_obj, ensure_ascii=False, separators=(',', ':')),
+                    "base_content": json.dumps(content_obj, ensure_ascii=False, separators=(',', ':')),
+                    "font_path": gen_font_path,
+                    "font_title": gen_font_title,
+                    "font_id": "",
+                    "font_resource_id": "",
+                    "font_source_platform": 0,
+                    "fonts": [],
+                    "letter_spacing": 0.0,
+                    "font_size": gen_font_size,
+                    "text_color": "#FFFFFF",
+                    "is_rich_text": False,
+                    "has_shadow": False,
+                    "words": {"start_time": [0], "end_time": [int(seg_dur_us // 1000)], "text": [gen_text]}
+                })
+
+                gen_seg = {
+                    "id": str(uuid.uuid4()).upper(),
+                    "material_id": mat_id,
+                    "source_timerange": None,
+                    "target_timerange": {
+                        "start": seg_start_us,
+                        "duration": seg_dur_us
+                    },
+                    "render_timerange": {"start": 0, "duration": 0},
+                    "clip": {
+                        "scale": copy.deepcopy(gen_scale),
+                        "transform": {"x": 0.0, "y": gen_y},
+                        "rotation": 0.0,
+                        "flip": {"vertical": False, "horizontal": False},
+                        "alpha": 1.0
+                    },
+                    "uniform_scale": {"on": True, "value": 1.0},
+                    "visible": True,
+                    "speed": 1.0,
+                    "volume": 1.0,
+                    "extra_material_refs": [],
+                    "render_index": 14000,
+                    "enable_color_curves": True,
+                    "enable_hsl_curves": True,
+                    "enable_color_wheels": True,
+                    "enable_video_mask": True
+                }
+                general_segments.append(gen_seg)
+
+        # 5. Organización de Pistas en CapCut
+        # Pista General (flag=1) y 4 Pistas de Escalera (flag=0)
+        tracks = project.data.setdefault('tracks', [])
+        existing_text_tracks = [t for t in tracks if t.get('type') == 'text']
+
+        while len(existing_text_tracks) < 5:
+            new_trk = {
+                "id": str(uuid.uuid4()).upper(),
+                "type": "text",
+                "flag": 0,
+                "attribute": 0,
+                "name": f"Text_{len(existing_text_tracks)}",
+                "is_default_name": True,
+                "segments": []
+            }
+            tracks.append(new_trk)
+            existing_text_tracks.append(new_trk)
+
+        gen_track = existing_text_tracks[0]
+        gen_track['flag'] = 1
+        gen_track['name'] = "General"
+        gen_track['segments'] = general_segments
+
+        for step_idx in range(4):
+            e_track = existing_text_tracks[1 + step_idx]
+            e_track['flag'] = 0
+            e_track['name'] = f"Escalera_{step_idx}"
+            e_track['segments'] = escalera_segments_by_step[step_idx]
+
+        for extra_trk in existing_text_tracks[5:]:
+            extra_trk['segments'] = []
+
+        materials['texts'] = new_texts
+        materials['text_templates'] = []
+
+        project._parse_subtitles()
+        if log_fn:
+            log_fn(f"[+] Preset Dentok aplicado: {len(general_segments)} subtítulos generales, {highlight_count} tarjeta(s) en escalera.")
+        return len(raw_items), highlight_count

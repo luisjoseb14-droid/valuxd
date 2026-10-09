@@ -8411,5 +8411,789 @@
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
+  },
+  "dentok": {
+    "name": "Letra Dentok",
+    "version": "1.0.0",
+    "description": "Estilo de Dentok: Formato escalera en el hook y momentos muy claves con Playfair Display Italic (#FFFFFF) y subtítulos generales largos y elegantes en Helvetica Regular (#FFFFFF) sin animación.",
+    "layout": "dentok",
+    "general": {
+      "font_name": "Helvetica Regular",
+      "font_title": "Helvetica",
+      "font_path": "Helvetica Regular.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 6.2,
+      "y": -0.167,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "animation": null
+    },
+    "escalera": {
+      "font_name": "Playfair Display Italic",
+      "font_title": "Playfair Display",
+      "font_path": "PlayfairDisplay-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.08,
+      "font_size_punchline": 18.08,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.496,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "staircase": {
+        "start_x": -0.16,
+        "step_x": 0.12,
+        "start_y": -0.14,
+        "step_y": -0.095
+      }
+    },
+    "sound_fx": {
+      "enabled": false
+    },
+    "pacing": {
+      "hook_always_escalera": true,
+      "min_seconds_between_highlights": 20.0,
+      "max_highlights_per_video": 3
+    },
+    "margins": {
+      "max_chars_per_line": 26,
+      "max_words_per_line": 6,
+      "max_chars_total": 48
+    }
+  },
+  "letra dentok": {
+    "name": "Letra Dentok",
+    "version": "1.0.0",
+    "description": "Estilo de Dentok: Formato escalera en el hook y momentos muy claves con Playfair Display Italic (#FFFFFF) y subtítulos generales largos y elegantes en Helvetica Regular (#FFFFFF) sin animación.",
+    "layout": "dentok",
+    "general": {
+      "font_name": "Helvetica Regular",
+      "font_title": "Helvetica",
+      "font_path": "Helvetica Regular.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 6.2,
+      "y": -0.167,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "animation": null
+    },
+    "escalera": {
+      "font_name": "Playfair Display Italic",
+      "font_title": "Playfair Display",
+      "font_path": "PlayfairDisplay-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.08,
+      "font_size_punchline": 18.08,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.496,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "staircase": {
+        "start_x": -0.16,
+        "step_x": 0.12,
+        "start_y": -0.14,
+        "step_y": -0.095
+      }
+    },
+    "sound_fx": {
+      "enabled": false
+    },
+    "pacing": {
+      "hook_always_escalera": true,
+      "min_seconds_between_highlights": 20.0,
+      "max_highlights_per_video": 3
+    },
+    "margins": {
+      "max_chars_per_line": 26,
+      "max_words_per_line": 6,
+      "max_chars_total": 48
+    }
+  },
+  "letra_dentok": {
+    "name": "Letra Dentok",
+    "version": "1.0.0",
+    "description": "Estilo de Dentok: Formato escalera en el hook y momentos muy claves con Playfair Display Italic (#FFFFFF) y subtítulos generales largos y elegantes en Helvetica Regular (#FFFFFF) sin animación.",
+    "layout": "dentok",
+    "general": {
+      "font_name": "Helvetica Regular",
+      "font_title": "Helvetica",
+      "font_path": "Helvetica Regular.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 6.2,
+      "y": -0.167,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "animation": null
+    },
+    "escalera": {
+      "font_name": "Playfair Display Italic",
+      "font_title": "Playfair Display",
+      "font_path": "PlayfairDisplay-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.08,
+      "font_size_punchline": 18.08,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.496,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "staircase": {
+        "start_x": -0.16,
+        "step_x": 0.12,
+        "start_y": -0.14,
+        "step_y": -0.095
+      }
+    },
+    "sound_fx": {
+      "enabled": false
+    },
+    "pacing": {
+      "hook_always_escalera": true,
+      "min_seconds_between_highlights": 20.0,
+      "max_highlights_per_video": 3
+    },
+    "margins": {
+      "max_chars_per_line": 26,
+      "max_words_per_line": 6,
+      "max_chars_total": 48
+    }
+  },
+  "dr dentok": {
+    "name": "Letra Dentok",
+    "version": "1.0.0",
+    "description": "Estilo de Dentok: Formato escalera en el hook y momentos muy claves con Playfair Display Italic (#FFFFFF) y subtítulos generales largos y elegantes en Helvetica Regular (#FFFFFF) sin animación.",
+    "layout": "dentok",
+    "general": {
+      "font_name": "Helvetica Regular",
+      "font_title": "Helvetica",
+      "font_path": "Helvetica Regular.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 6.2,
+      "y": -0.167,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "animation": null
+    },
+    "escalera": {
+      "font_name": "Playfair Display Italic",
+      "font_title": "Playfair Display",
+      "font_path": "PlayfairDisplay-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.08,
+      "font_size_punchline": 18.08,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.496,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "staircase": {
+        "start_x": -0.16,
+        "step_x": 0.12,
+        "start_y": -0.14,
+        "step_y": -0.095
+      }
+    },
+    "sound_fx": {
+      "enabled": false
+    },
+    "pacing": {
+      "hook_always_escalera": true,
+      "min_seconds_between_highlights": 20.0,
+      "max_highlights_per_video": 3
+    },
+    "margins": {
+      "max_chars_per_line": 26,
+      "max_words_per_line": 6,
+      "max_chars_total": 48
+    }
+  },
+  "dr. dentok": {
+    "name": "Letra Dentok",
+    "version": "1.0.0",
+    "description": "Estilo de Dentok: Formato escalera en el hook y momentos muy claves con Playfair Display Italic (#FFFFFF) y subtítulos generales largos y elegantes en Helvetica Regular (#FFFFFF) sin animación.",
+    "layout": "dentok",
+    "general": {
+      "font_name": "Helvetica Regular",
+      "font_title": "Helvetica",
+      "font_path": "Helvetica Regular.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 6.2,
+      "y": -0.167,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "animation": null
+    },
+    "escalera": {
+      "font_name": "Playfair Display Italic",
+      "font_title": "Playfair Display",
+      "font_path": "PlayfairDisplay-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.08,
+      "font_size_punchline": 18.08,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.496,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "staircase": {
+        "start_x": -0.16,
+        "step_x": 0.12,
+        "start_y": -0.14,
+        "step_y": -0.095
+      }
+    },
+    "sound_fx": {
+      "enabled": false
+    },
+    "pacing": {
+      "hook_always_escalera": true,
+      "min_seconds_between_highlights": 20.0,
+      "max_highlights_per_video": 3
+    },
+    "margins": {
+      "max_chars_per_line": 26,
+      "max_words_per_line": 6,
+      "max_chars_total": 48
+    }
+  },
+  "doctor dentok": {
+    "name": "Letra Dentok",
+    "version": "1.0.0",
+    "description": "Estilo de Dentok: Formato escalera en el hook y momentos muy claves con Playfair Display Italic (#FFFFFF) y subtítulos generales largos y elegantes en Helvetica Regular (#FFFFFF) sin animación.",
+    "layout": "dentok",
+    "general": {
+      "font_name": "Helvetica Regular",
+      "font_title": "Helvetica",
+      "font_path": "Helvetica Regular.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 6.2,
+      "y": -0.167,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "animation": null
+    },
+    "escalera": {
+      "font_name": "Playfair Display Italic",
+      "font_title": "Playfair Display",
+      "font_path": "PlayfairDisplay-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.08,
+      "font_size_punchline": 18.08,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.496,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "staircase": {
+        "start_x": -0.16,
+        "step_x": 0.12,
+        "start_y": -0.14,
+        "step_y": -0.095
+      }
+    },
+    "sound_fx": {
+      "enabled": false
+    },
+    "pacing": {
+      "hook_always_escalera": true,
+      "min_seconds_between_highlights": 20.0,
+      "max_highlights_per_video": 3
+    },
+    "margins": {
+      "max_chars_per_line": 26,
+      "max_words_per_line": 6,
+      "max_chars_total": 48
+    }
+  },
+  "sep dentok": {
+    "name": "Letra Dentok",
+    "version": "1.0.0",
+    "description": "Estilo de Dentok: Formato escalera en el hook y momentos muy claves con Playfair Display Italic (#FFFFFF) y subtítulos generales largos y elegantes en Helvetica Regular (#FFFFFF) sin animación.",
+    "layout": "dentok",
+    "general": {
+      "font_name": "Helvetica Regular",
+      "font_title": "Helvetica",
+      "font_path": "Helvetica Regular.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 6.2,
+      "y": -0.167,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "animation": null
+    },
+    "escalera": {
+      "font_name": "Playfair Display Italic",
+      "font_title": "Playfair Display",
+      "font_path": "PlayfairDisplay-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.08,
+      "font_size_punchline": 18.08,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.496,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "staircase": {
+        "start_x": -0.16,
+        "step_x": 0.12,
+        "start_y": -0.14,
+        "step_y": -0.095
+      }
+    },
+    "sound_fx": {
+      "enabled": false
+    },
+    "pacing": {
+      "hook_always_escalera": true,
+      "min_seconds_between_highlights": 20.0,
+      "max_highlights_per_video": 3
+    },
+    "margins": {
+      "max_chars_per_line": 26,
+      "max_words_per_line": 6,
+      "max_chars_total": 48
+    }
+  },
+  "sep_dentok": {
+    "name": "Letra Dentok",
+    "version": "1.0.0",
+    "description": "Estilo de Dentok: Formato escalera en el hook y momentos muy claves con Playfair Display Italic (#FFFFFF) y subtítulos generales largos y elegantes en Helvetica Regular (#FFFFFF) sin animación.",
+    "layout": "dentok",
+    "general": {
+      "font_name": "Helvetica Regular",
+      "font_title": "Helvetica",
+      "font_path": "Helvetica Regular.otf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 6.2,
+      "y": -0.167,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "animation": null
+    },
+    "escalera": {
+      "font_name": "Playfair Display Italic",
+      "font_title": "Playfair Display",
+      "font_path": "PlayfairDisplay-Italic.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.08,
+      "font_size_punchline": 18.08,
+      "scale": {
+        "x": 1.316435,
+        "y": 1.316435
+      },
+      "shadow": {
+        "alpha": 0.496,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "staircase": {
+        "start_x": -0.16,
+        "step_x": 0.12,
+        "start_y": -0.14,
+        "step_y": -0.095
+      }
+    },
+    "sound_fx": {
+      "enabled": false
+    },
+    "pacing": {
+      "hook_always_escalera": true,
+      "min_seconds_between_highlights": 20.0,
+      "max_highlights_per_video": 3
+    },
+    "margins": {
+      "max_chars_per_line": 26,
+      "max_words_per_line": 6,
+      "max_chars_total": 48
+    }
   }
 }

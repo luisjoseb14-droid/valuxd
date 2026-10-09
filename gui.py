@@ -365,6 +365,15 @@ class CCSubsProGUI(tk.Tk):
         )
         r_carrillo.grid(row=7, column=0, sticky=tk.W, pady=2, padx=(0, 10))
 
+        r_dentok = ttk.Radiobutton(
+            presets_frame,
+            text="🦷 Dentok  (Helvetica Regular | Playfair Display + Escalera)",
+            variable=self.doctor_preset,
+            value="dentok",
+            command=self._on_preset_change
+        )
+        r_dentok.grid(row=7, column=1, sticky=tk.W, pady=2)
+
         # Dynamic detail line for the selected doctor
         self.lbl_preset_detail = tk.Label(
             preset_card,
@@ -474,7 +483,10 @@ class CCSubsProGUI(tk.Tk):
             "laura_burgos": "🩺 Dra. Laura Burgos: Indivisible Regular blanco arriba | Indivisible Bold verde azulado (#ABC8CC) abajo + Aparición progresiva + Click fx",
             "enfocavision": "👁️ Doctores Enfocavisión: ITC Avant Garde Demi blanco arriba | ITC Avant Garde Bold menta (#85FFD6) abajo + Mini zoom + Click fx",
             "juan": "🌿 Juan: Gotham Bold blanco arriba | Anton morado (#7F1CCC) grande abajo + Click fx",
-            "carrillo": "🩺 Dr. Carrillo: Gotham Book blanco arriba (-0.175) | Gotham Bold arena (#CCC3B1) abajo (-0.255) en MAYÚSCULAS + Click fx"
+            "carrillo": "🩺 Dr. Carrillo: Gotham Book blanco arriba (-0.175) | Gotham Bold arena (#CCC3B1) abajo (-0.255) en MAYÚSCULAS + Click fx",
+            "dentok": "🦷 Dentok: Hook y momentos clave en escalera (Playfair Display Italic) | Subtítulos largos en Helvetica Regular sin animación",
+            "dr dentok": "🦷 Dentok: Hook y momentos clave en escalera (Playfair Display Italic) | Subtítulos largos en Helvetica Regular sin animación",
+            "sep dentok": "🦷 Dentok: Hook y momentos clave en escalera (Playfair Display Italic) | Subtítulos largos en Helvetica Regular sin animación"
         }
         if hasattr(self, 'lbl_preset_detail'):
             self.lbl_preset_detail.config(text=details.get(p, ""))
@@ -973,6 +985,10 @@ class CCSubsProGUI(tk.Tk):
                 self._log(f"  • Modo de diseño: En línea (Aglatia con descansos generosos)")
                 self._log(f"  • Subtítulos totales: {top_count}")
                 self._log(f"  • Palabras destacadas (con descansos): {bot_count}")
+            elif getattr(dual_styler, 'layout', 'dual') in ('dentok', 'escalera'):
+                self._log(f"  • Modo de diseño: Escalera + General sin animación (Dentok)")
+                self._log(f"  • Subtítulos procesados: {top_count}")
+                self._log(f"  • Tarjetas en formato escalera: {bot_count}")
             else:
                 self._log(f"  • Pista Superior (Base): {top_count} subtítulos")
                 self._log(f"  • Pista Inferior (Highlights): {bot_count} palabras destacadas")

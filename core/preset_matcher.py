@@ -73,6 +73,10 @@ PRESET_PATTERNS: List[Tuple[str, List[str]]] = [
     ("carrillo", [
         r'\b(carrillo|carillo)\b',
     ]),
+    # 16. Dentok
+    ("dentok", [
+        r'\bdentok\b',
+    ]),
 ]
 
 
