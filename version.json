@@ -1,8 +1,8 @@
 {
-  "version": "1.0.8",
-  "version_code": 9,
+  "version": "1.0.9",
+  "version_code": 10,
   "date": "2026-10-08",
-  "description": "Nuevo preset Dentok: Hook y momentos clave en formato escalera (Playfair Display Italic) y subtitulos generales elegantes en Helvetica Regular sin animacion.",
+  "description": "Proteccion estricta de margenes seguros en preset Dentok: division automatica de frases largas y balanceo de lineas.",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

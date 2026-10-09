@@ -187,6 +187,69 @@ class TestDentokPreset(unittest.TestCase):
         self.assertTrue(all(et == e_segs_end_times[0] for et in e_segs_end_times),
                         "All escalera steps must finish simultaneously at segment end")
 
+    def test_overflow_margins_protection(self):
+        # Create a project with an excessively long sentence that would normally exceed margins
+        test_dir2 = tempfile.mkdtemp()
+        draft_file2 = os.path.join(test_dir2, 'draft_content.json')
+        long_content = {
+            "canvas_config": {"height": 1920, "ratio": "original", "width": 1080},
+            "duration": 15000000,
+            "fps": 30.0,
+            "materials": {
+                "texts": [
+                    {
+                        "id": "MAT_HOOK",
+                        "content": json.dumps({"text": "cosas que no haría jamás", "styles": []}),
+                        "recognize_text": "cosas que no haría jamás",
+                        "type": "subtitle"
+                    },
+                    {
+                        "id": "MAT_LONG",
+                        "content": json.dumps({"text": "por no haber venido al dentista por ese pánico que tienes", "styles": []}),
+                        "recognize_text": "por no haber venido al dentista por ese pánico que tienes",
+                        "type": "subtitle",
+                        "words": {
+                            "start_time": [0, 300, 600, 900, 1200, 1500, 1800, 2100, 2400, 2700, 3000],
+                            "end_time": [300, 600, 900, 1200, 1500, 1800, 2100, 2400, 2700, 3000, 3500],
+                            "text": ["por", "no", "haber", "venido", "al", "dentista", "por", "ese", "pánico", "que", "tienes"]
+                        }
+                    }
+                ]
+            },
+            "tracks": [
+                {
+                    "id": "TRK_TEXT",
+                    "type": "text",
+                    "flag": 1,
+                    "segments": [
+                        {"id": "SEG_H", "material_id": "MAT_HOOK", "target_timerange": {"start": 0, "duration": 3000000}},
+                        {"id": "SEG_L", "material_id": "MAT_LONG", "target_timerange": {"start": 3000000, "duration": 3500000}}
+                    ]
+                }
+            ]
+        }
+        with open(draft_file2, 'w', encoding='utf-8') as f:
+            json.dump(long_content, f)
+
+        try:
+            proj = CapCutProject(draft_file2)
+            styler = DualStyler.from_preset("dentok")
+            styler.auto_dentok_process(proj)
+
+            # MAT_LONG (57 chars) must have been split into at least 2 safe cards
+            gen_track = [t for t in proj.data['tracks'] if t.get('type') == 'text' and t.get('flag') == 1][0]
+            self.assertGreaterEqual(len(gen_track.get('segments', [])), 2, "Long card must be split into sequential cards")
+
+            # Check that NO line in general materials exceeds 28 characters (safe margins)
+            for m in proj.data['materials']['texts']:
+                if 'Helvetica' in m.get('font_title', ''):
+                    c_txt = json.loads(m.get('content', '{}')).get('text', '')
+                    for line in c_txt.split('\n'):
+                        self.assertLessEqual(len(line), 28, f"Line '{line}' ({len(line)} chars) exceeds safe margin of 28 chars")
+        finally:
+            shutil.rmtree(test_dir2, ignore_errors=True)
+
 
 if __name__ == '__main__':
     unittest.main()
+

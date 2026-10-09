@@ -3257,11 +3257,77 @@ class DualStyler:
             return merged
 
         raw_items = merge_orphan_subtitles(raw_items)
+
+        # Helper para dividir tarjetas largas que desborden los márgenes seguros de pantalla (como en Ana Otorrino)
+        CLAUSE_STARTERS = {'y', 'pero', 'que', 'cuando', 'donde', 'porque', 'aunque', 'para', 'de', 'en', 'por', 'con', 'sin', 'como', 'si'}
+        CONNECTORS_BEFORE = {'un', 'una', 'el', 'la', 'los', 'las', 'de', 'del', 'al', 'su', 'mi', 'tu', 'y', 'o'}
+
+        def split_long_subtitles(items, max_chars=42, max_words=8):
+            final_items = []
+            def _split_item(item):
+                if item.get('index') == 0:
+                    return [item]
+                txt = item['text']
+                words_list = txt.split()
+                if len(words_list) <= max_words and len(txt) <= max_chars:
+                    return [item]
+                w_dict = item.get('words') or {}
+                tokens = w_dict.get('text', [])
+                starts = w_dict.get('start_time', [])
+                ends = w_dict.get('end_time', [])
+                word_indices = [idx for idx, t in enumerate(tokens) if t.strip()]
+                if len(word_indices) <= 3:
+                    word_indices = list(range(len(words_list)))
+                    tokens = words_list
+                    starts = [0] * len(words_list)
+                    ends = [int(item['duration'] // 1000)] * len(words_list)
+
+                mid_idx = len(word_indices) // 2
+                best_split_k = mid_idx
+                best_penalty = float('inf')
+                for k in range(max(2, mid_idx - 2), min(len(word_indices) - 1, mid_idx + 3)):
+                    w_before = tokens[word_indices[k-1]].lower()
+                    w_after = tokens[word_indices[k]].lower()
+                    pen = abs(k - mid_idx) * 6
+                    if w_before in CONNECTORS_BEFORE:
+                        pen += 50
+                    if w_after in CLAUSE_STARTERS:
+                        pen -= 25
+                    if pen < best_penalty:
+                        best_penalty = pen
+                        best_split_k = k
+                split_tok_idx = word_indices[best_split_k]
+                split_time_ms = ends[word_indices[best_split_k - 1]] if best_split_k - 1 < len(ends) else int((item['duration'] // 2000))
+                split_time_us = int(split_time_ms * 1000)
+                toks_a = tokens[:split_tok_idx]
+                txt_a = " ".join([t for t in toks_a if t.strip()]).strip()
+                dur_a_us = max(400000, min(item['duration'] - 400000, split_time_us))
+                item_a = {'index': item.get('index'), 'text': txt_a, 'start': item['start'], 'end': item['start'] + dur_a_us, 'duration': dur_a_us, 'words': {'text': toks_a, 'start_time': starts[:split_tok_idx], 'end_time': ends[:split_tok_idx]}}
+                toks_b = tokens[split_tok_idx:]
+                shift_ms = int(dur_a_us // 1000)
+                starts_b = [max(0, s - shift_ms) for s in starts[split_tok_idx:]] if starts else []
+                ends_b = [max(0, e - shift_ms) for e in ends[split_tok_idx:]] if ends else []
+                txt_b = " ".join([t for t in toks_b if t.strip()]).strip()
+                start_b_us = item['start'] + dur_a_us
+                dur_b_us = max(400000, item['duration'] - dur_a_us)
+                item_b = {'index': item.get('index'), 'text': txt_b, 'start': start_b_us, 'end': start_b_us + dur_b_us, 'duration': dur_b_us, 'words': {'text': toks_b, 'start_time': starts_b, 'end_time': ends_b}}
+                out = []
+                out.extend(_split_item(item_a))
+                out.extend(_split_item(item_b))
+                return out
+            for it in items:
+                final_items.extend(_split_item(it))
+            return final_items
+
+        margin_cfg = getattr(self, 'margins', {})
+        max_tot = int(margin_cfg.get('max_chars_total', 42))
+        max_wds = int(margin_cfg.get('max_words_per_line', 5)) * 2
+        raw_items = split_long_subtitles(raw_items, max_chars=max_tot, max_words=max_wds)
         for idx, it in enumerate(raw_items):
             it['index'] = idx
 
-        # Helper para equilibrar líneas de subtítulos generales
-        eff_max_chars = max_chars_per_line or 26
+        # Helper para equilibrar líneas de subtítulos generales dentro de la zona segura
+        eff_max_chars = max_chars_per_line if (max_chars_per_line is not None and max_chars_per_line != 18) else int(margin_cfg.get('max_chars_per_line', 24))
 
         def balance_line(text: str, max_len: int = eff_max_chars) -> str:
             words = text.split()
@@ -3278,8 +3344,8 @@ class DualStyler:
                 l1 = ' '.join(words[:i])
                 l2 = ' '.join(words[i:])
 
-                p_len1 = max(0, len(l1) - max_len) * 25
-                p_len2 = max(0, len(l2) - max_len) * 25
+                p_len1 = max(0, len(l1) - max_len) * 45
+                p_len2 = max(0, len(l2) - max_len) * 45
                 p_diff = abs(len(l1) - len(l2)) * 1.5
 
                 if len(words[:i]) == 1:
@@ -3287,7 +3353,7 @@ class DualStyler:
                 if len(words[i:]) == 1:
                     p_len2 += 120
 
-                if words[i-1].lower() in {'de', 'que', 'en', 'a', 'la', 'el', 'un', 'una', 'y', 'al', 'del'}:
+                if words[i-1].lower() in CONNECTORS_BEFORE:
                     p_len1 += 35
 
                 total_p = p_len1 + p_len2 + p_diff

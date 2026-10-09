@@ -8505,9 +8505,9 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 26,
-      "max_words_per_line": 6,
-      "max_chars_total": 48
+      "max_chars_per_line": 24,
+      "max_words_per_line": 5,
+      "max_chars_total": 42
     }
   },
   "letra dentok": {
@@ -8603,9 +8603,9 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 26,
-      "max_words_per_line": 6,
-      "max_chars_total": 48
+      "max_chars_per_line": 24,
+      "max_words_per_line": 5,
+      "max_chars_total": 42
     }
   },
   "letra_dentok": {
@@ -8701,9 +8701,9 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 26,
-      "max_words_per_line": 6,
-      "max_chars_total": 48
+      "max_chars_per_line": 24,
+      "max_words_per_line": 5,
+      "max_chars_total": 42
     }
   },
   "dr dentok": {
@@ -8799,9 +8799,9 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 26,
-      "max_words_per_line": 6,
-      "max_chars_total": 48
+      "max_chars_per_line": 24,
+      "max_words_per_line": 5,
+      "max_chars_total": 42
     }
   },
   "dr. dentok": {
@@ -8897,9 +8897,9 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 26,
-      "max_words_per_line": 6,
-      "max_chars_total": 48
+      "max_chars_per_line": 24,
+      "max_words_per_line": 5,
+      "max_chars_total": 42
     }
   },
   "doctor dentok": {
@@ -8995,9 +8995,9 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 26,
-      "max_words_per_line": 6,
-      "max_chars_total": 48
+      "max_chars_per_line": 24,
+      "max_words_per_line": 5,
+      "max_chars_total": 42
     }
   },
   "sep dentok": {
@@ -9093,9 +9093,9 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 26,
-      "max_words_per_line": 6,
-      "max_chars_total": 48
+      "max_chars_per_line": 24,
+      "max_words_per_line": 5,
+      "max_chars_total": 42
     }
   },
   "sep_dentok": {
@@ -9191,9 +9191,9 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 26,
-      "max_words_per_line": 6,
-      "max_chars_total": 48
+      "max_chars_per_line": 24,
+      "max_words_per_line": 5,
+      "max_chars_total": 42
     }
   }
 }
