@@ -9195,5 +9195,1613 @@
       "max_words_per_line": 5,
       "max_chars_total": 42
     }
+  },
+  "angel_cadenas": {
+    "name": "Letra Ángel Cárdenas",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 11.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
+      "color": "#fcfe60",
+      "rgb_color": [
+        0.9882352948188782,
+        0.9960784316062927,
+        0.3764705955982208
+      ],
+      "font_size": 17.0,
+      "font_size_short": 22.0,
+      "font_size_medium": 17.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 22.0,
+        "medium": 17.0,
+        "long": 14.0,
+        "short_max_chars": 13,
+        "medium_max_chars": 17
+      },
+      "line_max_width": 0.95,
+      "y": -0.1081,
+      "dynamic_y": {
+        "enabled": true,
+        "descender_y": -0.12,
+        "tall_numbers_y": -0.1268,
+        "standard_y": -0.1081,
+        "compact_y": -0.0865,
+        "size22_y": -0.1138,
+        "size22_descender_y": -0.12,
+        "solo_y": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 2.5,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4,
+      "max_highlight_chars": 19
+    },
+    "formatting": {
+      "strip_commas": true,
+      "strip_exclamations": true,
+      "preserve_questions": true,
+      "spoken_numbers_to_digits": true
+    }
+  },
+  "angel cadenas": {
+    "name": "Letra Ángel Cárdenas",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 11.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
+      "color": "#fcfe60",
+      "rgb_color": [
+        0.9882352948188782,
+        0.9960784316062927,
+        0.3764705955982208
+      ],
+      "font_size": 17.0,
+      "font_size_short": 22.0,
+      "font_size_medium": 17.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 22.0,
+        "medium": 17.0,
+        "long": 14.0,
+        "short_max_chars": 13,
+        "medium_max_chars": 17
+      },
+      "line_max_width": 0.95,
+      "y": -0.1081,
+      "dynamic_y": {
+        "enabled": true,
+        "descender_y": -0.12,
+        "tall_numbers_y": -0.1268,
+        "standard_y": -0.1081,
+        "compact_y": -0.0865,
+        "size22_y": -0.1138,
+        "size22_descender_y": -0.12,
+        "solo_y": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 2.5,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4,
+      "max_highlight_chars": 19
+    },
+    "formatting": {
+      "strip_commas": true,
+      "strip_exclamations": true,
+      "preserve_questions": true,
+      "spoken_numbers_to_digits": true
+    }
+  },
+  "ángel cárdenas": {
+    "name": "Letra Ángel Cárdenas",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 11.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
+      "color": "#fcfe60",
+      "rgb_color": [
+        0.9882352948188782,
+        0.9960784316062927,
+        0.3764705955982208
+      ],
+      "font_size": 17.0,
+      "font_size_short": 22.0,
+      "font_size_medium": 17.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 22.0,
+        "medium": 17.0,
+        "long": 14.0,
+        "short_max_chars": 13,
+        "medium_max_chars": 17
+      },
+      "line_max_width": 0.95,
+      "y": -0.1081,
+      "dynamic_y": {
+        "enabled": true,
+        "descender_y": -0.12,
+        "tall_numbers_y": -0.1268,
+        "standard_y": -0.1081,
+        "compact_y": -0.0865,
+        "size22_y": -0.1138,
+        "size22_descender_y": -0.12,
+        "solo_y": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 2.5,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4,
+      "max_highlight_chars": 19
+    },
+    "formatting": {
+      "strip_commas": true,
+      "strip_exclamations": true,
+      "preserve_questions": true,
+      "spoken_numbers_to_digits": true
+    }
+  },
+  "angel": {
+    "name": "Letra Ángel Cárdenas",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 11.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
+      "color": "#fcfe60",
+      "rgb_color": [
+        0.9882352948188782,
+        0.9960784316062927,
+        0.3764705955982208
+      ],
+      "font_size": 17.0,
+      "font_size_short": 22.0,
+      "font_size_medium": 17.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 22.0,
+        "medium": 17.0,
+        "long": 14.0,
+        "short_max_chars": 13,
+        "medium_max_chars": 17
+      },
+      "line_max_width": 0.95,
+      "y": -0.1081,
+      "dynamic_y": {
+        "enabled": true,
+        "descender_y": -0.12,
+        "tall_numbers_y": -0.1268,
+        "standard_y": -0.1081,
+        "compact_y": -0.0865,
+        "size22_y": -0.1138,
+        "size22_descender_y": -0.12,
+        "solo_y": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 2.5,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4,
+      "max_highlight_chars": 19
+    },
+    "formatting": {
+      "strip_commas": true,
+      "strip_exclamations": true,
+      "preserve_questions": true,
+      "spoken_numbers_to_digits": true
+    }
+  },
+  "ángel": {
+    "name": "Letra Ángel Cárdenas",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 11.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
+      "color": "#fcfe60",
+      "rgb_color": [
+        0.9882352948188782,
+        0.9960784316062927,
+        0.3764705955982208
+      ],
+      "font_size": 17.0,
+      "font_size_short": 22.0,
+      "font_size_medium": 17.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 22.0,
+        "medium": 17.0,
+        "long": 14.0,
+        "short_max_chars": 13,
+        "medium_max_chars": 17
+      },
+      "line_max_width": 0.95,
+      "y": -0.1081,
+      "dynamic_y": {
+        "enabled": true,
+        "descender_y": -0.12,
+        "tall_numbers_y": -0.1268,
+        "standard_y": -0.1081,
+        "compact_y": -0.0865,
+        "size22_y": -0.1138,
+        "size22_descender_y": -0.12,
+        "solo_y": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 2.5,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4,
+      "max_highlight_chars": 19
+    },
+    "formatting": {
+      "strip_commas": true,
+      "strip_exclamations": true,
+      "preserve_questions": true,
+      "spoken_numbers_to_digits": true
+    }
+  },
+  "letra angel cadenas": {
+    "name": "Letra Ángel Cárdenas",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 11.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
+      "color": "#fcfe60",
+      "rgb_color": [
+        0.9882352948188782,
+        0.9960784316062927,
+        0.3764705955982208
+      ],
+      "font_size": 17.0,
+      "font_size_short": 22.0,
+      "font_size_medium": 17.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 22.0,
+        "medium": 17.0,
+        "long": 14.0,
+        "short_max_chars": 13,
+        "medium_max_chars": 17
+      },
+      "line_max_width": 0.95,
+      "y": -0.1081,
+      "dynamic_y": {
+        "enabled": true,
+        "descender_y": -0.12,
+        "tall_numbers_y": -0.1268,
+        "standard_y": -0.1081,
+        "compact_y": -0.0865,
+        "size22_y": -0.1138,
+        "size22_descender_y": -0.12,
+        "solo_y": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 2.5,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4,
+      "max_highlight_chars": 19
+    },
+    "formatting": {
+      "strip_commas": true,
+      "strip_exclamations": true,
+      "preserve_questions": true,
+      "spoken_numbers_to_digits": true
+    }
+  },
+  "letra ángel cárdenas": {
+    "name": "Letra Ángel Cárdenas",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 11.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
+      "color": "#fcfe60",
+      "rgb_color": [
+        0.9882352948188782,
+        0.9960784316062927,
+        0.3764705955982208
+      ],
+      "font_size": 17.0,
+      "font_size_short": 22.0,
+      "font_size_medium": 17.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 22.0,
+        "medium": 17.0,
+        "long": 14.0,
+        "short_max_chars": 13,
+        "medium_max_chars": 17
+      },
+      "line_max_width": 0.95,
+      "y": -0.1081,
+      "dynamic_y": {
+        "enabled": true,
+        "descender_y": -0.12,
+        "tall_numbers_y": -0.1268,
+        "standard_y": -0.1081,
+        "compact_y": -0.0865,
+        "size22_y": -0.1138,
+        "size22_descender_y": -0.12,
+        "solo_y": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 2.5,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4,
+      "max_highlight_chars": 19
+    },
+    "formatting": {
+      "strip_commas": true,
+      "strip_exclamations": true,
+      "preserve_questions": true,
+      "spoken_numbers_to_digits": true
+    }
+  },
+  "letra_angel_cadenas": {
+    "name": "Letra Ángel Cárdenas",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 11.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
+      "color": "#fcfe60",
+      "rgb_color": [
+        0.9882352948188782,
+        0.9960784316062927,
+        0.3764705955982208
+      ],
+      "font_size": 17.0,
+      "font_size_short": 22.0,
+      "font_size_medium": 17.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 22.0,
+        "medium": 17.0,
+        "long": 14.0,
+        "short_max_chars": 13,
+        "medium_max_chars": 17
+      },
+      "line_max_width": 0.95,
+      "y": -0.1081,
+      "dynamic_y": {
+        "enabled": true,
+        "descender_y": -0.12,
+        "tall_numbers_y": -0.1268,
+        "standard_y": -0.1081,
+        "compact_y": -0.0865,
+        "size22_y": -0.1138,
+        "size22_descender_y": -0.12,
+        "solo_y": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 2.5,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4,
+      "max_highlight_chars": 19
+    },
+    "formatting": {
+      "strip_commas": true,
+      "strip_exclamations": true,
+      "preserve_questions": true,
+      "spoken_numbers_to_digits": true
+    }
+  },
+  "letra angel": {
+    "name": "Letra Ángel Cárdenas",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 11.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
+      "color": "#fcfe60",
+      "rgb_color": [
+        0.9882352948188782,
+        0.9960784316062927,
+        0.3764705955982208
+      ],
+      "font_size": 17.0,
+      "font_size_short": 22.0,
+      "font_size_medium": 17.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 22.0,
+        "medium": 17.0,
+        "long": 14.0,
+        "short_max_chars": 13,
+        "medium_max_chars": 17
+      },
+      "line_max_width": 0.95,
+      "y": -0.1081,
+      "dynamic_y": {
+        "enabled": true,
+        "descender_y": -0.12,
+        "tall_numbers_y": -0.1268,
+        "standard_y": -0.1081,
+        "compact_y": -0.0865,
+        "size22_y": -0.1138,
+        "size22_descender_y": -0.12,
+        "solo_y": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 2.5,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4,
+      "max_highlight_chars": 19
+    },
+    "formatting": {
+      "strip_commas": true,
+      "strip_exclamations": true,
+      "preserve_questions": true,
+      "spoken_numbers_to_digits": true
+    }
+  },
+  "preset angel cadenas": {
+    "name": "Letra Ángel Cárdenas",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 11.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
+      "color": "#fcfe60",
+      "rgb_color": [
+        0.9882352948188782,
+        0.9960784316062927,
+        0.3764705955982208
+      ],
+      "font_size": 17.0,
+      "font_size_short": 22.0,
+      "font_size_medium": 17.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 22.0,
+        "medium": 17.0,
+        "long": 14.0,
+        "short_max_chars": 13,
+        "medium_max_chars": 17
+      },
+      "line_max_width": 0.95,
+      "y": -0.1081,
+      "dynamic_y": {
+        "enabled": true,
+        "descender_y": -0.12,
+        "tall_numbers_y": -0.1268,
+        "standard_y": -0.1081,
+        "compact_y": -0.0865,
+        "size22_y": -0.1138,
+        "size22_descender_y": -0.12,
+        "solo_y": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 2.5,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4,
+      "max_highlight_chars": 19
+    },
+    "formatting": {
+      "strip_commas": true,
+      "strip_exclamations": true,
+      "preserve_questions": true,
+      "spoken_numbers_to_digits": true
+    }
+  },
+  "angel cadenas 1": {
+    "name": "Letra Ángel Cárdenas",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 11.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
+      "color": "#fcfe60",
+      "rgb_color": [
+        0.9882352948188782,
+        0.9960784316062927,
+        0.3764705955982208
+      ],
+      "font_size": 17.0,
+      "font_size_short": 22.0,
+      "font_size_medium": 17.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 22.0,
+        "medium": 17.0,
+        "long": 14.0,
+        "short_max_chars": 13,
+        "medium_max_chars": 17
+      },
+      "line_max_width": 0.95,
+      "y": -0.1081,
+      "dynamic_y": {
+        "enabled": true,
+        "descender_y": -0.12,
+        "tall_numbers_y": -0.1268,
+        "standard_y": -0.1081,
+        "compact_y": -0.0865,
+        "size22_y": -0.1138,
+        "size22_descender_y": -0.12,
+        "solo_y": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 2.5,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4,
+      "max_highlight_chars": 19
+    },
+    "formatting": {
+      "strip_commas": true,
+      "strip_exclamations": true,
+      "preserve_questions": true,
+      "spoken_numbers_to_digits": true
+    }
+  },
+  "angel_cadenas_1": {
+    "name": "Letra Ángel Cárdenas",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 11.0,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
+      "color": "#fcfe60",
+      "rgb_color": [
+        0.9882352948188782,
+        0.9960784316062927,
+        0.3764705955982208
+      ],
+      "font_size": 17.0,
+      "font_size_short": 22.0,
+      "font_size_medium": 17.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 22.0,
+        "medium": 17.0,
+        "long": 14.0,
+        "short_max_chars": 13,
+        "medium_max_chars": 17
+      },
+      "line_max_width": 0.95,
+      "y": -0.1081,
+      "dynamic_y": {
+        "enabled": true,
+        "descender_y": -0.12,
+        "tall_numbers_y": -0.1268,
+        "standard_y": -0.1081,
+        "compact_y": -0.0865,
+        "size22_y": -0.1138,
+        "size22_descender_y": -0.12,
+        "solo_y": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7229621702668325378",
+        "name": "Corte con láser",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.025,
+        "distance": 3.0,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.7
+    },
+    "pacing": {
+      "min_seconds": 2.5,
+      "max_seconds": 4.5
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4,
+      "max_highlight_chars": 19
+    },
+    "formatting": {
+      "strip_commas": true,
+      "strip_exclamations": true,
+      "preserve_questions": true,
+      "spoken_numbers_to_digits": true
+    }
   }
 }

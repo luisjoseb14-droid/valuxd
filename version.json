@@ -1,8 +1,8 @@
 {
-  "version": "1.0.9",
-  "version_code": 10,
-  "date": "2026-10-08",
-  "description": "Proteccion estricta de margenes seguros en preset Dentok: division automatica de frases largas y balanceo de lineas.",
+  "version": "1.0.10",
+  "version_code": 11,
+  "date": "2026-10-09",
+  "description": "Nuevo preset Angel Cadenas: Ligerid + Dream Believer Bold (#FCFE60) con corte laser, click y separacion calibrada",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

@@ -157,6 +157,8 @@ class DualStyler:
                 candidates.insert(0, 'carrillo')
             if 'juan' in norm:
                 candidates.insert(0, 'juan')
+            if 'angel' in norm or 'ángel' in norm:
+                candidates.insert(0, 'angel_cadenas')
 
             for cand in candidates:
                 cand_clean = cand.replace(" ", "_").strip()
@@ -333,9 +335,17 @@ class DualStyler:
             "font_size": font_size,
             "text_color": style_cfg.get('color', '#FFFFFF'),
             "is_rich_text": is_rich,
-            "has_shadow": False,
+            "has_shadow": bool(shadow_cfg),
             "words": {"start_time": [0], "end_time": [1000], "text": [text_str]}
         }
+        if 'line_max_width' in style_cfg:
+            mat_obj['line_max_width'] = float(style_cfg['line_max_width'])
+        if shadow_cfg:
+            mat_obj['shadow_color'] = shadow_cfg.get('color', '#000000')
+            mat_obj['shadow_alpha'] = float(shadow_cfg.get('alpha', 0.5))
+            mat_obj['shadow_distance'] = float(shadow_cfg.get('distance', 3.0))
+            mat_obj['shadow_angle'] = float(shadow_cfg.get('angle', -45.0))
+            mat_obj['shadow_smoothing'] = float(shadow_cfg.get('diffuse', 0.45))
         texts.append(mat_obj)
         return mat_id
 
@@ -641,6 +651,31 @@ class DualStyler:
                                 bot_scale['x'] = float(bot_scale['x']) * shrink_factor
                                 bot_scale['y'] = float(bot_scale['y']) * shrink_factor
 
+                    eff_bot_y = self.y_bottom
+                    dyn_y_cfg = self.highlight_style.get('dynamic_y') or (self.preset_data.get('bottom', {}).get('dynamic_y') if self.preset_data else None)
+                    if dyn_y_cfg and dyn_y_cfg.get('enabled', True):
+                        top_text_str = top_info.get('text', '') if (top_info and isinstance(top_info, dict)) else ""
+                        descenders = set('pqgyj')
+                        has_top_descenders = any(c in descenders for c in top_text_str.lower())
+                        has_tall_numbers = any(term.isdigit() and len(term) >= 4 for term in bot_text.split()) or len([c for c in bot_text if c.isdigit()]) >= 4
+                        sz_used = get_effective_font_size(style_to_use, bot_text)
+
+                        if not top_text_str:
+                            eff_bot_y = float(dyn_y_cfg.get('solo_y', 0.0))
+                        elif sz_used >= 21.0:
+                            if has_top_descenders:
+                                eff_bot_y = float(dyn_y_cfg.get('size22_descender_y', -0.1200))
+                            else:
+                                eff_bot_y = float(dyn_y_cfg.get('size22_y', -0.1138))
+                        elif has_top_descenders:
+                            eff_bot_y = float(dyn_y_cfg.get('descender_y', -0.1200))
+                        elif has_tall_numbers:
+                            eff_bot_y = float(dyn_y_cfg.get('tall_numbers_y', -0.1268))
+                        elif bot_text.islower() and not any(c.isdigit() for c in bot_text) and len(bot_text) <= 14 and 'compact_y' in dyn_y_cfg:
+                            eff_bot_y = float(dyn_y_cfg.get('compact_y', -0.0865))
+                        else:
+                            eff_bot_y = float(dyn_y_cfg.get('standard_y', -0.1081))
+
                     bot_seg = {
                         "id": str(uuid.uuid4()).upper(),
                         "material_id": bot_mat_id,
@@ -652,7 +687,7 @@ class DualStyler:
                         "render_timerange": {"start": 0, "duration": 0},
                         "clip": {
                             'scale': bot_scale,
-                            'transform': {'x': 0.0, 'y': self.y_bottom},
+                            'transform': {'x': 0.0, 'y': eff_bot_y},
                             'rotation': 0.0,
                             'flip': {'vertical': False, 'horizontal': False},
                             'alpha': 1.0
@@ -1854,8 +1889,63 @@ class DualStyler:
                     tmat['font_title'] = bot_font_name
                     tmat['font_size'] = bot_font_size
                     tmat['text_color'] = self.highlight_style.get('color', '#FFFFFF')
-                    tmat['has_shadow'] = False
-                    tmat['shadow'] = None
+                    lmw = self.highlight_style.get('line_max_width')
+                    if lmw:
+                        tmat['line_max_width'] = float(lmw)
+                    if self.highlight_style.get('shadow'):
+                        tmat['has_shadow'] = True
+                        sh = self.highlight_style['shadow']
+                        tmat['shadow_color'] = sh.get('color', '#000000')
+                        tmat['shadow_alpha'] = float(sh.get('alpha', 0.5))
+                        tmat['shadow_distance'] = float(sh.get('distance', 3.0))
+                        tmat['shadow_angle'] = float(sh.get('angle', -45.0))
+                        tmat['shadow_smoothing'] = float(sh.get('diffuse', 0.45))
+                    else:
+                        tmat['has_shadow'] = False
+                        tmat['shadow'] = None
+
+                    eff_bot_y = self.y_bottom
+                    dyn_y_cfg = self.highlight_style.get('dynamic_y') or (self.preset_data.get('bottom', {}).get('dynamic_y') if self.preset_data else None)
+                    if dyn_y_cfg and dyn_y_cfg.get('enabled', True):
+                        seg_st = seg.get('target_timerange', {}).get('start', 0)
+                        seg_dur = seg.get('target_timerange', {}).get('duration', 0)
+                        seg_et = seg_st + seg_dur
+
+                        top_text_str = ""
+                        for t_seg in text_tracks[0].get('segments', []):
+                            t_st = t_seg.get('target_timerange', {}).get('start', 0)
+                            t_et = t_st + t_seg.get('target_timerange', {}).get('duration', 0)
+                            if max(seg_st, t_st) < min(seg_et, t_et):
+                                t_mat = texts.get(t_seg.get('material_id'))
+                                if t_mat:
+                                    try:
+                                        top_text_str = json.loads(t_mat.get('content', '{}')).get('text', '')
+                                    except Exception:
+                                        top_text_str = t_mat.get('content', '')
+                                break
+
+                        descenders = set('pqgyj')
+                        has_top_descenders = any(c in descenders for c in top_text_str.lower())
+                        has_tall_numbers = any(term.isdigit() and len(term) >= 4 for term in current_text.split()) or len([c for c in current_text if c.isdigit()]) >= 4
+                        sz_used = bot_font_size
+
+                        if not top_text_str:
+                            eff_bot_y = float(dyn_y_cfg.get('solo_y', 0.0))
+                        elif sz_used >= 21.0:
+                            if has_top_descenders:
+                                eff_bot_y = float(dyn_y_cfg.get('size22_descender_y', -0.1200))
+                            else:
+                                eff_bot_y = float(dyn_y_cfg.get('size22_y', -0.1138))
+                        elif has_top_descenders:
+                            eff_bot_y = float(dyn_y_cfg.get('descender_y', -0.1200))
+                        elif has_tall_numbers:
+                            eff_bot_y = float(dyn_y_cfg.get('tall_numbers_y', -0.1268))
+                        elif current_text.islower() and not any(c.isdigit() for c in current_text) and len(current_text) <= 14 and 'compact_y' in dyn_y_cfg:
+                            eff_bot_y = float(dyn_y_cfg.get('compact_y', -0.0865))
+                        else:
+                            eff_bot_y = float(dyn_y_cfg.get('standard_y', -0.1081))
+
+                    seg['clip']['transform']['y'] = eff_bot_y
                     repaired_bot += 1
 
         is_upper_required = (

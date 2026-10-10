@@ -374,6 +374,15 @@ class CCSubsProGUI(tk.Tk):
         )
         r_dentok.grid(row=7, column=1, sticky=tk.W, pady=2)
 
+        r_angel = ttk.Radiobutton(
+            presets_frame,
+            text="⚡ Ángel Cárdenas  (Ligerid blanco | Dream Believer Bold #FCFE60)",
+            variable=self.doctor_preset,
+            value="angel_cadenas",
+            command=self._on_preset_change
+        )
+        r_angel.grid(row=8, column=0, sticky=tk.W, pady=2, padx=(0, 10))
+
         # Dynamic detail line for the selected doctor
         self.lbl_preset_detail = tk.Label(
             preset_card,
@@ -486,7 +495,9 @@ class CCSubsProGUI(tk.Tk):
             "carrillo": "🩺 Dr. Carrillo: Gotham Book blanco arriba (-0.175) | Gotham Bold arena (#CCC3B1) abajo (-0.255) en MAYÚSCULAS + Click fx",
             "dentok": "🦷 Dentok: Hook y momentos clave en escalera (Playfair Display Italic) | Subtítulos largos en Helvetica Regular sin animación",
             "dr dentok": "🦷 Dentok: Hook y momentos clave en escalera (Playfair Display Italic) | Subtítulos largos en Helvetica Regular sin animación",
-            "sep dentok": "🦷 Dentok: Hook y momentos clave en escalera (Playfair Display Italic) | Subtítulos largos en Helvetica Regular sin animación"
+            "sep dentok": "🦷 Dentok: Hook y momentos clave en escalera (Playfair Display Italic) | Subtítulos largos en Helvetica Regular sin animación",
+            "angel_cadenas": "⚡ Ángel Cárdenas: Ligerid blanco arriba (11.0, y=0.0) | Dream Believer Bold amarillo (#FCFE60) abajo + Corte con láser + Click fx",
+            "angel": "⚡ Ángel Cárdenas: Ligerid blanco arriba (11.0, y=0.0) | Dream Believer Bold amarillo (#FCFE60) abajo + Corte con láser + Click fx"
         }
         if hasattr(self, 'lbl_preset_detail'):
             self.lbl_preset_detail.config(text=details.get(p, ""))

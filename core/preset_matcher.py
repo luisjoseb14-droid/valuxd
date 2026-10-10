@@ -77,6 +77,10 @@ PRESET_PATTERNS: List[Tuple[str, List[str]]] = [
     ("dentok", [
         r'\bdentok\b',
     ]),
+    # 17. Ángel Cárdenas
+    ("angel_cadenas", [
+        r'\b(angel|ángel)(\s*(cadenas|cárdenas))?\b',
+    ]),
 ]
 
 

@@ -46,6 +46,8 @@ FONT_REGISTRY_MAP = {
     'Gotham Bold.otf': 'Gotham-Bold (TrueType)',
     'Gotham Book.otf': 'Gotham-Book (TrueType)',
     'Anton-Regular.ttf': 'Anton Regular (TrueType)',
+    'Ligerid.ttf': 'Ligerid (TrueType)',
+    'Dream Believer Bold.otf': 'Dream Believer Bold (TrueType)',
 }
 
 def install_all_assets() -> Dict[str, Any]:
