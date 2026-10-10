@@ -9198,21 +9198,21 @@
   },
   "angel_cadenas": {
     "name": "Letra Ángel Cárdenas",
-    "version": "1.0.0",
-    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "version": "2.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas invertido: Dream Believer Bold blanco arriba (tamaño 9, y=0.0) y Ligerid amarillo (#FCFE60) abajo (tamaño 12, y=-0.088) con animación Corte con láser, sonido de click sincronizado y separación vertical compacta.",
     "layout": "dual",
     "uppercase": false,
     "top": {
-      "font_name": "Ligerid",
-      "font_title": "Ligerid",
-      "font_path": "Ligerid.ttf",
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
       "color": "#FFFFFF",
       "rgb_color": [
         1.0,
         1.0,
         1.0
       ],
-      "font_size": 11.0,
+      "font_size": 9.0,
       "y": 0.0,
       "scale": {
         "x": 1.0,
@@ -9240,37 +9240,33 @@
       "uppercase": false
     },
     "bottom": {
-      "font_name": "Dream Believer Bold",
-      "font_title": "Dream Believer Bold",
-      "font_path": "Dream Believer Bold.otf",
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
       "color": "#fcfe60",
       "rgb_color": [
         0.9882352948188782,
         0.9960784316062927,
         0.3764705955982208
       ],
-      "font_size": 17.0,
-      "font_size_short": 22.0,
-      "font_size_medium": 17.0,
-      "font_size_long": 14.0,
+      "font_size": 12.0,
+      "font_size_short": 12.0,
+      "font_size_medium": 12.0,
+      "font_size_long": 12.0,
       "dynamic_font_size": {
-        "enabled": true,
-        "short": 22.0,
-        "medium": 17.0,
-        "long": 14.0,
-        "short_max_chars": 13,
-        "medium_max_chars": 17
+        "enabled": false,
+        "short": 12.0,
+        "medium": 12.0,
+        "long": 12.0
       },
       "line_max_width": 0.95,
-      "y": -0.1081,
+      "y": -0.088,
       "dynamic_y": {
         "enabled": true,
-        "descender_y": -0.12,
-        "tall_numbers_y": -0.1268,
-        "standard_y": -0.1081,
-        "compact_y": -0.0865,
-        "size22_y": -0.1138,
-        "size22_descender_y": -0.12,
+        "standard_y": -0.088,
+        "tall_numbers_y": -0.1081,
+        "descender_y": -0.095,
+        "compact_y": -0.078,
         "solo_y": 0.0
       },
       "scale": {
@@ -9319,9 +9315,9 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 24,
       "max_words_per_line": 4,
-      "max_highlight_chars": 19
+      "max_highlight_chars": 22
     },
     "formatting": {
       "strip_commas": true,
@@ -9332,21 +9328,21 @@
   },
   "angel cadenas": {
     "name": "Letra Ángel Cárdenas",
-    "version": "1.0.0",
-    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "version": "2.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas invertido: Dream Believer Bold blanco arriba (tamaño 9, y=0.0) y Ligerid amarillo (#FCFE60) abajo (tamaño 12, y=-0.088) con animación Corte con láser, sonido de click sincronizado y separación vertical compacta.",
     "layout": "dual",
     "uppercase": false,
     "top": {
-      "font_name": "Ligerid",
-      "font_title": "Ligerid",
-      "font_path": "Ligerid.ttf",
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
       "color": "#FFFFFF",
       "rgb_color": [
         1.0,
         1.0,
         1.0
       ],
-      "font_size": 11.0,
+      "font_size": 9.0,
       "y": 0.0,
       "scale": {
         "x": 1.0,
@@ -9374,37 +9370,33 @@
       "uppercase": false
     },
     "bottom": {
-      "font_name": "Dream Believer Bold",
-      "font_title": "Dream Believer Bold",
-      "font_path": "Dream Believer Bold.otf",
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
       "color": "#fcfe60",
       "rgb_color": [
         0.9882352948188782,
         0.9960784316062927,
         0.3764705955982208
       ],
-      "font_size": 17.0,
-      "font_size_short": 22.0,
-      "font_size_medium": 17.0,
-      "font_size_long": 14.0,
+      "font_size": 12.0,
+      "font_size_short": 12.0,
+      "font_size_medium": 12.0,
+      "font_size_long": 12.0,
       "dynamic_font_size": {
-        "enabled": true,
-        "short": 22.0,
-        "medium": 17.0,
-        "long": 14.0,
-        "short_max_chars": 13,
-        "medium_max_chars": 17
+        "enabled": false,
+        "short": 12.0,
+        "medium": 12.0,
+        "long": 12.0
       },
       "line_max_width": 0.95,
-      "y": -0.1081,
+      "y": -0.088,
       "dynamic_y": {
         "enabled": true,
-        "descender_y": -0.12,
-        "tall_numbers_y": -0.1268,
-        "standard_y": -0.1081,
-        "compact_y": -0.0865,
-        "size22_y": -0.1138,
-        "size22_descender_y": -0.12,
+        "standard_y": -0.088,
+        "tall_numbers_y": -0.1081,
+        "descender_y": -0.095,
+        "compact_y": -0.078,
         "solo_y": 0.0
       },
       "scale": {
@@ -9453,9 +9445,9 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 24,
       "max_words_per_line": 4,
-      "max_highlight_chars": 19
+      "max_highlight_chars": 22
     },
     "formatting": {
       "strip_commas": true,
@@ -9466,21 +9458,21 @@
   },
   "ángel cárdenas": {
     "name": "Letra Ángel Cárdenas",
-    "version": "1.0.0",
-    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "version": "2.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas invertido: Dream Believer Bold blanco arriba (tamaño 9, y=0.0) y Ligerid amarillo (#FCFE60) abajo (tamaño 12, y=-0.088) con animación Corte con láser, sonido de click sincronizado y separación vertical compacta.",
     "layout": "dual",
     "uppercase": false,
     "top": {
-      "font_name": "Ligerid",
-      "font_title": "Ligerid",
-      "font_path": "Ligerid.ttf",
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
       "color": "#FFFFFF",
       "rgb_color": [
         1.0,
         1.0,
         1.0
       ],
-      "font_size": 11.0,
+      "font_size": 9.0,
       "y": 0.0,
       "scale": {
         "x": 1.0,
@@ -9508,37 +9500,33 @@
       "uppercase": false
     },
     "bottom": {
-      "font_name": "Dream Believer Bold",
-      "font_title": "Dream Believer Bold",
-      "font_path": "Dream Believer Bold.otf",
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
       "color": "#fcfe60",
       "rgb_color": [
         0.9882352948188782,
         0.9960784316062927,
         0.3764705955982208
       ],
-      "font_size": 17.0,
-      "font_size_short": 22.0,
-      "font_size_medium": 17.0,
-      "font_size_long": 14.0,
+      "font_size": 12.0,
+      "font_size_short": 12.0,
+      "font_size_medium": 12.0,
+      "font_size_long": 12.0,
       "dynamic_font_size": {
-        "enabled": true,
-        "short": 22.0,
-        "medium": 17.0,
-        "long": 14.0,
-        "short_max_chars": 13,
-        "medium_max_chars": 17
+        "enabled": false,
+        "short": 12.0,
+        "medium": 12.0,
+        "long": 12.0
       },
       "line_max_width": 0.95,
-      "y": -0.1081,
+      "y": -0.088,
       "dynamic_y": {
         "enabled": true,
-        "descender_y": -0.12,
-        "tall_numbers_y": -0.1268,
-        "standard_y": -0.1081,
-        "compact_y": -0.0865,
-        "size22_y": -0.1138,
-        "size22_descender_y": -0.12,
+        "standard_y": -0.088,
+        "tall_numbers_y": -0.1081,
+        "descender_y": -0.095,
+        "compact_y": -0.078,
         "solo_y": 0.0
       },
       "scale": {
@@ -9587,9 +9575,9 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 24,
       "max_words_per_line": 4,
-      "max_highlight_chars": 19
+      "max_highlight_chars": 22
     },
     "formatting": {
       "strip_commas": true,
@@ -9600,21 +9588,21 @@
   },
   "angel": {
     "name": "Letra Ángel Cárdenas",
-    "version": "1.0.0",
-    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "version": "2.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas invertido: Dream Believer Bold blanco arriba (tamaño 9, y=0.0) y Ligerid amarillo (#FCFE60) abajo (tamaño 12, y=-0.088) con animación Corte con láser, sonido de click sincronizado y separación vertical compacta.",
     "layout": "dual",
     "uppercase": false,
     "top": {
-      "font_name": "Ligerid",
-      "font_title": "Ligerid",
-      "font_path": "Ligerid.ttf",
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
       "color": "#FFFFFF",
       "rgb_color": [
         1.0,
         1.0,
         1.0
       ],
-      "font_size": 11.0,
+      "font_size": 9.0,
       "y": 0.0,
       "scale": {
         "x": 1.0,
@@ -9642,37 +9630,33 @@
       "uppercase": false
     },
     "bottom": {
-      "font_name": "Dream Believer Bold",
-      "font_title": "Dream Believer Bold",
-      "font_path": "Dream Believer Bold.otf",
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
       "color": "#fcfe60",
       "rgb_color": [
         0.9882352948188782,
         0.9960784316062927,
         0.3764705955982208
       ],
-      "font_size": 17.0,
-      "font_size_short": 22.0,
-      "font_size_medium": 17.0,
-      "font_size_long": 14.0,
+      "font_size": 12.0,
+      "font_size_short": 12.0,
+      "font_size_medium": 12.0,
+      "font_size_long": 12.0,
       "dynamic_font_size": {
-        "enabled": true,
-        "short": 22.0,
-        "medium": 17.0,
-        "long": 14.0,
-        "short_max_chars": 13,
-        "medium_max_chars": 17
+        "enabled": false,
+        "short": 12.0,
+        "medium": 12.0,
+        "long": 12.0
       },
       "line_max_width": 0.95,
-      "y": -0.1081,
+      "y": -0.088,
       "dynamic_y": {
         "enabled": true,
-        "descender_y": -0.12,
-        "tall_numbers_y": -0.1268,
-        "standard_y": -0.1081,
-        "compact_y": -0.0865,
-        "size22_y": -0.1138,
-        "size22_descender_y": -0.12,
+        "standard_y": -0.088,
+        "tall_numbers_y": -0.1081,
+        "descender_y": -0.095,
+        "compact_y": -0.078,
         "solo_y": 0.0
       },
       "scale": {
@@ -9721,9 +9705,9 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 24,
       "max_words_per_line": 4,
-      "max_highlight_chars": 19
+      "max_highlight_chars": 22
     },
     "formatting": {
       "strip_commas": true,
@@ -9734,21 +9718,21 @@
   },
   "ángel": {
     "name": "Letra Ángel Cárdenas",
-    "version": "1.0.0",
-    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "version": "2.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas invertido: Dream Believer Bold blanco arriba (tamaño 9, y=0.0) y Ligerid amarillo (#FCFE60) abajo (tamaño 12, y=-0.088) con animación Corte con láser, sonido de click sincronizado y separación vertical compacta.",
     "layout": "dual",
     "uppercase": false,
     "top": {
-      "font_name": "Ligerid",
-      "font_title": "Ligerid",
-      "font_path": "Ligerid.ttf",
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
       "color": "#FFFFFF",
       "rgb_color": [
         1.0,
         1.0,
         1.0
       ],
-      "font_size": 11.0,
+      "font_size": 9.0,
       "y": 0.0,
       "scale": {
         "x": 1.0,
@@ -9776,37 +9760,33 @@
       "uppercase": false
     },
     "bottom": {
-      "font_name": "Dream Believer Bold",
-      "font_title": "Dream Believer Bold",
-      "font_path": "Dream Believer Bold.otf",
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
       "color": "#fcfe60",
       "rgb_color": [
         0.9882352948188782,
         0.9960784316062927,
         0.3764705955982208
       ],
-      "font_size": 17.0,
-      "font_size_short": 22.0,
-      "font_size_medium": 17.0,
-      "font_size_long": 14.0,
+      "font_size": 12.0,
+      "font_size_short": 12.0,
+      "font_size_medium": 12.0,
+      "font_size_long": 12.0,
       "dynamic_font_size": {
-        "enabled": true,
-        "short": 22.0,
-        "medium": 17.0,
-        "long": 14.0,
-        "short_max_chars": 13,
-        "medium_max_chars": 17
+        "enabled": false,
+        "short": 12.0,
+        "medium": 12.0,
+        "long": 12.0
       },
       "line_max_width": 0.95,
-      "y": -0.1081,
+      "y": -0.088,
       "dynamic_y": {
         "enabled": true,
-        "descender_y": -0.12,
-        "tall_numbers_y": -0.1268,
-        "standard_y": -0.1081,
-        "compact_y": -0.0865,
-        "size22_y": -0.1138,
-        "size22_descender_y": -0.12,
+        "standard_y": -0.088,
+        "tall_numbers_y": -0.1081,
+        "descender_y": -0.095,
+        "compact_y": -0.078,
         "solo_y": 0.0
       },
       "scale": {
@@ -9855,9 +9835,9 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 24,
       "max_words_per_line": 4,
-      "max_highlight_chars": 19
+      "max_highlight_chars": 22
     },
     "formatting": {
       "strip_commas": true,
@@ -9868,21 +9848,21 @@
   },
   "letra angel cadenas": {
     "name": "Letra Ángel Cárdenas",
-    "version": "1.0.0",
-    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "version": "2.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas invertido: Dream Believer Bold blanco arriba (tamaño 9, y=0.0) y Ligerid amarillo (#FCFE60) abajo (tamaño 12, y=-0.088) con animación Corte con láser, sonido de click sincronizado y separación vertical compacta.",
     "layout": "dual",
     "uppercase": false,
     "top": {
-      "font_name": "Ligerid",
-      "font_title": "Ligerid",
-      "font_path": "Ligerid.ttf",
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
       "color": "#FFFFFF",
       "rgb_color": [
         1.0,
         1.0,
         1.0
       ],
-      "font_size": 11.0,
+      "font_size": 9.0,
       "y": 0.0,
       "scale": {
         "x": 1.0,
@@ -9910,37 +9890,33 @@
       "uppercase": false
     },
     "bottom": {
-      "font_name": "Dream Believer Bold",
-      "font_title": "Dream Believer Bold",
-      "font_path": "Dream Believer Bold.otf",
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
       "color": "#fcfe60",
       "rgb_color": [
         0.9882352948188782,
         0.9960784316062927,
         0.3764705955982208
       ],
-      "font_size": 17.0,
-      "font_size_short": 22.0,
-      "font_size_medium": 17.0,
-      "font_size_long": 14.0,
+      "font_size": 12.0,
+      "font_size_short": 12.0,
+      "font_size_medium": 12.0,
+      "font_size_long": 12.0,
       "dynamic_font_size": {
-        "enabled": true,
-        "short": 22.0,
-        "medium": 17.0,
-        "long": 14.0,
-        "short_max_chars": 13,
-        "medium_max_chars": 17
+        "enabled": false,
+        "short": 12.0,
+        "medium": 12.0,
+        "long": 12.0
       },
       "line_max_width": 0.95,
-      "y": -0.1081,
+      "y": -0.088,
       "dynamic_y": {
         "enabled": true,
-        "descender_y": -0.12,
-        "tall_numbers_y": -0.1268,
-        "standard_y": -0.1081,
-        "compact_y": -0.0865,
-        "size22_y": -0.1138,
-        "size22_descender_y": -0.12,
+        "standard_y": -0.088,
+        "tall_numbers_y": -0.1081,
+        "descender_y": -0.095,
+        "compact_y": -0.078,
         "solo_y": 0.0
       },
       "scale": {
@@ -9989,9 +9965,9 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 24,
       "max_words_per_line": 4,
-      "max_highlight_chars": 19
+      "max_highlight_chars": 22
     },
     "formatting": {
       "strip_commas": true,
@@ -10002,21 +9978,21 @@
   },
   "letra ángel cárdenas": {
     "name": "Letra Ángel Cárdenas",
-    "version": "1.0.0",
-    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "version": "2.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas invertido: Dream Believer Bold blanco arriba (tamaño 9, y=0.0) y Ligerid amarillo (#FCFE60) abajo (tamaño 12, y=-0.088) con animación Corte con láser, sonido de click sincronizado y separación vertical compacta.",
     "layout": "dual",
     "uppercase": false,
     "top": {
-      "font_name": "Ligerid",
-      "font_title": "Ligerid",
-      "font_path": "Ligerid.ttf",
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
       "color": "#FFFFFF",
       "rgb_color": [
         1.0,
         1.0,
         1.0
       ],
-      "font_size": 11.0,
+      "font_size": 9.0,
       "y": 0.0,
       "scale": {
         "x": 1.0,
@@ -10044,37 +10020,33 @@
       "uppercase": false
     },
     "bottom": {
-      "font_name": "Dream Believer Bold",
-      "font_title": "Dream Believer Bold",
-      "font_path": "Dream Believer Bold.otf",
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
       "color": "#fcfe60",
       "rgb_color": [
         0.9882352948188782,
         0.9960784316062927,
         0.3764705955982208
       ],
-      "font_size": 17.0,
-      "font_size_short": 22.0,
-      "font_size_medium": 17.0,
-      "font_size_long": 14.0,
+      "font_size": 12.0,
+      "font_size_short": 12.0,
+      "font_size_medium": 12.0,
+      "font_size_long": 12.0,
       "dynamic_font_size": {
-        "enabled": true,
-        "short": 22.0,
-        "medium": 17.0,
-        "long": 14.0,
-        "short_max_chars": 13,
-        "medium_max_chars": 17
+        "enabled": false,
+        "short": 12.0,
+        "medium": 12.0,
+        "long": 12.0
       },
       "line_max_width": 0.95,
-      "y": -0.1081,
+      "y": -0.088,
       "dynamic_y": {
         "enabled": true,
-        "descender_y": -0.12,
-        "tall_numbers_y": -0.1268,
-        "standard_y": -0.1081,
-        "compact_y": -0.0865,
-        "size22_y": -0.1138,
-        "size22_descender_y": -0.12,
+        "standard_y": -0.088,
+        "tall_numbers_y": -0.1081,
+        "descender_y": -0.095,
+        "compact_y": -0.078,
         "solo_y": 0.0
       },
       "scale": {
@@ -10123,9 +10095,9 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 24,
       "max_words_per_line": 4,
-      "max_highlight_chars": 19
+      "max_highlight_chars": 22
     },
     "formatting": {
       "strip_commas": true,
@@ -10136,21 +10108,21 @@
   },
   "letra_angel_cadenas": {
     "name": "Letra Ángel Cárdenas",
-    "version": "1.0.0",
-    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "version": "2.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas invertido: Dream Believer Bold blanco arriba (tamaño 9, y=0.0) y Ligerid amarillo (#FCFE60) abajo (tamaño 12, y=-0.088) con animación Corte con láser, sonido de click sincronizado y separación vertical compacta.",
     "layout": "dual",
     "uppercase": false,
     "top": {
-      "font_name": "Ligerid",
-      "font_title": "Ligerid",
-      "font_path": "Ligerid.ttf",
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
       "color": "#FFFFFF",
       "rgb_color": [
         1.0,
         1.0,
         1.0
       ],
-      "font_size": 11.0,
+      "font_size": 9.0,
       "y": 0.0,
       "scale": {
         "x": 1.0,
@@ -10178,37 +10150,33 @@
       "uppercase": false
     },
     "bottom": {
-      "font_name": "Dream Believer Bold",
-      "font_title": "Dream Believer Bold",
-      "font_path": "Dream Believer Bold.otf",
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
       "color": "#fcfe60",
       "rgb_color": [
         0.9882352948188782,
         0.9960784316062927,
         0.3764705955982208
       ],
-      "font_size": 17.0,
-      "font_size_short": 22.0,
-      "font_size_medium": 17.0,
-      "font_size_long": 14.0,
+      "font_size": 12.0,
+      "font_size_short": 12.0,
+      "font_size_medium": 12.0,
+      "font_size_long": 12.0,
       "dynamic_font_size": {
-        "enabled": true,
-        "short": 22.0,
-        "medium": 17.0,
-        "long": 14.0,
-        "short_max_chars": 13,
-        "medium_max_chars": 17
+        "enabled": false,
+        "short": 12.0,
+        "medium": 12.0,
+        "long": 12.0
       },
       "line_max_width": 0.95,
-      "y": -0.1081,
+      "y": -0.088,
       "dynamic_y": {
         "enabled": true,
-        "descender_y": -0.12,
-        "tall_numbers_y": -0.1268,
-        "standard_y": -0.1081,
-        "compact_y": -0.0865,
-        "size22_y": -0.1138,
-        "size22_descender_y": -0.12,
+        "standard_y": -0.088,
+        "tall_numbers_y": -0.1081,
+        "descender_y": -0.095,
+        "compact_y": -0.078,
         "solo_y": 0.0
       },
       "scale": {
@@ -10257,9 +10225,9 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 24,
       "max_words_per_line": 4,
-      "max_highlight_chars": 19
+      "max_highlight_chars": 22
     },
     "formatting": {
       "strip_commas": true,
@@ -10270,21 +10238,21 @@
   },
   "letra angel": {
     "name": "Letra Ángel Cárdenas",
-    "version": "1.0.0",
-    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "version": "2.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas invertido: Dream Believer Bold blanco arriba (tamaño 9, y=0.0) y Ligerid amarillo (#FCFE60) abajo (tamaño 12, y=-0.088) con animación Corte con láser, sonido de click sincronizado y separación vertical compacta.",
     "layout": "dual",
     "uppercase": false,
     "top": {
-      "font_name": "Ligerid",
-      "font_title": "Ligerid",
-      "font_path": "Ligerid.ttf",
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
       "color": "#FFFFFF",
       "rgb_color": [
         1.0,
         1.0,
         1.0
       ],
-      "font_size": 11.0,
+      "font_size": 9.0,
       "y": 0.0,
       "scale": {
         "x": 1.0,
@@ -10312,37 +10280,33 @@
       "uppercase": false
     },
     "bottom": {
-      "font_name": "Dream Believer Bold",
-      "font_title": "Dream Believer Bold",
-      "font_path": "Dream Believer Bold.otf",
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
       "color": "#fcfe60",
       "rgb_color": [
         0.9882352948188782,
         0.9960784316062927,
         0.3764705955982208
       ],
-      "font_size": 17.0,
-      "font_size_short": 22.0,
-      "font_size_medium": 17.0,
-      "font_size_long": 14.0,
+      "font_size": 12.0,
+      "font_size_short": 12.0,
+      "font_size_medium": 12.0,
+      "font_size_long": 12.0,
       "dynamic_font_size": {
-        "enabled": true,
-        "short": 22.0,
-        "medium": 17.0,
-        "long": 14.0,
-        "short_max_chars": 13,
-        "medium_max_chars": 17
+        "enabled": false,
+        "short": 12.0,
+        "medium": 12.0,
+        "long": 12.0
       },
       "line_max_width": 0.95,
-      "y": -0.1081,
+      "y": -0.088,
       "dynamic_y": {
         "enabled": true,
-        "descender_y": -0.12,
-        "tall_numbers_y": -0.1268,
-        "standard_y": -0.1081,
-        "compact_y": -0.0865,
-        "size22_y": -0.1138,
-        "size22_descender_y": -0.12,
+        "standard_y": -0.088,
+        "tall_numbers_y": -0.1081,
+        "descender_y": -0.095,
+        "compact_y": -0.078,
         "solo_y": 0.0
       },
       "scale": {
@@ -10391,9 +10355,9 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 24,
       "max_words_per_line": 4,
-      "max_highlight_chars": 19
+      "max_highlight_chars": 22
     },
     "formatting": {
       "strip_commas": true,
@@ -10404,21 +10368,21 @@
   },
   "preset angel cadenas": {
     "name": "Letra Ángel Cárdenas",
-    "version": "1.0.0",
-    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "version": "2.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas invertido: Dream Believer Bold blanco arriba (tamaño 9, y=0.0) y Ligerid amarillo (#FCFE60) abajo (tamaño 12, y=-0.088) con animación Corte con láser, sonido de click sincronizado y separación vertical compacta.",
     "layout": "dual",
     "uppercase": false,
     "top": {
-      "font_name": "Ligerid",
-      "font_title": "Ligerid",
-      "font_path": "Ligerid.ttf",
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
       "color": "#FFFFFF",
       "rgb_color": [
         1.0,
         1.0,
         1.0
       ],
-      "font_size": 11.0,
+      "font_size": 9.0,
       "y": 0.0,
       "scale": {
         "x": 1.0,
@@ -10446,37 +10410,33 @@
       "uppercase": false
     },
     "bottom": {
-      "font_name": "Dream Believer Bold",
-      "font_title": "Dream Believer Bold",
-      "font_path": "Dream Believer Bold.otf",
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
       "color": "#fcfe60",
       "rgb_color": [
         0.9882352948188782,
         0.9960784316062927,
         0.3764705955982208
       ],
-      "font_size": 17.0,
-      "font_size_short": 22.0,
-      "font_size_medium": 17.0,
-      "font_size_long": 14.0,
+      "font_size": 12.0,
+      "font_size_short": 12.0,
+      "font_size_medium": 12.0,
+      "font_size_long": 12.0,
       "dynamic_font_size": {
-        "enabled": true,
-        "short": 22.0,
-        "medium": 17.0,
-        "long": 14.0,
-        "short_max_chars": 13,
-        "medium_max_chars": 17
+        "enabled": false,
+        "short": 12.0,
+        "medium": 12.0,
+        "long": 12.0
       },
       "line_max_width": 0.95,
-      "y": -0.1081,
+      "y": -0.088,
       "dynamic_y": {
         "enabled": true,
-        "descender_y": -0.12,
-        "tall_numbers_y": -0.1268,
-        "standard_y": -0.1081,
-        "compact_y": -0.0865,
-        "size22_y": -0.1138,
-        "size22_descender_y": -0.12,
+        "standard_y": -0.088,
+        "tall_numbers_y": -0.1081,
+        "descender_y": -0.095,
+        "compact_y": -0.078,
         "solo_y": 0.0
       },
       "scale": {
@@ -10525,9 +10485,9 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 24,
       "max_words_per_line": 4,
-      "max_highlight_chars": 19
+      "max_highlight_chars": 22
     },
     "formatting": {
       "strip_commas": true,
@@ -10538,21 +10498,21 @@
   },
   "angel cadenas 1": {
     "name": "Letra Ángel Cárdenas",
-    "version": "1.0.0",
-    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "version": "2.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas invertido: Dream Believer Bold blanco arriba (tamaño 9, y=0.0) y Ligerid amarillo (#FCFE60) abajo (tamaño 12, y=-0.088) con animación Corte con láser, sonido de click sincronizado y separación vertical compacta.",
     "layout": "dual",
     "uppercase": false,
     "top": {
-      "font_name": "Ligerid",
-      "font_title": "Ligerid",
-      "font_path": "Ligerid.ttf",
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
       "color": "#FFFFFF",
       "rgb_color": [
         1.0,
         1.0,
         1.0
       ],
-      "font_size": 11.0,
+      "font_size": 9.0,
       "y": 0.0,
       "scale": {
         "x": 1.0,
@@ -10580,37 +10540,33 @@
       "uppercase": false
     },
     "bottom": {
-      "font_name": "Dream Believer Bold",
-      "font_title": "Dream Believer Bold",
-      "font_path": "Dream Believer Bold.otf",
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
       "color": "#fcfe60",
       "rgb_color": [
         0.9882352948188782,
         0.9960784316062927,
         0.3764705955982208
       ],
-      "font_size": 17.0,
-      "font_size_short": 22.0,
-      "font_size_medium": 17.0,
-      "font_size_long": 14.0,
+      "font_size": 12.0,
+      "font_size_short": 12.0,
+      "font_size_medium": 12.0,
+      "font_size_long": 12.0,
       "dynamic_font_size": {
-        "enabled": true,
-        "short": 22.0,
-        "medium": 17.0,
-        "long": 14.0,
-        "short_max_chars": 13,
-        "medium_max_chars": 17
+        "enabled": false,
+        "short": 12.0,
+        "medium": 12.0,
+        "long": 12.0
       },
       "line_max_width": 0.95,
-      "y": -0.1081,
+      "y": -0.088,
       "dynamic_y": {
         "enabled": true,
-        "descender_y": -0.12,
-        "tall_numbers_y": -0.1268,
-        "standard_y": -0.1081,
-        "compact_y": -0.0865,
-        "size22_y": -0.1138,
-        "size22_descender_y": -0.12,
+        "standard_y": -0.088,
+        "tall_numbers_y": -0.1081,
+        "descender_y": -0.095,
+        "compact_y": -0.078,
         "solo_y": 0.0
       },
       "scale": {
@@ -10659,9 +10615,9 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 24,
       "max_words_per_line": 4,
-      "max_highlight_chars": 19
+      "max_highlight_chars": 22
     },
     "formatting": {
       "strip_commas": true,
@@ -10672,21 +10628,21 @@
   },
   "angel_cadenas_1": {
     "name": "Letra Ángel Cárdenas",
-    "version": "1.0.0",
-    "description": "Estilo de 2 capas de Ángel Cárdenas: Ligerid blanco arriba (tamaño 11, y=0.0) y Dream Believer Bold amarillo (#fcfe60) abajo con animación Corte con láser, sonido de click sincronizado y separación vertical calibrada.",
+    "version": "2.0.0",
+    "description": "Estilo de 2 capas de Ángel Cárdenas invertido: Dream Believer Bold blanco arriba (tamaño 9, y=0.0) y Ligerid amarillo (#FCFE60) abajo (tamaño 12, y=-0.088) con animación Corte con láser, sonido de click sincronizado y separación vertical compacta.",
     "layout": "dual",
     "uppercase": false,
     "top": {
-      "font_name": "Ligerid",
-      "font_title": "Ligerid",
-      "font_path": "Ligerid.ttf",
+      "font_name": "Dream Believer Bold",
+      "font_title": "Dream Believer Bold",
+      "font_path": "Dream Believer Bold.otf",
       "color": "#FFFFFF",
       "rgb_color": [
         1.0,
         1.0,
         1.0
       ],
-      "font_size": 11.0,
+      "font_size": 9.0,
       "y": 0.0,
       "scale": {
         "x": 1.0,
@@ -10714,37 +10670,33 @@
       "uppercase": false
     },
     "bottom": {
-      "font_name": "Dream Believer Bold",
-      "font_title": "Dream Believer Bold",
-      "font_path": "Dream Believer Bold.otf",
+      "font_name": "Ligerid",
+      "font_title": "Ligerid",
+      "font_path": "Ligerid.ttf",
       "color": "#fcfe60",
       "rgb_color": [
         0.9882352948188782,
         0.9960784316062927,
         0.3764705955982208
       ],
-      "font_size": 17.0,
-      "font_size_short": 22.0,
-      "font_size_medium": 17.0,
-      "font_size_long": 14.0,
+      "font_size": 12.0,
+      "font_size_short": 12.0,
+      "font_size_medium": 12.0,
+      "font_size_long": 12.0,
       "dynamic_font_size": {
-        "enabled": true,
-        "short": 22.0,
-        "medium": 17.0,
-        "long": 14.0,
-        "short_max_chars": 13,
-        "medium_max_chars": 17
+        "enabled": false,
+        "short": 12.0,
+        "medium": 12.0,
+        "long": 12.0
       },
       "line_max_width": 0.95,
-      "y": -0.1081,
+      "y": -0.088,
       "dynamic_y": {
         "enabled": true,
-        "descender_y": -0.12,
-        "tall_numbers_y": -0.1268,
-        "standard_y": -0.1081,
-        "compact_y": -0.0865,
-        "size22_y": -0.1138,
-        "size22_descender_y": -0.12,
+        "standard_y": -0.088,
+        "tall_numbers_y": -0.1081,
+        "descender_y": -0.095,
+        "compact_y": -0.078,
         "solo_y": 0.0
       },
       "scale": {
@@ -10793,9 +10745,9 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 24,
       "max_words_per_line": 4,
-      "max_highlight_chars": 19
+      "max_highlight_chars": 22
     },
     "formatting": {
       "strip_commas": true,

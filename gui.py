@@ -376,7 +376,7 @@ class CCSubsProGUI(tk.Tk):
 
         r_angel = ttk.Radiobutton(
             presets_frame,
-            text="⚡ Ángel Cárdenas  (Ligerid blanco | Dream Believer Bold #FCFE60)",
+            text="⚡ Ángel Cárdenas  (Dream Believer Bold blanco 9 | Ligerid #FCFE60 12)",
             variable=self.doctor_preset,
             value="angel_cadenas",
             command=self._on_preset_change
@@ -496,8 +496,8 @@ class CCSubsProGUI(tk.Tk):
             "dentok": "🦷 Dentok: Hook y momentos clave en escalera (Playfair Display Italic) | Subtítulos largos en Helvetica Regular sin animación",
             "dr dentok": "🦷 Dentok: Hook y momentos clave en escalera (Playfair Display Italic) | Subtítulos largos en Helvetica Regular sin animación",
             "sep dentok": "🦷 Dentok: Hook y momentos clave en escalera (Playfair Display Italic) | Subtítulos largos en Helvetica Regular sin animación",
-            "angel_cadenas": "⚡ Ángel Cárdenas: Ligerid blanco arriba (11.0, y=0.0) | Dream Believer Bold amarillo (#FCFE60) abajo + Corte con láser + Click fx",
-            "angel": "⚡ Ángel Cárdenas: Ligerid blanco arriba (11.0, y=0.0) | Dream Believer Bold amarillo (#FCFE60) abajo + Corte con láser + Click fx"
+            "angel_cadenas": "⚡ Ángel Cárdenas: Dream Believer Bold blanco arriba (9.0, y=0.0) | Ligerid amarillo (#FCFE60) abajo (12.0, y=-0.088) + Corte con láser + Click fx",
+            "angel": "⚡ Ángel Cárdenas: Dream Believer Bold blanco arriba (9.0, y=0.0) | Ligerid amarillo (#FCFE60) abajo (12.0, y=-0.088) + Corte con láser + Click fx"
         }
         if hasattr(self, 'lbl_preset_detail'):
             self.lbl_preset_detail.config(text=details.get(p, ""))

@@ -661,20 +661,20 @@ class DualStyler:
                         sz_used = get_effective_font_size(style_to_use, bot_text)
 
                         if not top_text_str:
-                            eff_bot_y = float(dyn_y_cfg.get('solo_y', 0.0))
+                            eff_bot_y = float(dyn_y_cfg.get('solo_y', self.y_bottom))
                         elif sz_used >= 21.0:
                             if has_top_descenders:
-                                eff_bot_y = float(dyn_y_cfg.get('size22_descender_y', -0.1200))
+                                eff_bot_y = float(dyn_y_cfg.get('size22_descender_y', dyn_y_cfg.get('descender_y', -0.1200)))
                             else:
-                                eff_bot_y = float(dyn_y_cfg.get('size22_y', -0.1138))
-                        elif has_top_descenders:
-                            eff_bot_y = float(dyn_y_cfg.get('descender_y', -0.1200))
+                                eff_bot_y = float(dyn_y_cfg.get('size22_y', dyn_y_cfg.get('standard_y', -0.1138)))
                         elif has_tall_numbers:
-                            eff_bot_y = float(dyn_y_cfg.get('tall_numbers_y', -0.1268))
+                            eff_bot_y = float(dyn_y_cfg.get('tall_numbers_y', dyn_y_cfg.get('standard_y', self.y_bottom)))
+                        elif has_top_descenders:
+                            eff_bot_y = float(dyn_y_cfg.get('descender_y', dyn_y_cfg.get('standard_y', self.y_bottom)))
                         elif bot_text.islower() and not any(c.isdigit() for c in bot_text) and len(bot_text) <= 14 and 'compact_y' in dyn_y_cfg:
-                            eff_bot_y = float(dyn_y_cfg.get('compact_y', -0.0865))
+                            eff_bot_y = float(dyn_y_cfg.get('compact_y', dyn_y_cfg.get('standard_y', self.y_bottom)))
                         else:
-                            eff_bot_y = float(dyn_y_cfg.get('standard_y', -0.1081))
+                            eff_bot_y = float(dyn_y_cfg.get('standard_y', self.y_bottom))
 
                     bot_seg = {
                         "id": str(uuid.uuid4()).upper(),
@@ -1930,20 +1930,20 @@ class DualStyler:
                         sz_used = bot_font_size
 
                         if not top_text_str:
-                            eff_bot_y = float(dyn_y_cfg.get('solo_y', 0.0))
+                            eff_bot_y = float(dyn_y_cfg.get('solo_y', self.y_bottom))
                         elif sz_used >= 21.0:
                             if has_top_descenders:
-                                eff_bot_y = float(dyn_y_cfg.get('size22_descender_y', -0.1200))
+                                eff_bot_y = float(dyn_y_cfg.get('size22_descender_y', dyn_y_cfg.get('descender_y', -0.1200)))
                             else:
-                                eff_bot_y = float(dyn_y_cfg.get('size22_y', -0.1138))
-                        elif has_top_descenders:
-                            eff_bot_y = float(dyn_y_cfg.get('descender_y', -0.1200))
+                                eff_bot_y = float(dyn_y_cfg.get('size22_y', dyn_y_cfg.get('standard_y', -0.1138)))
                         elif has_tall_numbers:
-                            eff_bot_y = float(dyn_y_cfg.get('tall_numbers_y', -0.1268))
+                            eff_bot_y = float(dyn_y_cfg.get('tall_numbers_y', dyn_y_cfg.get('standard_y', self.y_bottom)))
+                        elif has_top_descenders:
+                            eff_bot_y = float(dyn_y_cfg.get('descender_y', dyn_y_cfg.get('standard_y', self.y_bottom)))
                         elif current_text.islower() and not any(c.isdigit() for c in current_text) and len(current_text) <= 14 and 'compact_y' in dyn_y_cfg:
-                            eff_bot_y = float(dyn_y_cfg.get('compact_y', -0.0865))
+                            eff_bot_y = float(dyn_y_cfg.get('compact_y', dyn_y_cfg.get('standard_y', self.y_bottom)))
                         else:
-                            eff_bot_y = float(dyn_y_cfg.get('standard_y', -0.1081))
+                            eff_bot_y = float(dyn_y_cfg.get('standard_y', self.y_bottom))
 
                     seg['clip']['transform']['y'] = eff_bot_y
                     repaired_bot += 1
