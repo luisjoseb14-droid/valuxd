@@ -383,6 +383,15 @@ class CCSubsProGUI(tk.Tk):
         )
         r_angel.grid(row=8, column=0, sticky=tk.W, pady=2, padx=(0, 10))
 
+        r_nuria = ttk.Radiobutton(
+            presets_frame,
+            text="🌸 Dra. Nuria  (Recline | Bold Italic rosa + Zoom blur)",
+            variable=self.doctor_preset,
+            value="nuria",
+            command=self._on_preset_change
+        )
+        r_nuria.grid(row=8, column=1, sticky=tk.W, pady=2)
+
         # Dynamic detail line for the selected doctor
         self.lbl_preset_detail = tk.Label(
             preset_card,
@@ -467,7 +476,7 @@ class CCSubsProGUI(tk.Tk):
 
     def _on_preset_change(self):
         p = self.doctor_preset.get()
-        if p in ["gerardo", "alharilla", "jose", "deditos", "laura", "emilia", "alvaro", "pequenos", "cuidus", "laura burgos", "laura_burgos", "enfocavision"]:
+        if p in ["gerardo", "alharilla", "jose", "deditos", "laura", "emilia", "alvaro", "pequenos", "cuidus", "laura burgos", "laura_burgos", "enfocavision", "nuria"]:
             self.chk_anim.config(state=tk.NORMAL)
             self.enable_anim_var.set(True)
         else:
@@ -497,7 +506,9 @@ class CCSubsProGUI(tk.Tk):
             "dr dentok": "🦷 Dentok: Hook y momentos clave en escalera (Playfair Display Italic) | Subtítulos largos en Helvetica Regular sin animación",
             "sep dentok": "🦷 Dentok: Hook y momentos clave en escalera (Playfair Display Italic) | Subtítulos largos en Helvetica Regular sin animación",
             "angel_cadenas": "⚡ Ángel Cárdenas: Dream Believer Bold blanco arriba (9.0, y=0.0) | Ligerid amarillo (#FCFE60) abajo (12.0, y=-0.088) + Corte con láser + Click fx",
-            "angel": "⚡ Ángel Cárdenas: Dream Believer Bold blanco arriba (9.0, y=0.0) | Ligerid amarillo (#FCFE60) abajo (12.0, y=-0.088) + Corte con láser + Click fx"
+            "angel": "⚡ Ángel Cárdenas: Dream Believer Bold blanco arriba (9.0, y=0.0) | Ligerid amarillo (#FCFE60) abajo (12.0, y=-0.088) + Corte con láser + Click fx",
+            "nuria": "🌸 Dra. Nuria: Recline Regular blanco arriba | Recline Bold Italic rosa (#DEB0B0) abajo + Zoom blur + Click fx",
+            "dra nuria": "🌸 Dra. Nuria: Recline Regular blanco arriba | Recline Bold Italic rosa (#DEB0B0) abajo + Zoom blur + Click fx"
         }
         if hasattr(self, 'lbl_preset_detail'):
             self.lbl_preset_detail.config(text=details.get(p, ""))

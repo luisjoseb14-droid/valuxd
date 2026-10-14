@@ -48,6 +48,8 @@ FONT_REGISTRY_MAP = {
     'Anton-Regular.ttf': 'Anton Regular (TrueType)',
     'Ligerid.ttf': 'Ligerid (TrueType)',
     'Dream Believer Bold.otf': 'Dream Believer Bold (TrueType)',
+    'Recline-Regular.ttf': 'Recline Regular (TrueType)',
+    'Recline-BoldItalic.ttf': 'Recline Bold Italic (TrueType)',
 }
 
 def install_all_assets() -> Dict[str, Any]:
