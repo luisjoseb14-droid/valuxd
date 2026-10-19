@@ -1,0 +1,153 @@
+{
+  "name": "Letra Ana Visedo",
+  "version": "1.0.0",
+  "description": "Estilo de 2 capas de Dra. Ana Visedo: Poppins Bold blanco arriba (tamaño 10, y=-0.105) y Wonder Nature Sans rosa (#E8ACBB) abajo (tamaño 12, y=-0.191) con animación Mini zoom, stickers de líneas/énfasis sincronizados y sonido de click.",
+  "layout": "dual",
+  "uppercase": false,
+  "top": {
+    "font_name": "Poppins Bold",
+    "font_title": "Poppins Bold",
+    "font_path": "Poppins-Bold.ttf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 10.0,
+    "y": -0.104522161340843,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45.0,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45.0,
+      "thickness_projection_distance": 0.0,
+      "thickness_projection_enable": false
+    },
+    "uppercase": false
+  },
+  "bottom": {
+    "font_name": "Wonder Nature Sans",
+    "font_title": "Wonder Nature Sans",
+    "font_path": "WonderNature-Sans.otf",
+    "color": "#e8acbb",
+    "rgb_color": [
+      0.9098039269447327,
+      0.674509823322296,
+      0.7333333492279053
+    ],
+    "font_size": 12.0,
+    "y": -0.190977492752947,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "animation": {
+      "enabled": true,
+      "resource_id": "6763469998330483213",
+      "name": "Mini zoom",
+      "path": "",
+      "duration": 433333,
+      "type": "in"
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45.0,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45.0,
+      "thickness_projection_distance": 0.0,
+      "thickness_projection_enable": false
+    },
+    "useLetterColor": true,
+    "uppercase": false
+  },
+  "stickers": {
+    "enabled": true,
+    "mode": "cycle",
+    "pool": [
+      {
+        "name": "Simple Icon En - Curly Line",
+        "resource_id": "7468646543625588021",
+        "sticker_id": "7468646543625588021",
+        "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/artistEffect/7468646543625588021/f7231da2b29bee7ed094cabbe257090c",
+        "category_id": "100000",
+        "category_name": "Favoritos",
+        "icon_url": "https://p16-heycan-image-sign-sg.ibyteimg.com/tos-alisg-i-fhsjxsyzit-sg/a8722494ed884789a5c216fedacddcc2~tplv-fhsjxsyzit-resize:0:0.webp?x-expires=1817329452&x-signature=Extk4h3IzcisdHYfRCET5EQFbfY%3D",
+        "preview_cover_url": "https://p16-heycan-image-sign-sg.ibyteimg.com/tos-alisg-i-fhsjxsyzit-sg/a8722494ed884789a5c216fedacddcc2~tplv-fhsjxsyzit-resize:0:0.webp?x-expires=1817329452&x-signature=Extk4h3IzcisdHYfRCET5EQFbfY%3D",
+        "clip": {
+          "transform": {
+            "x": 0.0,
+            "y": -0.274666423794283
+          },
+          "scale": {
+            "x": 1.414399430939007,
+            "y": 1.414399430939007
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "name": "Doodle EN Emphasis",
+        "resource_id": "7598155150993132818",
+        "sticker_id": "7598155150993132818",
+        "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/artistEffect/7598155150993132818/a4810614331293c584990a3caac6642f",
+        "category_id": "100000",
+        "category_name": "Favoritos",
+        "icon_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/f09693c7c5174fadae4ad4bba0168e90~tplv-j6daoa426t-resize:0:0.webp?x-expires=1819514516&x-signature=pfGjEb6VkKWJzyuujtxU6hn4nV4%3D",
+        "preview_cover_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/f09693c7c5174fadae4ad4bba0168e90~tplv-j6daoa426t-resize:0:0.webp?x-expires=1819514516&x-signature=pfGjEb6VkKWJzyuujtxU6hn4nV4%3D",
+        "clip": {
+          "transform": {
+            "x": 0.0,
+            "y": -0.25
+          },
+          "scale": {
+            "x": 0.85,
+            "y": 0.85
+          },
+          "rotation": 0.0
+        }
+      }
+    ]
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.7
+  },
+  "pacing": {
+    "min_seconds": 2.5,
+    "max_seconds": 4.5
+  },
+  "margins": {
+    "max_chars_per_line": 22,
+    "max_words_per_line": 4
+  }
+}

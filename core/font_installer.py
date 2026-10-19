@@ -50,6 +50,8 @@ FONT_REGISTRY_MAP = {
     'Dream Believer Bold.otf': 'Dream Believer Bold (TrueType)',
     'Recline-Regular.ttf': 'Recline Regular (TrueType)',
     'Recline-BoldItalic.ttf': 'Recline Bold Italic (TrueType)',
+    'WonderNature-Sans.otf': 'Wonder Nature Sans (TrueType)',
+    'Poppins-Bold.ttf': 'Poppins Bold (TrueType)',
 }
 
 def install_all_assets() -> Dict[str, Any]:

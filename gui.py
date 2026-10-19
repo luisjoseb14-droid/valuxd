@@ -392,6 +392,15 @@ class CCSubsProGUI(tk.Tk):
         )
         r_nuria.grid(row=8, column=1, sticky=tk.W, pady=2)
 
+        r_ana_visedo = ttk.Radiobutton(
+            presets_frame,
+            text="✨ Dra. Ana Visedo  (Poppins Bold blanco 10 | Wonder Nature Sans rosa 12 + Mini zoom + Stickers)",
+            variable=self.doctor_preset,
+            value="ana_visedo",
+            command=self._on_preset_change
+        )
+        r_ana_visedo.grid(row=9, column=0, columnspan=2, sticky=tk.W, pady=2)
+
         # Dynamic detail line for the selected doctor
         self.lbl_preset_detail = tk.Label(
             preset_card,
@@ -476,7 +485,7 @@ class CCSubsProGUI(tk.Tk):
 
     def _on_preset_change(self):
         p = self.doctor_preset.get()
-        if p in ["gerardo", "alharilla", "jose", "deditos", "laura", "emilia", "alvaro", "pequenos", "cuidus", "laura burgos", "laura_burgos", "enfocavision", "nuria"]:
+        if p in ["gerardo", "alharilla", "jose", "deditos", "laura", "emilia", "alvaro", "pequenos", "cuidus", "laura burgos", "laura_burgos", "enfocavision", "nuria", "ana_visedo"]:
             self.chk_anim.config(state=tk.NORMAL)
             self.enable_anim_var.set(True)
         else:
@@ -496,6 +505,8 @@ class CCSubsProGUI(tk.Tk):
             "ana": "👂 Dra. Ana Otorrino: Plantilla CapCut flotante | Liliana Bold blanco + Liliana Black amarillo (#FDE69A) en la misma línea",
             "ana otorrino": "👂 Dra. Ana Otorrino: Plantilla CapCut flotante | Liliana Bold blanco + Liliana Black amarillo (#FDE69A) en la misma línea",
             "ana_otorrino": "👂 Dra. Ana Otorrino: Plantilla CapCut flotante | Liliana Bold blanco + Liliana Black amarillo (#FDE69A) en la misma línea",
+            "ana_visedo": "✨ Dra. Ana Visedo: Poppins Bold blanco arriba (10.0, y=-0.105) | Wonder Nature Sans rosa (#E8ACBB) abajo (12.0, y=-0.191) + Mini zoom + Stickers CapCut + Click fx",
+            "ana visedo": "✨ Dra. Ana Visedo: Poppins Bold blanco arriba (10.0, y=-0.105) | Wonder Nature Sans rosa (#E8ACBB) abajo (12.0, y=-0.191) + Mini zoom + Stickers CapCut + Click fx",
             "cuidus": "🌸 CUIDUS: Gentium Plus Italic blanco arriba | Gentium Plus Bold rosa suave (#E5C7D2) abajo + Descenso + Click fx",
             "laura burgos": "🩺 Dra. Laura Burgos: Indivisible Regular blanco arriba | Indivisible Bold verde azulado (#ABC8CC) abajo + Aparición progresiva + Click fx",
             "laura_burgos": "🩺 Dra. Laura Burgos: Indivisible Regular blanco arriba | Indivisible Bold verde azulado (#ABC8CC) abajo + Aparición progresiva + Click fx",

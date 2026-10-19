@@ -33,7 +33,11 @@ PRESET_PATTERNS: List[Tuple[str, List[str]]] = [
     ("gala", [
         r'\bgala\b',
     ]),
-    # 6. Dra. Ana Otorrino
+    # 6. Dra. Ana Visedo (evaluarse antes de 'ana' general)
+    ("ana_visedo", [
+        r'\b(ana\s*visedo|visedo|ana\s*vis)\b',
+    ]),
+    # 7. Dra. Ana Otorrino
     ("ana", [
         r'\b(ana|otorrino|otorrinolaringolog[ií]a)\b',
     ]),
