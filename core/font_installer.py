@@ -52,6 +52,8 @@ FONT_REGISTRY_MAP = {
     'Recline-BoldItalic.ttf': 'Recline Bold Italic (TrueType)',
     'WonderNature-Sans.otf': 'Wonder Nature Sans (TrueType)',
     'Poppins-Bold.ttf': 'Poppins Bold (TrueType)',
+    'Montserrat-Bold.otf': 'Montserrat Bold (TrueType)',
+    'Antro_Vectra.otf': 'Antro Vectra (TrueType)',
 }
 
 def install_all_assets() -> Dict[str, Any]:

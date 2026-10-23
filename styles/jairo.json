@@ -1,0 +1,115 @@
+{
+  "name": "Letra Dr. Jairo",
+  "version": "1.0.0",
+  "description": "Estilo de 2 capas de Dr. Jairo: Montserrat Bold blanco arriba (tamaño 10, y=-0.093) y Antro Vectra verde menta (#26FFA0) abajo (tamaño 17, y=-0.191) con animación Aparición progresiva y sonido de click sincronizado.",
+  "layout": "dual",
+  "uppercase": false,
+  "top": {
+    "font_name": "Montserrat Bold",
+    "font_title": "Montserrat Bold",
+    "font_path": "Montserrat-Bold.otf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 10.0,
+    "y": -0.09275547829797182,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45.0,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45.0,
+      "thickness_projection_distance": 0.0,
+      "thickness_projection_enable": false
+    },
+    "uppercase": false
+  },
+  "bottom": {
+    "font_name": "Antro Vectra",
+    "font_title": "Antro Vectra",
+    "font_path": "Antro_Vectra.otf",
+    "color": "#26ffa0",
+    "rgb_color": [
+      0.14901961386203766,
+      1.0,
+      0.627451002597809
+    ],
+    "font_size": 17.0,
+    "font_size_short": 17.0,
+    "font_size_medium": 17.0,
+    "font_size_long": 17.0,
+    "dynamic_font_size": {
+      "enabled": false,
+      "short": 17.0,
+      "medium": 17.0,
+      "long": 17.0
+    },
+    "y": -0.190977492752947,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "animation": {
+      "enabled": true,
+      "resource_id": "7646371244257955092",
+      "name": "Aparición progresiva",
+      "path": "",
+      "duration": 500000,
+      "type": "in"
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45.0,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45.0,
+      "thickness_projection_distance": 0.0,
+      "thickness_projection_enable": false
+    },
+    "useLetterColor": true,
+    "letter_spacing": -0.05,
+    "uppercase": false
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.7
+  },
+  "pacing": {
+    "min_seconds": 2.5,
+    "max_seconds": 4.5
+  },
+  "margins": {
+    "max_chars_per_line": 22,
+    "max_words_per_line": 4
+  }
+}
