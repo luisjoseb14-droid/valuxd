@@ -54,6 +54,8 @@ FONT_REGISTRY_MAP = {
     'Poppins-Bold.ttf': 'Poppins Bold (TrueType)',
     'Montserrat-Bold.otf': 'Montserrat Bold (TrueType)',
     'Antro_Vectra.otf': 'Antro Vectra (TrueType)',
+    'MuktaMahee-Regular.ttf': 'Mukta Mahee Regular (TrueType)',
+    'Marydale Regular.ttf': 'Marydale Regular (TrueType)',
 }
 
 def install_all_assets() -> Dict[str, Any]:

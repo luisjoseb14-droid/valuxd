@@ -409,6 +409,14 @@ class CCSubsProGUI(tk.Tk):
             command=self._on_preset_change
         )
         r_jairo.grid(row=10, column=0, columnspan=2, sticky=tk.W, pady=2)
+        r_maria_manuel = ttk.Radiobutton(
+            presets_frame,
+            text="👥 María y Manuel  (Mukta Mahee blanco 11 | Marydale blanco 22 + Mini zoom + Stickers + Click fx)",
+            variable=self.doctor_preset,
+            value="maria_manuel",
+            command=self._on_preset_change
+        )
+        r_maria_manuel.grid(row=11, column=0, columnspan=2, sticky=tk.W, pady=2)
 
         # Dynamic detail line for the selected doctor
         self.lbl_preset_detail = tk.Label(
@@ -494,7 +502,7 @@ class CCSubsProGUI(tk.Tk):
 
     def _on_preset_change(self):
         p = self.doctor_preset.get()
-        if p in ["gerardo", "alharilla", "jose", "deditos", "laura", "emilia", "alvaro", "pequenos", "cuidus", "laura burgos", "laura_burgos", "enfocavision", "nuria", "ana_visedo", "jairo"]:
+        if p in ["gerardo", "alharilla", "jose", "deditos", "laura", "emilia", "alvaro", "pequenos", "cuidus", "laura burgos", "laura_burgos", "enfocavision", "nuria", "ana_visedo", "jairo", "maria_manuel"]:
             self.chk_anim.config(state=tk.NORMAL)
             self.enable_anim_var.set(True)
         else:
@@ -530,7 +538,11 @@ class CCSubsProGUI(tk.Tk):
             "nuria": "🌸 Dra. Nuria: Recline Regular blanco arriba | Recline Bold Italic rosa (#DEB0B0) abajo + Zoom blur + Click fx",
             "dra nuria": "🌸 Dra. Nuria: Recline Regular blanco arriba | Recline Bold Italic rosa (#DEB0B0) abajo + Zoom blur + Click fx",
             "jairo": "🩺 Dr. Jairo: Montserrat Bold blanco arriba (10.0, y=-0.093) | Antro Vectra verde menta (#26FFA0) abajo (17.0, y=-0.191) + Aparición progresiva + Click fx",
-            "dr jairo": "🩺 Dr. Jairo: Montserrat Bold blanco arriba (10.0, y=-0.093) | Antro Vectra verde menta (#26FFA0) abajo (17.0, y=-0.191) + Aparición progresiva + Click fx"
+            "dr jairo": "🩺 Dr. Jairo: Montserrat Bold blanco arriba (10.0, y=-0.093) | Antro Vectra verde menta (#26FFA0) abajo (17.0, y=-0.191) + Aparición progresiva + Click fx",
+            "maria_manuel": "👥 María y Manuel: Mukta Mahee blanco arriba (11.0, y=-0.113) | Marydale blanco (#FFFFFF) abajo (22.38, y=-0.196) + Mini zoom + Stickers + Click fx",
+            "maria y manuel": "👥 María y Manuel: Mukta Mahee blanco arriba (11.0, y=-0.113) | Marydale blanco (#FFFFFF) abajo (22.38, y=-0.196) + Mini zoom + Stickers + Click fx",
+            "manuel": "👥 María y Manuel: Mukta Mahee blanco arriba (11.0, y=-0.113) | Marydale blanco (#FFFFFF) abajo (22.38, y=-0.196) + Mini zoom + Stickers + Click fx",
+            "maria": "👥 María y Manuel: Mukta Mahee blanco arriba (11.0, y=-0.113) | Marydale blanco (#FFFFFF) abajo (22.38, y=-0.196) + Mini zoom + Stickers + Click fx"
         }
         if hasattr(self, 'lbl_preset_detail'):
             self.lbl_preset_detail.config(text=details.get(p, ""))

@@ -1,0 +1,174 @@
+{
+  "name": "Letra María y Manuel",
+  "version": "1.0.0",
+  "description": "Estilo de 2 capas de María y Manuel: Mukta Mahee Regular blanco arriba (tamaño 11.0, y=-0.113) y Marydale Regular blanco grande abajo (tamaño 22.38, y=-0.196) con animación Mini zoom, stickers de líneas/énfasis sincronizados y sonido de click.",
+  "layout": "dual",
+  "uppercase": false,
+  "top": {
+    "font_name": "Mukta Mahee Regular",
+    "font_title": "Mukta Mahee Regular",
+    "font_path": "MuktaMahee-Regular.ttf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 11.0,
+    "y": -0.11311065115309173,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45.0,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45.0,
+      "thickness_projection_distance": 0.0,
+      "thickness_projection_enable": false
+    },
+    "uppercase": false
+  },
+  "bottom": {
+    "font_name": "Marydale Regular",
+    "font_title": "Marydale Regular",
+    "font_path": "Marydale Regular.ttf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 22.376811981201172,
+    "y": -0.195960316859051,
+    "scale": {
+      "x": 1.3550004042363974,
+      "y": 1.3550004042363974
+    },
+    "animation": {
+      "enabled": true,
+      "resource_id": "6763469998330483213",
+      "name": "Mini zoom",
+      "path": "",
+      "duration": 433333,
+      "type": "in"
+    },
+    "shadow": {
+      "alpha": 0.4952380955219269,
+      "angle": -45.0,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45.0,
+      "thickness_projection_distance": 0.0,
+      "thickness_projection_enable": false
+    },
+    "useLetterColor": false,
+    "uppercase": false
+  },
+  "stickers": {
+    "enabled": true,
+    "mode": "cycle",
+    "pool": [
+      {
+        "name": "Simple Icon En - Curly Line",
+        "resource_id": "7468646543625588021",
+        "sticker_id": "7468646543625588021",
+        "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/artistEffect/7468646543625588021/f7231da2b29bee7ed094cabbe257090c",
+        "category_id": "100000",
+        "category_name": "Favoritos",
+        "icon_url": "https://p16-heycan-image-sign-sg.ibyteimg.com/tos-alisg-i-fhsjxsyzit-sg/a8722494ed884789a5c216fedacddcc2~tplv-fhsjxsyzit-resize:0:0.webp?x-expires=1817268118&x-signature=yB5PfszJPDVQDRXugTh%2BF3TlfNs%3D",
+        "preview_cover_url": "https://p16-heycan-image-sign-sg.ibyteimg.com/tos-alisg-i-fhsjxsyzit-sg/a8722494ed884789a5c216fedacddcc2~tplv-fhsjxsyzit-resize:0:0.webp?x-expires=1817268118&x-signature=yB5PfszJPDVQDRXugTh%2BF3TlfNs%3D",
+        "clip": {
+          "transform": {
+            "x": 0.0,
+            "y": -0.274666423794283
+          },
+          "scale": {
+            "x": 1.25,
+            "y": 1.25
+          },
+          "rotation": 0.0
+        }
+      },
+      {
+        "name": "Doodle EN Hand Drawn Speed Reaction Line",
+        "resource_id": "7562803730404609285",
+        "sticker_id": "7562803730404609285",
+        "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/artistEffect/7562803730404609285/9550c5269a94479e3a268e48d672a698",
+        "category_id": "100000",
+        "category_name": "Favoritos",
+        "icon_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/b995ae86c7b2416fbac89e15cedce3cd~tplv-j6daoa426t-resize:0:0.webp?x-expires=1817151916&x-signature=aeYioWfZbySKByomGGgWfyapaSA%3D",
+        "preview_cover_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/b995ae86c7b2416fbac89e15cedce3cd~tplv-j6daoa426t-resize:0:0.webp?x-expires=1817151916&x-signature=aeYioWfZbySKByomGGgWfyapaSA%3D",
+        "clip": {
+          "transform": {
+            "x": 0.46,
+            "y": -0.095
+          },
+          "scale": {
+            "x": 0.45,
+            "y": 0.45
+          },
+          "rotation": 40.0
+        }
+      },
+      {
+        "name": "Doodle EN Emphasis",
+        "resource_id": "7598155150993132818",
+        "sticker_id": "7598155150993132818",
+        "path": "C:/Users/WINDOWS/AppData/Local/CapCut/User Data/Cache/artistEffect/7598155150993132818/a4810614331293c584990a3caac6642f",
+        "category_id": "100000",
+        "category_name": "Favoritos",
+        "icon_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/f09693c7c5174fadae4ad4bba0168e90~tplv-j6daoa426t-resize:0:0.webp?x-expires=1817151916&x-signature=mvTZ52NV5saIlA8B1bbWDuW4RRg%3D",
+        "preview_cover_url": "https://p16-heycan-img-sign-sg.ibyteimg.com/tos-alisg-i-j6daoa426t-sg/f09693c7c5174fadae4ad4bba0168e90~tplv-j6daoa426t-resize:0:0.webp?x-expires=1817151916&x-signature=mvTZ52NV5saIlA8B1bbWDuW4RRg%3D",
+        "clip": {
+          "transform": {
+            "x": 0.0,
+            "y": -0.235
+          },
+          "scale": {
+            "x": 0.9,
+            "y": 0.9
+          },
+          "rotation": 145.0
+        }
+      }
+    ]
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.7
+  },
+  "pacing": {
+    "min_seconds": 2.5,
+    "max_seconds": 4.5
+  },
+  "margins": {
+    "max_chars_per_line": 22,
+    "max_words_per_line": 4
+  }
+}

@@ -89,6 +89,11 @@ PRESET_PATTERNS: List[Tuple[str, List[str]]] = [
     ("jairo", [
         r'\b(jairo)\b',
     ]),
+    # 19. María y Manuel
+    ("maria_manuel", [
+        r'\b(maria\s*y\s*manuel|mar[ií]a\s*y\s*manuel)\b',
+        r'\b(manuel|mar[ií]a)\b',
+    ]),
 ]
 
 
