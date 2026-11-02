@@ -23,7 +23,7 @@ OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 DEFAULT_MODEL = "google/gemini-2.5-flash"
 FALLBACK_MODELS = ["google/gemini-2.5-flash", "google/gemini-2.5-flash-lite"]
 
-SYSTEM_PROMPT_SUBTITLES = """Eres un editor de video y lingüista profesional especializado en subtítulos virales de alta retención para redes sociales (Reels, TikTok, YouTube Shorts).
+SYSTEM_PROMPT_SUBTITLES_BASE = """Eres un editor de video y lingüista profesional especializado en subtítulos virales de alta retención para redes sociales (Reels, TikTok, YouTube Shorts).
 
 Tu tarea es recibir la lista cronológica de segmentos de subtítulos de un video (con sus IDs, marcas de tiempo y texto transcrito por CapCut) y realizar dos labores simultáneas:
 
@@ -31,12 +31,7 @@ Tu tarea es recibir la lista cronológica de segmentos de subtítulos de un vide
    a) CORREGIR MAYÚSCULAS ERRÓNEAS Y SOSTENIDAS (OBLIGATORIA): CapCut suele poner mayúsculas aleatorias o palabras completas en mayúsculas en medio de oraciones (por ejemplo: "que VA a ser", "para tu Pueblo", "LA gente", "ESTÁN", "MÁS", "que DEBERÍAS", "y por qué Evita"). NUNCA dejes palabras en MAYÚSCULAS sostenidas salvo acrónimos oficiales (ADN, UCI, TDAH, OMS). Todas las demás palabras en medio de oraciones DEBEN ir en minúscula natural.
    b) MAYÚSCULAS INICIALES: Coloca mayúscula inicial al comienzo de cada oración, locución o pregunta.
    c) SIGNOS DE INTERROGACIÓN: Detecta preguntas directas o retóricas del orador y añade los signos de interrogación completos de apertura (¿) y de cierre (?). Por ejemplo: "¿Por qué?", "¿Para esto tanto lío?". Asegúrate de cerrar siempre cada pregunta con su signo de cierre (?).
-   d) REGLA ESTRICTA DE PUNTUACIÓN (OBLIGATORIA):
-      - NUNCA coloques comas (,).
-      - NUNCA coloques puntos (.).
-      - NUNCA coloques dos puntos (:).
-      - NUNCA coloques puntos suspensivos (...).
-      - Las comas, puntos y dos puntos quedan estrictamente prohibidos en todos los subtítulos.
+   {punctuation_rule}
    e) REGLA CRÍTICA DE INTEGRIDAD Y LONGITUD DE SEGMENTO (ESTRICTA Y OBLIGATORIA):
       - CADA segmento individual de entrada representa un bloque de audio muy breve de CapCut (típicamente 1 a 3 palabras, máximo 18 caracteres).
       - NUNCA concatenes ni fusiones varios segmentos en oraciones largas.
@@ -78,23 +73,44 @@ Tu tarea es recibir la lista cronológica de segmentos de subtítulos de un vide
       - PROHIBICIÓN TOTAL DE CUANTIFICADORES Y DETERMINANTES: JAMÁS incluyas "ningún", "ninguna", "mucho", "poco", "tan", "más", "cada", "todo" en la palabra destacada. Si la frase dice "no aportan ningún beneficio", destaca ÚNICAMENTE "beneficio", JAMÁS "ningún beneficio" ni "no aportan".
 
 DEBES RESPONDER EXCLUSIVAMENTE UN OBJETO JSON VÁLIDO CON LA SIGUIENTE ESTRUCTURA:
-{
+{{
   "corrected_subtitles": [
-    {
+    {{
       "index": 0,
-      "text": "Texto corregido sin comas ni puntos con mayúscula inicial si inicia frase"
-    }
+      "text": "{example_text}"
+    }}
   ],
   "highlights": [
-    {
+    {{
       "target_index": 1,
       "phrase": "palabra o frase destacada",
       "tone": "normal",
       "is_solo": false
-    }
+    }}
   ]
-}
+}}
 """
+
+PUNCTUATION_RULE_NO = """d) REGLA ESTRICTA DE PUNTUACIÓN (OBLIGATORIA):
+      - NUNCA coloques comas (,).
+      - NUNCA coloques puntos (.).
+      - NUNCA coloques dos puntos (:).
+      - NUNCA coloques puntos suspensivos (...).
+      - Las comas, puntos y dos puntos quedan estrictamente prohibidos en todos los subtítulos."""
+
+PUNCTUATION_RULE_YES = """d) REGLA DE PUNTUACIÓN (PUNTOS Y COMAS ACTIVADOS):
+      - Coloca puntos (.) y comas (,) con precisión según las reglas gramaticales estándar en español.
+      - Coloca coma (,) para pausas naturales, vocativos, enumeraciones y cláusulas coordinadas/subordinadas.
+      - Coloca punto (.) al finalizar oraciones completas y afirmaciones declarativas.
+      - Las comas y puntos DEBEN ir adheridos al final de la palabra correspondiente (ejemplo: "desarrollo.", "crecer,").
+      - NUNCA coloques dos puntos (:) ni puntos suspensivos (...)."""
+
+def get_system_prompt_subtitles(keep_punctuation: bool = False) -> str:
+    rule = PUNCTUATION_RULE_YES if keep_punctuation else PUNCTUATION_RULE_NO
+    example = "Texto corregido con puntos y comas naturales, con mayúscula inicial" if keep_punctuation else "Texto corregido sin comas ni puntos con mayúscula inicial si inicia frase"
+    return SYSTEM_PROMPT_SUBTITLES_BASE.format(punctuation_rule=rule, example_text=example)
+
+SYSTEM_PROMPT_SUBTITLES = get_system_prompt_subtitles(keep_punctuation=False)
 
 class OpenRouterClient:
     def __init__(self, api_key: Optional[str] = None, model: str = DEFAULT_MODEL):
@@ -154,7 +170,7 @@ class OpenRouterClient:
 
         return False, last_error
 
-    def process_subtitles(self, segments: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    def process_subtitles(self, segments: List[Dict[str, Any]], keep_punctuation: bool = False) -> Optional[Dict[str, Any]]:
         """
         Envía los segmentos originales transcritos a Gemini Flash en OpenRouter.
         Retorna un dict con:
@@ -171,7 +187,7 @@ class OpenRouterClient:
             idx = s.get('index', 0)
             st_s = s.get('start', 0) / 1e6
             et_s = s.get('end', 0) / 1e6
-            txt = clean_subtitle_text(s.get('text', ''))
+            txt = clean_subtitle_text(s.get('text', ''), keep_punctuation=keep_punctuation)
             items_payload.append({
                 "index": idx,
                 "start": f"{st_s:.2f}s",
@@ -186,11 +202,13 @@ class OpenRouterClient:
             if fb not in candidates:
                 candidates.append(fb)
 
+        sys_prompt = get_system_prompt_subtitles(keep_punctuation=keep_punctuation)
+
         for m in candidates:
             payload = {
                 "model": m,
                 "messages": [
-                    {"role": "system", "content": SYSTEM_PROMPT_SUBTITLES},
+                    {"role": "system", "content": sys_prompt},
                     {"role": "user", "content": user_content}
                 ],
                 "response_format": {"type": "json_object"},
@@ -218,10 +236,10 @@ class OpenRouterClient:
                         raw_text = re.sub(r'\s*```$', '', raw_text)
                     parsed = json.loads(raw_text)
 
-                    # Sanitizar respuestas para garantizar 0 comas, 0 puntos y números en dígitos
+                    # Sanitizar respuestas para garantizar puntuación según preset y números en dígitos
                     corrected = parsed.get('corrected_subtitles', [])
                     for item in corrected:
-                        item['text'] = convert_spanish_numbers_to_digits(clean_subtitle_text(item.get('text', '')))
+                        item['text'] = convert_spanish_numbers_to_digits(clean_subtitle_text(item.get('text', ''), keep_punctuation=keep_punctuation))
 
                     highlights = parsed.get('highlights', [])
                     for hl in highlights:

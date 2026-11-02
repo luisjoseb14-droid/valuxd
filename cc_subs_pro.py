@@ -303,8 +303,9 @@ def cmd_dual_style(args):
             max_pacing_sec=args.max_pacing
         )
 
-    # Strictly enforce 0 commas and 0 periods
-    proj.clean_all_subtitles()
+    # Strictly enforce punctuation rules according to preset
+    keep_punc = getattr(styler, 'keep_punctuation', False)
+    proj.clean_all_subtitles(keep_punctuation=keep_punc)
     proj.save(create_backup=False)
     print(f"[OK] Estilizacion en doble capa (Arriba / Abajo) completada:")
     print(f"    Proyecto: {os.path.basename(proj.project_path)}")

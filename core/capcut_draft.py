@@ -48,10 +48,10 @@ class SubtitleItem:
         if 'base_content' in self.text_material:
             self.text_material['base_content'] = serialized
 
-    def set_text(self, new_text: str) -> str:
+    def set_text(self, new_text: str, keep_punctuation: bool = False) -> str:
         """Sets new text for the subtitle item, ensuring clean punctuation, style range sync, and uppercase preservation."""
         is_already_upper = not any(c.islower() for c in new_text) if new_text else False
-        cleaned = clean_subtitle_text(new_text, preserve_case=is_already_upper)
+        cleaned = clean_subtitle_text(new_text, preserve_case=is_already_upper, keep_punctuation=keep_punctuation)
         if is_already_upper:
             cleaned = cleaned.upper()
         self.parsed_content['text'] = cleaned
@@ -72,9 +72,9 @@ class SubtitleItem:
         self.sync_content_to_material()
         return cleaned
 
-    def clean_text(self) -> str:
-        """Removes commas, periods, and colons from subtitle text and updates materials and style ranges."""
-        return self.set_text(self.text)
+    def clean_text(self, keep_punctuation: bool = False) -> str:
+        """Removes commas, periods, and colons from subtitle text unless keep_punctuation is True, and updates materials and style ranges."""
+        return self.set_text(self.text, keep_punctuation=keep_punctuation)
 
 
 class CapCutProject:
@@ -158,12 +158,12 @@ class CapCutProject:
 
         self.subtitles.sort(key=lambda s: (s.start_us, s.track_index))
 
-    def clean_all_subtitles(self) -> int:
-        """Cleans commas, periods, and colons from all subtitles in the project."""
+    def clean_all_subtitles(self, keep_punctuation: bool = False) -> int:
+        """Cleans commas, periods, and colons from all subtitles in the project (preserves them if keep_punctuation is True)."""
         self._parse_subtitles()
         count = 0
         for sub in self.subtitles:
-            sub.clean_text()
+            sub.clean_text(keep_punctuation=keep_punctuation)
             count += 1
         return count
 

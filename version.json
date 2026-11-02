@@ -1,8 +1,8 @@
 {
-  "version": "1.0.16",
-  "version_code": 17,
+  "version": "1.0.17",
+  "version_code": 18,
   "date": "2026-11-02",
-  "description": "Nuevo preset Abde (Akzidenz Grotesk Black + azul cielo #6D94FF + Descenso + Clicks chinos variados + Puntos y comas)",
+  "description": "Recorte de latencia en click 鼠标单击1 para disparo instantáneo y corrección integral para conservar puntos (.) y comas (,) en preset Abde",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

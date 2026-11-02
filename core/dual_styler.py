@@ -8,7 +8,7 @@ from typing import Dict, List, Any, Optional, Tuple
 from core.capcut_draft import CapCutProject, SubtitleItem
 from core.animator import Animator
 from core.platform_paths import resolve_font_path, get_default_click_sound_path, resolve_effect_path, resolve_sticker_path
-from core.text_utils import clean_subtitle_text, find_phrase_timing, convert_spanish_numbers_to_digits, sanitize_highlight_phrase, SPANISH_STOPWORDS, align_ai_corrections_to_raw_items
+from core.text_utils import clean_subtitle_text, find_phrase_timing, convert_spanish_numbers_to_digits, sanitize_highlight_phrase, SPANISH_STOPWORDS, align_ai_corrections_to_raw_items, heuristic_punctuation_fallback
 from ai.openrouter_client import OpenRouterClient, DEFAULT_MODEL
 
 
@@ -215,7 +215,7 @@ class DualStyler:
         return cls(preset_data=preset_dict)
 
     def _create_text_material(self, draft_data: Dict[str, Any], text_str: str, style_cfg: Dict[str, Any], is_highlight: bool = False) -> str:
-        text_str = clean_subtitle_text(text_str)
+        text_str = clean_subtitle_text(text_str, keep_punctuation=getattr(self, 'keep_punctuation', False))
         if style_cfg.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False)):
             text_str = text_str.upper()
         materials = draft_data.setdefault('materials', {})
@@ -237,7 +237,6 @@ class DualStyler:
             neg_rgb = style_cfg.get('negative_rgb_color', [0.92549, 0.11372, 0.11372])
             hl_rgb = style_cfg.get('highlight_rgb_color', [0.95686, 0.78039, 0.05882])
 
-            import re
             lower_str = text_str.lower()
             matched_spans = []
 
@@ -1137,12 +1136,12 @@ class DualStyler:
                 if log_fn:
                     log_fn(f"[*] Conectando con OpenRouter ({m})...")
                 client = OpenRouterClient(api_key=effective_key, model=m)
-                ai_res = client.process_subtitles(raw_items)
+                ai_res = client.process_subtitles(raw_items, keep_punctuation=getattr(self, 'keep_punctuation', False))
                 if ai_res:
                     # Align AI corrections strictly to original acoustic word slots via SequenceMatcher
                     # Prevents index-shifting and guarantees 100% voice synchronization
                     corrected_subs = ai_res.get('corrected_subtitles', [])
-                    align_ai_corrections_to_raw_items(raw_items, corrected_subs)
+                    align_ai_corrections_to_raw_items(raw_items, corrected_subs, keep_punctuation=getattr(self, 'keep_punctuation', False))
 
                     # Extract highlight phrases from AI response
                     idx_to_text = {item['index']: item['text'] for item in raw_items}
@@ -1170,6 +1169,9 @@ class DualStyler:
                 logger.warning(msg)
                 if log_fn:
                     log_fn(msg)
+
+        if getattr(self, 'keep_punctuation', False):
+            heuristic_punctuation_fallback(raw_items)
 
         full_script = " ".join(item['text'] for item in raw_items)
         phrases_to_highlight = ai_phrases
@@ -1265,7 +1267,6 @@ class DualStyler:
 
                 # 3. Pacing fallback guarantee: if time exceeded max_pacing_sec, ensure constant visual rhythm
                 if not matched_highlight and time_since_last_sec >= max_pacing_sec:
-                    import re
                     cand_words = [
                         w for w in re.findall(r'\b[\wáéíóúÁÉÍÓÚñÑüÜ]+\b', curr_text)
                         if w.lower() not in SPANISH_STOPWORDS and len(w) <= eff_max_hl_chars and (len(w) >= 4 or w.lower() in {'pie', 'ojo', 'voz', 'tos'})
@@ -1344,7 +1345,7 @@ class DualStyler:
                 if prefix:
                     # Standard Dual-Layer: Top general text stays visible across prefix and highlight duration
                     top_entry = {
-                        'text': clean_subtitle_text(prefix),
+                        'text': clean_subtitle_text(prefix, keep_punctuation=getattr(self, 'keep_punctuation', False)),
                         'start': curr_start,
                         'end': bot_end
                     }
@@ -1358,7 +1359,7 @@ class DualStyler:
                     if suffix:
                         plan.append({
                             'top': {
-                                'text': clean_subtitle_text(suffix),
+                                'text': clean_subtitle_text(suffix, keep_punctuation=getattr(self, 'keep_punctuation', False)),
                                 'start': bot_end,
                                 'end': curr_end
                             },
@@ -1424,7 +1425,7 @@ class DualStyler:
                             if suffix:
                                 plan.append({
                                     'top': {
-                                        'text': clean_subtitle_text(suffix),
+                                        'text': clean_subtitle_text(suffix, keep_punctuation=getattr(self, 'keep_punctuation', False)),
                                         'start': bot_end,
                                         'end': curr_end
                                     },
@@ -1440,7 +1441,7 @@ class DualStyler:
                                 'tone': matched_tone
                             }
                             top_entry = {
-                                'text': clean_subtitle_text(suffix),
+                                'text': clean_subtitle_text(suffix, keep_punctuation=getattr(self, 'keep_punctuation', False)),
                                 'start': bot_end,
                                 'end': curr_end
                             }
@@ -1455,7 +1456,7 @@ class DualStyler:
                                 'tone': matched_tone
                             }
                             top_entry = {
-                                'text': clean_subtitle_text(curr_text),
+                                'text': clean_subtitle_text(curr_text, keep_punctuation=getattr(self, 'keep_punctuation', False)),
                                 'start': curr_start,
                                 'end': curr_end
                             }
@@ -1480,7 +1481,7 @@ class DualStyler:
                         if suffix:
                             plan.append({
                                 'top': {
-                                    'text': clean_subtitle_text(suffix),
+                                    'text': clean_subtitle_text(suffix, keep_punctuation=getattr(self, 'keep_punctuation', False)),
                                     'start': bot_end,
                                     'end': curr_end
                                 },
@@ -1491,7 +1492,7 @@ class DualStyler:
             else:
                 plan.append({
                     'top': {
-                        'text': clean_subtitle_text(curr_text),
+                        'text': clean_subtitle_text(curr_text, keep_punctuation=getattr(self, 'keep_punctuation', False)),
                         'start': curr_start,
                         'end': curr_end
                     },
@@ -2049,7 +2050,7 @@ class DualStyler:
 
         raw_items = []
         for idx, s in enumerate(subs):
-            txt = clean_subtitle_text(s.text)
+            txt = clean_subtitle_text(s.text, keep_punctuation=getattr(self, 'keep_punctuation', False))
             if txt and s.duration_us > 0:
                 raw_items.append({
                     'index': idx,
@@ -2093,12 +2094,12 @@ class DualStyler:
                 if log_fn:
                     log_fn(f"[*] Conectando con OpenRouter ({m})...")
                 client = OpenRouterClient(api_key=effective_key, model=m)
-                ai_res = client.process_subtitles(raw_items)
+                ai_res = client.process_subtitles(raw_items, keep_punctuation=getattr(self, 'keep_punctuation', False))
                 if ai_res:
                     # Align AI corrections strictly to original acoustic word slots via SequenceMatcher
                     # Prevents index-shifting and guarantees 100% voice synchronization
                     corrected_subs = ai_res.get('corrected_subtitles', [])
-                    align_ai_corrections_to_raw_items(raw_items, corrected_subs)
+                    align_ai_corrections_to_raw_items(raw_items, corrected_subs, keep_punctuation=getattr(self, 'keep_punctuation', False))
 
                     idx_to_text = {item['index']: item['text'] for item in raw_items}
                     for h in ai_res.get('highlights', []):
@@ -2125,6 +2126,9 @@ class DualStyler:
                 logger.warning(msg)
                 if log_fn:
                     log_fn(msg)
+
+        if getattr(self, 'keep_punctuation', False):
+            heuristic_punctuation_fallback(raw_items)
 
         full_script = " ".join(item['text'] for item in raw_items)
         phrases_to_highlight = ai_phrases
@@ -2171,7 +2175,7 @@ class DualStyler:
 
         # 4. Process each subtitle
         for curr in raw_items:
-            curr_text = clean_subtitle_text(curr['text'])
+            curr_text = clean_subtitle_text(curr['text'], keep_punctuation=getattr(self, 'keep_punctuation', False))
             curr_start = curr['start']
             curr_end = curr['end']
             curr_dur = curr['duration']
@@ -2389,7 +2393,7 @@ class DualStyler:
                 except Exception:
                     raw_text = t_mat.get('recognize_text', '')
 
-            txt = clean_subtitle_text(raw_text)
+            txt = clean_subtitle_text(raw_text, keep_punctuation=getattr(self, 'keep_punctuation', False))
             tr = seg.get('target_timerange', {})
             start_us = tr.get('start', 0)
             dur_us = tr.get('duration', 0)
@@ -2604,6 +2608,9 @@ class DualStyler:
                 if log_fn:
                     log_fn(msg)
 
+        if getattr(self, 'keep_punctuation', False):
+            heuristic_punctuation_fallback(raw_items)
+
         full_script = " ".join(item['text'] for item in raw_items)
         phrases_to_highlight = ai_phrases
 
@@ -2666,7 +2673,7 @@ class DualStyler:
 
         # 4. Process each subtitle segment
         for item_idx, curr in enumerate(raw_items):
-            clean_text = clean_subtitle_text(curr['text'])
+            clean_text = clean_subtitle_text(curr['text'], keep_punctuation=getattr(self, 'keep_punctuation', False))
             formatted_text = balance_line(clean_text)
             curr_start = curr['start']
             curr_dur = curr['duration']
@@ -3309,7 +3316,7 @@ class DualStyler:
                 except Exception:
                     raw_text = t_mat.get('recognize_text', '')
 
-            txt = clean_subtitle_text(raw_text)
+            txt = clean_subtitle_text(raw_text, keep_punctuation=getattr(self, 'keep_punctuation', False))
             if not txt:
                 continue
 

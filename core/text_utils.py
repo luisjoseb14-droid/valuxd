@@ -604,22 +604,25 @@ def sanitize_highlight_phrase(phrase: str, max_chars: int = 18) -> str:
 
 def normalize_word_for_alignment(w: str) -> str:
     """
-    Normalizes a word for sequence alignment by removing punctuation
-    and lowercasing.
+    Normalizes a word for sequence alignment by removing punctuation,
+    accents, and lowercasing.
     """
     w_clean = re.sub(r'^[¿¡\'"\(\[\{]+', '', w)
     w_clean = re.sub(r'[?!,.;:\'"\)\]\}]+$', '', w_clean)
-    return w_clean.lower()
+    w_clean = w_clean.lower()
+    accents = str.maketrans('áéíóúü', 'aeiouu')
+    return w_clean.translate(accents)
 
 
 def align_ai_corrections_to_raw_items(
     raw_items: List[Dict[str, Any]],
-    corrected_subtitles: List[Dict[str, Any]]
+    corrected_subtitles: List[Dict[str, Any]],
+    keep_punctuation: bool = False
 ) -> None:
     """
     Guarantees 100% microsecond acoustic synchronization by strictly binding
-    AI corrections (casing, question marks, digits) to the original word slots
-    of CapCut speech-to-text segments using sequence alignment.
+    AI corrections (casing, question marks, digits, and optional punctuation) to
+    the original word slots of CapCut speech-to-text segments using sequence alignment.
     
     Prevents AI models (such as Gemini Flash) from shifting words between segments,
     ensuring subtitles never drift or desynchronize from the speaker's voice.
@@ -642,7 +645,7 @@ def align_ai_corrections_to_raw_items(
     # 2. Flatten AI corrected words
     ai_words = []
     for c in corrected_subtitles:
-        txt = clean_subtitle_text(c.get('text', ''))
+        txt = clean_subtitle_text(c.get('text', ''), keep_punctuation=keep_punctuation)
         txt = convert_spanish_numbers_to_digits(txt)
         for w in txt.split():
             ai_words.append(w)
@@ -700,12 +703,65 @@ def align_ai_corrections_to_raw_items(
             it = raw_items[item_idx].get('item')
             if it:
                 if hasattr(it, 'set_text'):
-                    it.set_text(rebuilt_text)
+                    it.set_text(rebuilt_text, keep_punctuation=keep_punctuation)
                 elif hasattr(it, 'text'):
                     try:
                         it.text = rebuilt_text
                     except Exception:
                         pass
+
+
+def heuristic_punctuation_fallback(raw_items: List[Dict[str, Any]]) -> None:
+    """
+    Heuristically adds periods (.) and commas (,) to unpunctuated segments
+    based on acoustic pauses (gaps) and linguistic connectors.
+    Used when keep_punctuation is True and input lacks punctuation.
+    """
+    if not raw_items:
+        return
+    
+    # Check if text already has punctuation
+    has_any_punc = any(re.search(r'[,.]', it.get('text', '')) for it in raw_items)
+    if has_any_punc:
+        return
+
+    CONJUNCTIONS_COMMA = {'pero', 'aunque', 'sin embargo', 'ya que', 'porque', 'es decir', 'o sea', 'por lo tanto'}
+    SENTENCE_STARTERS = {'cada', 'este', 'esta', 'estos', 'estas', 'esto', 'ademas', 'además', 'por eso', 'finalmente', 'primero', 'segundo'}
+
+    n = len(raw_items)
+    for i in range(n):
+        curr = raw_items[i]
+        curr_text = curr['text'].strip()
+        if not curr_text:
+            continue
+        if curr_text[-1] in '.?!,;:':
+            continue
+
+        if i == n - 1:
+            curr['text'] = curr_text + '.'
+            it = curr.get('item')
+            if it and hasattr(it, 'set_text'):
+                it.set_text(curr['text'], keep_punctuation=True)
+            continue
+
+        nxt = raw_items[i + 1]
+        gap_us = nxt.get('start', 0) - curr.get('end', 0)
+        nxt_text = nxt.get('text', '').strip()
+        first_nxt_word = nxt_text.split()[0].lower() if nxt_text.split() else ''
+
+        if gap_us >= 320000:
+            curr['text'] = curr_text + '.'
+        elif first_nxt_word in SENTENCE_STARTERS and gap_us >= 180000:
+            curr['text'] = curr_text + '.'
+        elif first_nxt_word in CONJUNCTIONS_COMMA and gap_us >= 120000:
+            curr['text'] = curr_text + ','
+        elif gap_us >= 200000 and len(curr_text.split()) >= 3:
+            curr['text'] = curr_text + ','
+
+        it = curr.get('item')
+        if it and hasattr(it, 'set_text'):
+            it.set_text(curr['text'], keep_punctuation=True)
+
 
 
 

@@ -58,7 +58,7 @@ class TestAbdePreset(unittest.TestCase):
         self.assertTrue(snd.get("enabled"))
         self.assertEqual(snd.get("name"), "鼠标单击1")
         self.assertEqual(snd.get("variation"), "intermittent")
-        self.assertEqual(snd.get("duration"), 766666)
+        self.assertEqual(snd.get("duration"), 496000)
 
     def test_presets_json_registration(self):
         presets_path = os.path.join(repo_root, "styles", "presets.json")
@@ -111,6 +111,45 @@ class TestAbdePreset(unittest.TestCase):
         sound_path = get_default_click_sound_path(sound_name="鼠标单击1", filename="25b5bc6c42f453173fbf056859eec22b.mp3")
         self.assertTrue(os.path.isfile(sound_path))
         self.assertIn("25b5bc6c42f453173fbf056859eec22b", sound_path)
+
+    def test_align_ai_corrections_with_punctuation(self):
+        from core.text_utils import align_ai_corrections_to_raw_items
+        raw_items = [
+            {"index": 0, "text": "cada vez mas niñas", "start": 0, "end": 1000000, "duration": 1000000, "words": None},
+            {"index": 1, "text": "entran en pubertad", "start": 1000000, "end": 2000000, "duration": 1000000, "words": None}
+        ]
+        corrected_ai = [
+            {"index": 0, "text": "Cada vez más niñas,"},
+            {"index": 1, "text": "entran en pubertad."}
+        ]
+        # With keep_punctuation=True, periods and commas are preserved in alignment
+        align_ai_corrections_to_raw_items(raw_items, corrected_ai, keep_punctuation=True)
+        self.assertIn(",", raw_items[0]["text"])
+        self.assertIn(".", raw_items[1]["text"])
+        self.assertEqual(raw_items[0]["text"], "Cada vez más niñas,")
+        self.assertEqual(raw_items[1]["text"], "entran en pubertad.")
+
+    def test_heuristic_punctuation_fallback(self):
+        from core.text_utils import heuristic_punctuation_fallback
+        raw_items = [
+            {"index": 0, "text": "cada vez mas niñas", "start": 0, "end": 1000000, "duration": 1000000},
+            {"index": 1, "text": "esto afecta su crecimiento", "start": 1400000, "end": 2500000, "duration": 1100000}
+        ]
+        # gap is 400ms (1400000 - 1000000), which should trigger sentence end period
+        heuristic_punctuation_fallback(raw_items)
+        self.assertTrue(raw_items[0]["text"].endswith("."))
+        self.assertTrue(raw_items[1]["text"].endswith("."))
+
+    def test_openrouter_prompt_punctuation_rule(self):
+        from ai.openrouter_client import get_system_prompt_subtitles
+        prompt_with_punc = get_system_prompt_subtitles(keep_punctuation=True)
+        self.assertIn("REGLA DE PUNTUACIÓN (PUNTOS Y COMAS ACTIVADOS)", prompt_with_punc)
+        self.assertIn("Coloca puntos (.) y comas (,)", prompt_with_punc)
+
+        prompt_without_punc = get_system_prompt_subtitles(keep_punctuation=False)
+        self.assertIn("REGLA ESTRICTA DE PUNTUACIÓN", prompt_without_punc)
+        self.assertIn("NUNCA coloques comas", prompt_without_punc)
+        self.assertIn("NUNCA coloques puntos", prompt_without_punc)
 
 
 if __name__ == "__main__":

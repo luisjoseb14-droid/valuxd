@@ -1036,9 +1036,13 @@ class CCSubsProGUI(tk.Tk):
                 log_fn=self._log
             )
 
-            # Enforce clean punctuation strictly
-            clean_count = proj.clean_all_subtitles()
-            self._log(f"[*] Puntuación saneada (0 comas, 0 puntos) en {clean_count} subtítulos.")
+            # Enforce clean punctuation strictly according to preset
+            keep_punc = getattr(dual_styler, 'keep_punctuation', False)
+            clean_count = proj.clean_all_subtitles(keep_punctuation=keep_punc)
+            if keep_punc:
+                self._log(f"[*] Puntuación preservada (. y ,) en {clean_count} subtítulos.")
+            else:
+                self._log(f"[*] Puntuación saneada (0 comas, 0 puntos) en {clean_count} subtítulos.")
 
             # Save and sync
             proj.save(create_backup=False)
