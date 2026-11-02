@@ -106,6 +106,8 @@ class DualStyler:
             self.escalera_cfg = preset_data.get('escalera', bot_cfg)
             self.y_top = top_cfg.get('y', y_top)
             self.y_bottom = bot_cfg.get('y', y_bottom)
+            self.x_top = float(top_cfg.get('x', 0.0))
+            self.x_bottom = float(bot_cfg.get('x', 0.0))
             self.top_scale = top_cfg.get('scale', scale or SCALE_DEFAULT)
             self.bot_scale = bot_cfg.get('scale', self.top_scale)
             self.scale = self.top_scale
@@ -114,6 +116,7 @@ class DualStyler:
             self.margins = preset_data.get('margins', {'max_chars_per_line': 18, 'max_words_per_line': 3})
             self.preset_name = preset_data.get('name', 'Custom')
             self.stickers_cfg = preset_data.get('stickers', {})
+            self.keep_punctuation = bool(preset_data.get('keep_punctuation', False) or preset_data.get('preserve_punctuation', False))
         else:
             self.preset_data = None
             self.layout = 'dual'
@@ -128,6 +131,8 @@ class DualStyler:
 
             self.y_top = y_top
             self.y_bottom = y_bottom
+            self.x_top = 0.0
+            self.x_bottom = 0.0
             self.top_scale = scale or SCALE_DEFAULT
             self.bot_scale = scale or SCALE_DEFAULT
             self.scale = scale or SCALE_DEFAULT
@@ -136,6 +141,7 @@ class DualStyler:
             self.margins = {'max_chars_per_line': 18, 'max_words_per_line': 3}
             self.preset_name = 'Custom'
             self.stickers_cfg = {}
+            self.keep_punctuation = False
 
     @classmethod
     def from_preset(cls, preset_name_or_data: Any) -> 'DualStyler':
@@ -552,7 +558,7 @@ class DualStyler:
                     top_info = None  # prevent adding duplicate top segment!
 
             if top_info and top_info.get('text'):
-                top_text = clean_subtitle_text(top_info['text'])
+                top_text = clean_subtitle_text(top_info['text'], keep_punctuation=getattr(self, 'keep_punctuation', False))
                 if self.default_style.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False)):
                     top_text = top_text.upper()
                 t_start = top_info.get('start', 0)
@@ -600,7 +606,7 @@ class DualStyler:
                         "render_timerange": {"start": 0, "duration": 0},
                         "clip": {
                             'scale': top_scale,
-                            'transform': {'x': 0.0, 'y': self.y_top},
+                            'transform': {'x': getattr(self, 'x_top', 0.0), 'y': self.y_top},
                             'rotation': 0.0,
                             'flip': {'vertical': False, 'horizontal': False},
                             'alpha': 1.0
@@ -616,7 +622,7 @@ class DualStyler:
 
             bot_info = item.get('bot')
             if bot_info and bot_info.get('text'):
-                bot_text = clean_subtitle_text(bot_info['text'])
+                bot_text = clean_subtitle_text(bot_info['text'], keep_punctuation=getattr(self, 'keep_punctuation', False))
                 if self.highlight_style.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False)):
                     bot_text = bot_text.upper()
                 b_start = bot_info.get('start', 0)
@@ -687,7 +693,7 @@ class DualStyler:
                         "render_timerange": {"start": 0, "duration": 0},
                         "clip": {
                             'scale': bot_scale,
-                            'transform': {'x': 0.0, 'y': eff_bot_y},
+                            'transform': {'x': getattr(self, 'x_bottom', 0.0), 'y': eff_bot_y},
                             'rotation': 0.0,
                             'flip': {'vertical': False, 'horizontal': False},
                             'alpha': 1.0
@@ -775,9 +781,22 @@ class DualStyler:
             vol = float(self.sound_fx.get('volume', 0.65))
             snd_name = self.sound_fx.get('name', 'Click_Mouse_Click_02(864360)')
             snd_path = self.sound_fx.get('path')
+            snd_file = self.sound_fx.get('filename', '')
             if not snd_path or not os.path.isfile(snd_path):
-                snd_path = get_default_click_sound_path()
-            self._add_click_sound_fx(data, bot_starts, volume=vol, sound_name=snd_name, sound_path=snd_path)
+                snd_path = get_default_click_sound_path(sound_name=snd_name, filename=snd_file)
+
+            click_starts = bot_starts
+            variation = self.sound_fx.get('variation') or self.sound_fx.get('mode')
+            if variation in ('intermittent', 'occasional', 'abde', 'variations'):
+                filtered = []
+                for i, st in enumerate(bot_starts):
+                    # Keep bursts (< 900ms apart)
+                    is_burst = (i > 0 and (st - bot_starts[i-1]) < 900000) or (i < len(bot_starts) - 1 and (bot_starts[i+1] - st) < 900000)
+                    if is_burst or (i % 2 == 1) or (i == len(bot_starts) - 1 and len(bot_starts) > 2):
+                        filtered.append(st)
+                click_starts = filtered if filtered else bot_starts
+
+            self._add_click_sound_fx(data, click_starts, volume=vol, sound_name=snd_name, sound_path=snd_path)
 
         is_upper_required = (
             (self.default_style.get('uppercase', False) and self.highlight_style.get('uppercase', False))
@@ -1081,7 +1100,7 @@ class DualStyler:
                 prev_words = prev_txt.split()
                 if prev_words and prev_words[-1].lower().rstrip('?!,.:;') in UNFINISHED_ENDINGS:
                     is_start = False
-            txt = clean_subtitle_text(s.text, is_sentence_start=is_start)
+            txt = clean_subtitle_text(s.text, is_sentence_start=is_start, keep_punctuation=getattr(self, 'keep_punctuation', False))
             if is_all_uppercase:
                 txt = txt.upper()
             w_data = s.text_material.get('words')
@@ -1269,8 +1288,18 @@ class DualStyler:
                 clean_lower_hl = matched_highlight.lower()
                 hl_idx = clean_lower_curr.find(clean_lower_hl)
 
-                prefix = clean_subtitle_text(curr_text[:hl_idx], preserve_case=is_all_uppercase) if hl_idx > 0 else ""
-                suffix = clean_subtitle_text(curr_text[hl_idx + len(matched_highlight):], preserve_case=is_all_uppercase)
+                prefix_raw = curr_text[:hl_idx] if hl_idx > 0 else ""
+                suffix_raw = curr_text[hl_idx + len(matched_highlight):]
+
+                # If keep_punctuation is enabled, attach trailing punctuation from suffix to matched_highlight
+                if getattr(self, "keep_punctuation", False) and suffix_raw:
+                    punc_match = re.match(r"^([,.:;]+)\s*(.*)$", suffix_raw.strip())
+                    if punc_match:
+                        matched_highlight += punc_match.group(1)
+                        suffix_raw = punc_match.group(2)
+
+                prefix = clean_subtitle_text(prefix_raw, preserve_case=is_all_uppercase, keep_punctuation=getattr(self, "keep_punctuation", False))
+                suffix = clean_subtitle_text(suffix_raw, preserve_case=is_all_uppercase, keep_punctuation=getattr(self, "keep_punctuation", False))
                 if is_all_uppercase:
                     prefix = prefix.upper() if prefix else ""
                     suffix = suffix.upper() if suffix else ""
@@ -1297,7 +1326,7 @@ class DualStyler:
                         'rotation': float(stk_template.get('clip', {}).get('rotation', 0.0))
                     }
 
-                bot_text = clean_subtitle_text(matched_highlight, preserve_case=is_all_uppercase)
+                bot_text = clean_subtitle_text(matched_highlight, preserve_case=is_all_uppercase, keep_punctuation=getattr(self, 'keep_punctuation', False))
                 if is_all_uppercase:
                     bot_text = bot_text.upper()
                 if suffix:
@@ -1506,7 +1535,7 @@ class DualStyler:
                 "unique_id": "",
                 "type": "sound",
                 "name": sound_name,
-                "duration": 866666,
+                "duration": int(getattr(self, "sound_fx", {}).get("duration", 866666)),
                 "path": sound_path,
                 "category_name": "Favoritos",
                 "wave_points": [],
@@ -1578,7 +1607,7 @@ class DualStyler:
         else:
             eff_track['segments'] = []
 
-        CLICK_DUR = 866666
+        CLICK_DUR = int(getattr(self, 'sound_fx', {}).get('duration', 866666))
         for st in start_times_us:
             s_id = str(uuid.uuid4()).upper()
             p_id = str(uuid.uuid4()).upper()

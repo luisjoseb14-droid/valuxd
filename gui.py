@@ -417,6 +417,14 @@ class CCSubsProGUI(tk.Tk):
             command=self._on_preset_change
         )
         r_maria_manuel.grid(row=11, column=0, columnspan=2, sticky=tk.W, pady=2)
+        r_abde = ttk.Radiobutton(
+            presets_frame,
+            text="🩺 Abde  (Akzidenz Grotesk Black blanco 9 | azul cielo #6D94FF 11 + Descenso + Clicks chinos + Puntuación)",
+            variable=self.doctor_preset,
+            value="abde",
+            command=self._on_preset_change
+        )
+        r_abde.grid(row=12, column=0, columnspan=2, sticky=tk.W, pady=2)
 
         # Dynamic detail line for the selected doctor
         self.lbl_preset_detail = tk.Label(
@@ -502,7 +510,7 @@ class CCSubsProGUI(tk.Tk):
 
     def _on_preset_change(self):
         p = self.doctor_preset.get()
-        if p in ["gerardo", "alharilla", "jose", "deditos", "laura", "emilia", "alvaro", "pequenos", "cuidus", "laura burgos", "laura_burgos", "enfocavision", "nuria", "ana_visedo", "jairo", "maria_manuel"]:
+        if p in ["gerardo", "alharilla", "jose", "deditos", "laura", "emilia", "alvaro", "pequenos", "cuidus", "laura burgos", "laura_burgos", "enfocavision", "nuria", "ana_visedo", "jairo", "maria_manuel", "abde"]:
             self.chk_anim.config(state=tk.NORMAL)
             self.enable_anim_var.set(True)
         else:
@@ -542,7 +550,9 @@ class CCSubsProGUI(tk.Tk):
             "maria_manuel": "👥 María y Manuel: Mukta Mahee blanco arriba (11.0, y=-0.113) | Marydale blanco (#FFFFFF) abajo (22.38, y=-0.196) + Mini zoom + Stickers + Click fx",
             "maria y manuel": "👥 María y Manuel: Mukta Mahee blanco arriba (11.0, y=-0.113) | Marydale blanco (#FFFFFF) abajo (22.38, y=-0.196) + Mini zoom + Stickers + Click fx",
             "manuel": "👥 María y Manuel: Mukta Mahee blanco arriba (11.0, y=-0.113) | Marydale blanco (#FFFFFF) abajo (22.38, y=-0.196) + Mini zoom + Stickers + Click fx",
-            "maria": "👥 María y Manuel: Mukta Mahee blanco arriba (11.0, y=-0.113) | Marydale blanco (#FFFFFF) abajo (22.38, y=-0.196) + Mini zoom + Stickers + Click fx"
+            "maria": "👥 María y Manuel: Mukta Mahee blanco arriba (11.0, y=-0.113) | Marydale blanco (#FFFFFF) abajo (22.38, y=-0.196) + Mini zoom + Stickers + Click fx",
+            "abde": "🩺 Abde: Akzidenz Grotesk Black blanco arriba (9.0, y=0.0) | Akzidenz azul cielo (#6D94FF) abajo (11.0, y=-0.079) + Descenso + Clicks chinos variados + Puntos y comas",
+            "letra abde": "🩺 Abde: Akzidenz Grotesk Black blanco arriba (9.0, y=0.0) | Akzidenz azul cielo (#6D94FF) abajo (11.0, y=-0.079) + Descenso + Clicks chinos variados + Puntos y comas"
         }
         if hasattr(self, 'lbl_preset_detail'):
             self.lbl_preset_detail.config(text=details.get(p, ""))

@@ -1,0 +1,117 @@
+# -*- coding: utf-8 -*-
+import os
+import sys
+import json
+import unittest
+
+# Ensure repo root is on path
+repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if repo_root not in sys.path:
+    sys.path.insert(0, repo_root)
+
+from core.preset_matcher import detect_preset_from_name
+from core.text_utils import clean_subtitle_text
+from core.dual_styler import DualStyler
+from core.platform_paths import resolve_font_path, get_default_click_sound_path, resolve_effect_path
+from core.font_installer import install_all_assets
+
+
+class TestAbdePreset(unittest.TestCase):
+
+    def test_preset_matcher(self):
+        self.assertEqual(detect_preset_from_name("Abde"), "abde")
+        self.assertEqual(detect_preset_from_name("Proyecto Abde 1"), "abde")
+        self.assertEqual(detect_preset_from_name("Adbe final"), "abde")
+        self.assertEqual(detect_preset_from_name(r"C:\CapCut\Projects\Abde"), "abde")
+
+    def test_preset_json_structure(self):
+        style_path = os.path.join(repo_root, "styles", "abde.json")
+        self.assertTrue(os.path.isfile(style_path))
+        with open(style_path, "r", encoding="utf-8") as f:
+            cfg = json.load(f)
+
+        self.assertEqual(cfg.get("name"), "Letra Abde")
+        self.assertEqual(cfg.get("layout"), "dual")
+        self.assertTrue(cfg.get("keep_punctuation"))
+
+        # Top layer
+        top = cfg.get("top", {})
+        self.assertIn("Akzidenz", top.get("font_name"))
+        self.assertEqual(top.get("font_size"), 9.0)
+        self.assertEqual(top.get("color"), "#FFFFFF")
+        self.assertAlmostEqual(top.get("y", 0.0), 0.0)
+        self.assertAlmostEqual(top.get("x", 0.0), 0.0504032258, places=4)
+
+        # Bottom layer
+        bot = cfg.get("bottom", {})
+        self.assertIn("Akzidenz", bot.get("font_name"))
+        self.assertEqual(bot.get("font_size"), 11.0)
+        self.assertEqual(bot.get("color"), "#6D94FF")
+        self.assertAlmostEqual(bot.get("y", 0.0), -0.079038, places=4)
+        self.assertAlmostEqual(bot.get("x", 0.0), 0.032762, places=4)
+        self.assertEqual(bot.get("animation", {}).get("name"), "Descenso")
+        self.assertEqual(bot.get("animation", {}).get("resource_id"), "7648941380408053013")
+        self.assertEqual(bot.get("animation", {}).get("duration"), 200000)
+
+        # Sound fx
+        snd = cfg.get("sound_fx", {})
+        self.assertTrue(snd.get("enabled"))
+        self.assertEqual(snd.get("name"), "鼠标单击1")
+        self.assertEqual(snd.get("variation"), "intermittent")
+        self.assertEqual(snd.get("duration"), 766666)
+
+    def test_presets_json_registration(self):
+        presets_path = os.path.join(repo_root, "styles", "presets.json")
+        with open(presets_path, "r", encoding="utf-8") as f:
+            presets = json.load(f)
+
+        self.assertIn("abde", presets)
+        self.assertIn("letra abde", presets)
+        self.assertIn("preset abde", presets)
+        self.assertTrue(presets["abde"].get("keep_punctuation"))
+
+    def test_styler_initialization(self):
+        styler = DualStyler.from_preset("abde")
+        self.assertTrue(styler.keep_punctuation)
+        self.assertAlmostEqual(styler.y_top, 0.0)
+        self.assertAlmostEqual(styler.y_bottom, -0.079038, places=4)
+        self.assertAlmostEqual(styler.x_top, 0.050403, places=4)
+        self.assertAlmostEqual(styler.x_bottom, 0.032762, places=4)
+        self.assertEqual(styler.sound_fx.get("name"), "鼠标单击1")
+        self.assertEqual(styler.sound_fx.get("variation"), "intermittent")
+
+    def test_punctuation_preservation_only_for_abde(self):
+        # 1. Standard text cleaning (default for other doctors) strips commas & periods
+        text_with_punct = "Si veo a esta paciente, el hígado falla y tiene ictericia."
+        cleaned_standard = clean_subtitle_text(text_with_punct, keep_punctuation=False)
+        self.assertNotIn(",", cleaned_standard)
+        self.assertNotIn(".", cleaned_standard)
+        self.assertEqual(cleaned_standard, "Si veo a esta paciente el hígado falla y tiene ictericia")
+
+        # 2. Abde preset preserves commas and periods
+        cleaned_abde = clean_subtitle_text(text_with_punct, keep_punctuation=True)
+        self.assertIn(",", cleaned_abde)
+        self.assertIn(".", cleaned_abde)
+        self.assertEqual(cleaned_abde, "Si veo a esta paciente, el hígado falla y tiene ictericia.")
+
+    def test_bundled_assets(self):
+        # Font
+        font_file = os.path.join(repo_root, "assets", "fonts", "Akzidenz-grotesk-black.ttf")
+        self.assertTrue(os.path.isfile(font_file), "Akzidenz font must exist in assets/fonts")
+
+        # Audio click
+        audio_file = os.path.join(repo_root, "assets", "audio", "25b5bc6c42f453173fbf056859eec22b.mp3")
+        self.assertTrue(os.path.isfile(audio_file), "鼠标单击1 audio must exist in assets/audio")
+
+        # Animation effect
+        effect_dir = os.path.join(repo_root, "assets", "effects", "7648941380408053013")
+        self.assertTrue(os.path.isdir(effect_dir), "Descenso effect must exist in assets/effects")
+
+    def test_chinese_click_sound_resolution(self):
+        sound_path = get_default_click_sound_path(sound_name="鼠标单击1", filename="25b5bc6c42f453173fbf056859eec22b.mp3")
+        self.assertTrue(os.path.isfile(sound_path))
+        self.assertIn("25b5bc6c42f453173fbf056859eec22b", sound_path)
+
+
+if __name__ == "__main__":
+    unittest.main()

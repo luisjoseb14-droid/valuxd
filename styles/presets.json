@@ -17165,5 +17165,1145 @@
       "max_chars_per_line": 22,
       "max_words_per_line": 4
     }
+  },
+  "abde": {
+    "name": "Letra Abde",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Abde: Akzidenz Grotesk Black blanco arriba (tamaño 9.0, y=0.0) y Akzidenz Grotesk Black azul cielo (#6D94FF) con sombra azul marino (#13299B) abajo (tamaño 11.0, y=-0.079) con animación Descenso, sonido de click chino 鼠标单击1 con variaciones y conservación de puntos y comas.",
+    "layout": "dual",
+    "uppercase": false,
+    "keep_punctuation": true,
+    "top": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "x": 0.05040322580645151,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.7009345889091492,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#6D94FF",
+      "rgb_color": [
+        0.4274509847164154,
+        0.5803921818733215,
+        1.0
+      ],
+      "font_size": 11.0,
+      "x": 0.032762096774193505,
+      "y": -0.079038025466597,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 200000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "color": "#13299B",
+        "alpha": 0.6869158744812012,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.07450980693101883,
+              0.16078431904315948,
+              0.6078431606292725
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "鼠标单击1",
+      "filename": "25b5bc6c42f453173fbf056859eec22b.mp3",
+      "path": "",
+      "duration": 766666,
+      "volume": 0.48,
+      "variation": "intermittent"
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4
+    }
+  },
+  "letra abde": {
+    "name": "Letra Abde",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Abde: Akzidenz Grotesk Black blanco arriba (tamaño 9.0, y=0.0) y Akzidenz Grotesk Black azul cielo (#6D94FF) con sombra azul marino (#13299B) abajo (tamaño 11.0, y=-0.079) con animación Descenso, sonido de click chino 鼠标单击1 con variaciones y conservación de puntos y comas.",
+    "layout": "dual",
+    "uppercase": false,
+    "keep_punctuation": true,
+    "top": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "x": 0.05040322580645151,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.7009345889091492,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#6D94FF",
+      "rgb_color": [
+        0.4274509847164154,
+        0.5803921818733215,
+        1.0
+      ],
+      "font_size": 11.0,
+      "x": 0.032762096774193505,
+      "y": -0.079038025466597,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 200000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "color": "#13299B",
+        "alpha": 0.6869158744812012,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.07450980693101883,
+              0.16078431904315948,
+              0.6078431606292725
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "鼠标单击1",
+      "filename": "25b5bc6c42f453173fbf056859eec22b.mp3",
+      "path": "",
+      "duration": 766666,
+      "volume": 0.48,
+      "variation": "intermittent"
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4
+    }
+  },
+  "letra_abde": {
+    "name": "Letra Abde",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Abde: Akzidenz Grotesk Black blanco arriba (tamaño 9.0, y=0.0) y Akzidenz Grotesk Black azul cielo (#6D94FF) con sombra azul marino (#13299B) abajo (tamaño 11.0, y=-0.079) con animación Descenso, sonido de click chino 鼠标单击1 con variaciones y conservación de puntos y comas.",
+    "layout": "dual",
+    "uppercase": false,
+    "keep_punctuation": true,
+    "top": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "x": 0.05040322580645151,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.7009345889091492,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#6D94FF",
+      "rgb_color": [
+        0.4274509847164154,
+        0.5803921818733215,
+        1.0
+      ],
+      "font_size": 11.0,
+      "x": 0.032762096774193505,
+      "y": -0.079038025466597,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 200000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "color": "#13299B",
+        "alpha": 0.6869158744812012,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.07450980693101883,
+              0.16078431904315948,
+              0.6078431606292725
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "鼠标单击1",
+      "filename": "25b5bc6c42f453173fbf056859eec22b.mp3",
+      "path": "",
+      "duration": 766666,
+      "volume": 0.48,
+      "variation": "intermittent"
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4
+    }
+  },
+  "preset abde": {
+    "name": "Letra Abde",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Abde: Akzidenz Grotesk Black blanco arriba (tamaño 9.0, y=0.0) y Akzidenz Grotesk Black azul cielo (#6D94FF) con sombra azul marino (#13299B) abajo (tamaño 11.0, y=-0.079) con animación Descenso, sonido de click chino 鼠标单击1 con variaciones y conservación de puntos y comas.",
+    "layout": "dual",
+    "uppercase": false,
+    "keep_punctuation": true,
+    "top": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "x": 0.05040322580645151,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.7009345889091492,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#6D94FF",
+      "rgb_color": [
+        0.4274509847164154,
+        0.5803921818733215,
+        1.0
+      ],
+      "font_size": 11.0,
+      "x": 0.032762096774193505,
+      "y": -0.079038025466597,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 200000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "color": "#13299B",
+        "alpha": 0.6869158744812012,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.07450980693101883,
+              0.16078431904315948,
+              0.6078431606292725
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "鼠标单击1",
+      "filename": "25b5bc6c42f453173fbf056859eec22b.mp3",
+      "path": "",
+      "duration": 766666,
+      "volume": 0.48,
+      "variation": "intermittent"
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4
+    }
+  },
+  "preset_abde": {
+    "name": "Letra Abde",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Abde: Akzidenz Grotesk Black blanco arriba (tamaño 9.0, y=0.0) y Akzidenz Grotesk Black azul cielo (#6D94FF) con sombra azul marino (#13299B) abajo (tamaño 11.0, y=-0.079) con animación Descenso, sonido de click chino 鼠标单击1 con variaciones y conservación de puntos y comas.",
+    "layout": "dual",
+    "uppercase": false,
+    "keep_punctuation": true,
+    "top": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "x": 0.05040322580645151,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.7009345889091492,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#6D94FF",
+      "rgb_color": [
+        0.4274509847164154,
+        0.5803921818733215,
+        1.0
+      ],
+      "font_size": 11.0,
+      "x": 0.032762096774193505,
+      "y": -0.079038025466597,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 200000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "color": "#13299B",
+        "alpha": 0.6869158744812012,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.07450980693101883,
+              0.16078431904315948,
+              0.6078431606292725
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "鼠标单击1",
+      "filename": "25b5bc6c42f453173fbf056859eec22b.mp3",
+      "path": "",
+      "duration": 766666,
+      "volume": 0.48,
+      "variation": "intermittent"
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4
+    }
+  },
+  "dr abde": {
+    "name": "Letra Abde",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Abde: Akzidenz Grotesk Black blanco arriba (tamaño 9.0, y=0.0) y Akzidenz Grotesk Black azul cielo (#6D94FF) con sombra azul marino (#13299B) abajo (tamaño 11.0, y=-0.079) con animación Descenso, sonido de click chino 鼠标单击1 con variaciones y conservación de puntos y comas.",
+    "layout": "dual",
+    "uppercase": false,
+    "keep_punctuation": true,
+    "top": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "x": 0.05040322580645151,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.7009345889091492,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#6D94FF",
+      "rgb_color": [
+        0.4274509847164154,
+        0.5803921818733215,
+        1.0
+      ],
+      "font_size": 11.0,
+      "x": 0.032762096774193505,
+      "y": -0.079038025466597,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 200000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "color": "#13299B",
+        "alpha": 0.6869158744812012,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.07450980693101883,
+              0.16078431904315948,
+              0.6078431606292725
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "鼠标单击1",
+      "filename": "25b5bc6c42f453173fbf056859eec22b.mp3",
+      "path": "",
+      "duration": 766666,
+      "volume": 0.48,
+      "variation": "intermittent"
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4
+    }
+  },
+  "dr. abde": {
+    "name": "Letra Abde",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Abde: Akzidenz Grotesk Black blanco arriba (tamaño 9.0, y=0.0) y Akzidenz Grotesk Black azul cielo (#6D94FF) con sombra azul marino (#13299B) abajo (tamaño 11.0, y=-0.079) con animación Descenso, sonido de click chino 鼠标单击1 con variaciones y conservación de puntos y comas.",
+    "layout": "dual",
+    "uppercase": false,
+    "keep_punctuation": true,
+    "top": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "x": 0.05040322580645151,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.7009345889091492,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#6D94FF",
+      "rgb_color": [
+        0.4274509847164154,
+        0.5803921818733215,
+        1.0
+      ],
+      "font_size": 11.0,
+      "x": 0.032762096774193505,
+      "y": -0.079038025466597,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 200000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "color": "#13299B",
+        "alpha": 0.6869158744812012,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.07450980693101883,
+              0.16078431904315948,
+              0.6078431606292725
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "鼠标单击1",
+      "filename": "25b5bc6c42f453173fbf056859eec22b.mp3",
+      "path": "",
+      "duration": 766666,
+      "volume": 0.48,
+      "variation": "intermittent"
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4
+    }
+  },
+  "doctor abde": {
+    "name": "Letra Abde",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Abde: Akzidenz Grotesk Black blanco arriba (tamaño 9.0, y=0.0) y Akzidenz Grotesk Black azul cielo (#6D94FF) con sombra azul marino (#13299B) abajo (tamaño 11.0, y=-0.079) con animación Descenso, sonido de click chino 鼠标单击1 con variaciones y conservación de puntos y comas.",
+    "layout": "dual",
+    "uppercase": false,
+    "keep_punctuation": true,
+    "top": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "x": 0.05040322580645151,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.7009345889091492,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#6D94FF",
+      "rgb_color": [
+        0.4274509847164154,
+        0.5803921818733215,
+        1.0
+      ],
+      "font_size": 11.0,
+      "x": 0.032762096774193505,
+      "y": -0.079038025466597,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 200000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "color": "#13299B",
+        "alpha": 0.6869158744812012,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.07450980693101883,
+              0.16078431904315948,
+              0.6078431606292725
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "鼠标单击1",
+      "filename": "25b5bc6c42f453173fbf056859eec22b.mp3",
+      "path": "",
+      "duration": 766666,
+      "volume": 0.48,
+      "variation": "intermittent"
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4
+    }
+  },
+  "adbe": {
+    "name": "Letra Abde",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Abde: Akzidenz Grotesk Black blanco arriba (tamaño 9.0, y=0.0) y Akzidenz Grotesk Black azul cielo (#6D94FF) con sombra azul marino (#13299B) abajo (tamaño 11.0, y=-0.079) con animación Descenso, sonido de click chino 鼠标单击1 con variaciones y conservación de puntos y comas.",
+    "layout": "dual",
+    "uppercase": false,
+    "keep_punctuation": true,
+    "top": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "x": 0.05040322580645151,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.7009345889091492,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#6D94FF",
+      "rgb_color": [
+        0.4274509847164154,
+        0.5803921818733215,
+        1.0
+      ],
+      "font_size": 11.0,
+      "x": 0.032762096774193505,
+      "y": -0.079038025466597,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 200000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "color": "#13299B",
+        "alpha": 0.6869158744812012,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.07450980693101883,
+              0.16078431904315948,
+              0.6078431606292725
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "鼠标单击1",
+      "filename": "25b5bc6c42f453173fbf056859eec22b.mp3",
+      "path": "",
+      "duration": 766666,
+      "volume": 0.48,
+      "variation": "intermittent"
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4
+    }
+  },
+  "letra adbe": {
+    "name": "Letra Abde",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Abde: Akzidenz Grotesk Black blanco arriba (tamaño 9.0, y=0.0) y Akzidenz Grotesk Black azul cielo (#6D94FF) con sombra azul marino (#13299B) abajo (tamaño 11.0, y=-0.079) con animación Descenso, sonido de click chino 鼠标单击1 con variaciones y conservación de puntos y comas.",
+    "layout": "dual",
+    "uppercase": false,
+    "keep_punctuation": true,
+    "top": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 9.0,
+      "x": 0.05040322580645151,
+      "y": 0.0,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.7009345889091492,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Akzidenz Grotesk Black",
+      "font_title": "Akzidenz Grotesk Black",
+      "font_path": "Akzidenz-grotesk-black.ttf",
+      "color": "#6D94FF",
+      "rgb_color": [
+        0.4274509847164154,
+        0.5803921818733215,
+        1.0
+      ],
+      "font_size": 11.0,
+      "x": 0.032762096774193505,
+      "y": -0.079038025466597,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7648941380408053013",
+        "name": "Descenso",
+        "path": "",
+        "duration": 200000,
+        "type": "in",
+        "category_id": "ruchang_fav",
+        "category_name": "Favoritos"
+      },
+      "shadow": {
+        "color": "#13299B",
+        "alpha": 0.6869158744812012,
+        "angle": -45.0,
+        "diffuse": 0.01596573181450367,
+        "distance": 4.999999523162842,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0.07450980693101883,
+              0.16078431904315948,
+              0.6078431606292725
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "鼠标单击1",
+      "filename": "25b5bc6c42f453173fbf056859eec22b.mp3",
+      "path": "",
+      "duration": 766666,
+      "volume": 0.48,
+      "variation": "intermittent"
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 22,
+      "max_words_per_line": 4
+    }
   }
 }

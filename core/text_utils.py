@@ -310,10 +310,11 @@ def clean_spanish_casing(text: str, is_sentence_start: bool = True) -> str:
     return " ".join(out)
 
 
-def clean_subtitle_text(text: str, is_sentence_start: bool = True, preserve_case: bool = False) -> str:
+def clean_subtitle_text(text: str, is_sentence_start: bool = True, preserve_case: bool = False, keep_punctuation: bool = False) -> str:
     """
     Cleans subtitle text by removing commas (,), periods (.), and colons (:),
     including ellipses (...), and normalizing whitespace.
+    If keep_punctuation is True, preserves commas and periods as requested by specific presets (e.g. Abde).
     
     Also automatically corrects known CapCut speech-to-text uppercase glitches
     and erratic casing using clean_spanish_casing when text is not already all-caps.
@@ -330,8 +331,9 @@ def clean_subtitle_text(text: str, is_sentence_start: bool = True, preserve_case
     else:
         cleaned = clean_spanish_casing(str(text), is_sentence_start=is_sentence_start)
     
-    # Remove commas, periods, colons
-    cleaned = re.sub(r'[,.:]+', '', cleaned)
+    # Remove commas, periods, colons unless keep_punctuation is True
+    if not keep_punctuation:
+        cleaned = re.sub(r'[,.:]+', '', cleaned)
     
     # Normalize multiple whitespace characters into a single space and strip
     cleaned = re.sub(r'\s+', ' ', cleaned).strip()

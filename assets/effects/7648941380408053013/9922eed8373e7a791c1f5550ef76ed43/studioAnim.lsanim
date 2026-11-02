@@ -1,0 +1,156 @@
+{
+    "studio_anim_params": {
+        "effectAnimators": [
+            {
+                "effects": [
+                    {
+                        "caption": "高斯模糊",
+                        "isRelativePath": true,
+                        "name": "GaussianBlur",
+                        "params": {
+                            "blurAlpha": {
+                                "value": true
+                            },
+                            "blurDirection": {
+                                "value": 0
+                            },
+                            "blurIntensity": {
+                                "motionKeyFrameInfo": [
+                                    {
+                                        "it": "cubic",
+                                        "t": 0,
+                                        "v": 10,
+                                        "vi": 0,
+                                        "vo": 4.25,
+                                        "vti": 0,
+                                        "vto": 0.585
+                                    },
+                                    {
+                                        "it": "cubic",
+                                        "t": 1.5,
+                                        "v": 0,
+                                        "vi": 0,
+                                        "vo": 0,
+                                        "vti": -0.652,
+                                        "vto": 0.495
+                                    },
+                                    {
+                                        "it": "cubic",
+                                        "t": 3,
+                                        "v": 0,
+                                        "vi": 0,
+                                        "vo": 0,
+                                        "vti": -0.51,
+                                        "vto": 0
+                                    }
+                                ],
+                                "value": 20
+                            },
+                            "borderType": {
+                                "value": 0
+                            },
+                            "horizontalStrength": {
+                                "value": 1
+                            },
+                            "inverseGammaCorrection": {
+                                "value": true
+                            },
+                            "quality": {
+                                "value": 0.5
+                            },
+                            "spaceDither": {
+                                "value": 0
+                            },
+                            "verticalStrength": {
+                                "value": 1
+                            }
+                        },
+                        "path": "/res/GaussianBlur",
+                        "prefabName": "LumiGaussianBlur.prefab"
+                    }
+                ],
+                "renderGroup_attrs": {
+                    "customShape": {
+                        "value": 0
+                    },
+                    "duration": [
+                        0,
+                        3
+                    ],
+                    "expandRatioX": {
+                        "value": 2
+                    },
+                    "expandRatioY": {
+                        "value": 2
+                    },
+                    "isRDGMode": {
+                        "value": false
+                    },
+                    "mode": {
+                        "value": 0
+                    },
+                    "offset": {
+                        "value": 0
+                    },
+                    "optimize": {
+                        "value": false
+                    },
+                    "priority": 0,
+                    "randomSeed": {
+                        "value": 50
+                    },
+                    "randomSort": {
+                        "value": false
+                    },
+                    "shape": {
+                        "value": 0
+                    }
+                }
+            }
+        ],
+        "selectors": [
+            {
+                "base_attrs": {
+                    "custom_script": {
+                        "isRelativePath": true,
+                        "path": "/res/20260607_065356_2c16.jsdat"
+                    }
+                },
+                "class": "Text_BaseSelector",
+                "selector_attrs": {
+                    "basedOn": {
+                        "value": 0
+                    },
+                    "class": "Text_BaseSelector",
+                    "constrained": {
+                        "value": 1
+                    },
+                    "customShape": {
+                        "value": 0
+                    },
+                    "end": {
+                        "value": 1
+                    },
+                    "offset": {
+                        "value": 0
+                    },
+                    "randomSeed": {
+                        "value": 50
+                    },
+                    "randomSort": {
+                        "value": false
+                    },
+                    "shape": {
+                        "value": 0
+                    },
+                    "smooth": {
+                        "value": 0
+                    },
+                    "start": {
+                        "value": 0
+                    }
+                }
+            }
+        ]
+    }
+}

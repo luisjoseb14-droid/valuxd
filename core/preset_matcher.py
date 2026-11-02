@@ -94,6 +94,10 @@ PRESET_PATTERNS: List[Tuple[str, List[str]]] = [
         r'\b(maria\s*y\s*manuel|mar[ií]a\s*y\s*manuel)\b',
         r'\b(manuel|mar[ií]a)\b',
     ]),
+    # 20. Abde
+    ("abde", [
+        r'\b(abde|adbe)\b',
+    ]),
 ]
 
 

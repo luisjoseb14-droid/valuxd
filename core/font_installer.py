@@ -56,6 +56,7 @@ FONT_REGISTRY_MAP = {
     'Antro_Vectra.otf': 'Antro Vectra (TrueType)',
     'MuktaMahee-Regular.ttf': 'Mukta Mahee Regular (TrueType)',
     'Marydale Regular.ttf': 'Marydale Regular (TrueType)',
+    'Akzidenz-grotesk-black.ttf': 'Akzidenz Grotesk Black (TrueType)',
 }
 
 def install_all_assets() -> Dict[str, Any]:
@@ -153,18 +154,23 @@ def install_all_assets() -> Dict[str, Any]:
     target_cache_dirs = get_capcut_cache_dirs()
 
     # 2. Install Audio Click to CapCut cache
-    src_sound = os.path.join(base_dir, 'assets', 'audio', 'click_mouse_02.mp3')
-    if os.path.isfile(src_sound):
-        for cache_dir in target_cache_dirs:
-            music_dir = os.path.join(cache_dir, 'music')
-            os.makedirs(music_dir, exist_ok=True)
-            dst_sound = os.path.join(music_dir, '33f11a55221681b3fefec3346290169e.mp3')
-            if not os.path.exists(dst_sound) or os.path.getsize(src_sound) != os.path.getsize(dst_sound):
-                try:
-                    shutil.copy2(src_sound, dst_sound)
-                except Exception as e:
-                    results['errors'].append(f"Error al copiar sonido de click en {music_dir}: {e}")
-        results['audio'].append('Click_Mouse_Click_02(864360)')
+    sounds_to_install = [
+        ('click_mouse_02.mp3', '33f11a55221681b3fefec3346290169e.mp3', 'Click_Mouse_Click_02(864360)'),
+        ('25b5bc6c42f453173fbf056859eec22b.mp3', '25b5bc6c42f453173fbf056859eec22b.mp3', '鼠标单击1')
+    ]
+    for src_name, dst_cache_name, display_name in sounds_to_install:
+        src_sound = os.path.join(base_dir, 'assets', 'audio', src_name)
+        if os.path.isfile(src_sound):
+            for cache_dir in target_cache_dirs:
+                music_dir = os.path.join(cache_dir, 'music')
+                os.makedirs(music_dir, exist_ok=True)
+                dst_sound = os.path.join(music_dir, dst_cache_name)
+                if not os.path.exists(dst_sound) or os.path.getsize(src_sound) != os.path.getsize(dst_sound):
+                    try:
+                        shutil.copy2(src_sound, dst_sound)
+                    except Exception as e:
+                        results['errors'].append(f"Error al copiar sonido {display_name} en {music_dir}: {e}")
+            results['audio'].append(display_name)
 
     # 3. Install Effect Animations to CapCut cache
     bundled_effects = os.path.join(base_dir, 'assets', 'effects')

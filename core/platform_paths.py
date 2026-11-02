@@ -79,8 +79,23 @@ def resolve_font_path(font_path_or_name: str) -> str:
 
     return font_path_or_name.replace('\\', '/')
 
-def get_default_click_sound_path() -> str:
+def get_default_click_sound_path(sound_name: str = "Click_Mouse_Click_02(864360)", filename: str = "") -> str:
     base_dir = get_base_dir()
+
+    # 1. If Chinese mouse click 1 is requested
+    if "鼠标单击1" in str(sound_name) or "25b5bc6c42f453173fbf056859eec22b" in str(filename):
+        for cache_dir in get_capcut_cache_dirs():
+            cached_mp3 = os.path.join(cache_dir, 'music', '25b5bc6c42f453173fbf056859eec22b.mp3')
+            if os.path.isfile(cached_mp3):
+                return cached_mp3.replace('\\', '/')
+        bundled_ch = os.path.join(base_dir, 'assets', 'audio', '25b5bc6c42f453173fbf056859eec22b.mp3')
+        if os.path.isfile(bundled_ch):
+            return bundled_ch.replace('\\', '/')
+        bundled_alt = os.path.join(base_dir, 'assets', 'audio', 'mouse_click_1.mp3')
+        if os.path.isfile(bundled_alt):
+            return bundled_alt.replace('\\', '/')
+
+    # 2. Default standard click sound
     bundled = os.path.join(base_dir, 'assets', 'audio', 'click_mouse_02.mp3')
     
     # Check CapCut music cache on current platform
