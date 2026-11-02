@@ -1,8 +1,8 @@
 {
-  "version": "1.0.17",
-  "version_code": 18,
+  "version": "1.0.18",
+  "version_code": 19,
   "date": "2026-11-02",
-  "description": "Recorte de latencia en click 鼠标单击1 para disparo instantáneo y corrección integral para conservar puntos (.) y comas (,) en preset Abde",
+  "description": "Aplicación estricta de variaciones intermitentes para 鼠标单击1 en preset Abde (reproducción en subconjunto selectivo y prevención de colisión sonora)",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

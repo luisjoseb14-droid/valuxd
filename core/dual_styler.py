@@ -784,18 +784,7 @@ class DualStyler:
             if not snd_path or not os.path.isfile(snd_path):
                 snd_path = get_default_click_sound_path(sound_name=snd_name, filename=snd_file)
 
-            click_starts = bot_starts
-            variation = self.sound_fx.get('variation') or self.sound_fx.get('mode')
-            if variation in ('intermittent', 'occasional', 'abde', 'variations'):
-                filtered = []
-                for i, st in enumerate(bot_starts):
-                    # Keep bursts (< 900ms apart)
-                    is_burst = (i > 0 and (st - bot_starts[i-1]) < 900000) or (i < len(bot_starts) - 1 and (bot_starts[i+1] - st) < 900000)
-                    if is_burst or (i % 2 == 1) or (i == len(bot_starts) - 1 and len(bot_starts) > 2):
-                        filtered.append(st)
-                click_starts = filtered if filtered else bot_starts
-
-            self._add_click_sound_fx(data, click_starts, volume=vol, sound_name=snd_name, sound_path=snd_path)
+            self._add_click_sound_fx(data, bot_starts, volume=vol, sound_name=snd_name, sound_path=snd_path)
 
         is_upper_required = (
             (self.default_style.get('uppercase', False) and self.highlight_style.get('uppercase', False))
@@ -1504,6 +1493,82 @@ class DualStyler:
 
         return self.apply_plan(project, plan)
 
+    def filter_sound_fx_timestamps(
+        self,
+        start_times_us: List[int],
+        draft_data: Optional[Dict[str, Any]] = None
+    ) -> List[int]:
+        """
+        Filters highlight start timestamps according to sound_fx variation settings.
+        When variation is 'intermittent' / 'occasional' / 'abde' / 'variations',
+        sound fx does not play on every highlight, but only on an intermittent subset (~40-60%),
+        preserving rapid bursts (< 0.75s) and spacing out isolated highlights (min gap ~2.2s).
+        Also avoids placing clicks within 350ms of existing short sound effects in draft_data.
+        """
+        if not start_times_us:
+            return []
+
+        variation = getattr(self, "sound_fx", {}).get("variation") or getattr(self, "sound_fx", {}).get("mode")
+        if variation not in ('intermittent', 'occasional', 'abde', 'variations'):
+            return list(start_times_us)
+
+        if len(start_times_us) <= 2:
+            return [start_times_us[0]]
+
+        # Gather any existing sound effects in other audio tracks if draft_data is provided
+        existing_sfx_starts = []
+        if draft_data and isinstance(draft_data, dict):
+            for trk in draft_data.get("tracks", []):
+                if trk.get("type") == "audio" and trk.get("name") != "Efectos de Sonido":
+                    for seg in trk.get("segments", []):
+                        t_dur = seg.get("target_timerange", {}).get("duration", 0)
+                        if 0 < t_dur < 3500000:
+                            existing_sfx_starts.append(seg.get("target_timerange", {}).get("start", 0))
+
+        filtered = []
+        burst_threshold_us = 750000   # 0.75s (burst list items)
+        min_gap_us = 2200000          # 2.2s minimum separation for isolated clicks
+        last_kept_time = -99999999
+        last_kept_idx = -999
+
+        for i, st in enumerate(start_times_us):
+            # Avoid collision with other sound effects on separate tracks
+            if any(abs(st - ex) < 350000 for ex in existing_sfx_starts):
+                continue
+
+            # 1. Burst detection (rapid list items like "a, b o c")
+            is_burst_prev = (i > 0 and (st - start_times_us[i - 1]) < burst_threshold_us)
+            is_burst_next = (i < len(start_times_us) - 1 and (start_times_us[i + 1] - st) < burst_threshold_us)
+            is_burst = is_burst_prev or is_burst_next
+
+            if is_burst:
+                filtered.append(st)
+                last_kept_time = st
+                last_kept_idx = i
+                continue
+
+            # 2. Skip early intro highlight (< 1.0s) when there are multiple highlights
+            if i == 0 and st < 1000000 and len(start_times_us) > 2:
+                continue
+
+            gap = st - last_kept_time
+            # 3. For non-burst highlights, alternate (skip at least 1 highlight) AND enforce min_gap_us
+            if (i - last_kept_idx) >= 2 and gap >= min_gap_us:
+                filtered.append(st)
+                last_kept_time = st
+                last_kept_idx = i
+
+        # Fallback to keep ~40-50% if over-filtered
+        if not filtered or len(filtered) < max(1, len(start_times_us) // 3):
+            filtered = [
+                st for idx, st in enumerate(start_times_us)
+                if not any(abs(st - ex) < 350000 for ex in existing_sfx_starts)
+                and (idx % 2 == 1 or idx == 0)
+            ]
+            if not filtered:
+                filtered = [start_times_us[0]]
+
+        return filtered
 
     def _add_click_sound_fx(
         self,
@@ -1517,8 +1582,13 @@ class DualStyler:
         if not start_times_us:
             return
 
+        start_times_us = self.filter_sound_fx_timestamps(start_times_us, draft_data=draft_data)
+        if not start_times_us:
+            return
+
         if not sound_path or not os.path.isfile(sound_path):
-            sound_path = get_default_click_sound_path()
+            snd_file = getattr(self, "sound_fx", {}).get("filename", "")
+            sound_path = get_default_click_sound_path(sound_name=sound_name, filename=snd_file)
 
         materials = draft_data.setdefault('materials', {})
         audios = materials.setdefault('audios', [])
@@ -2319,8 +2389,9 @@ class DualStyler:
             vol = float(self.sound_fx.get('volume', 0.65))
             snd_name = self.sound_fx.get('name', 'Click_Mouse_Click_02(864360)')
             snd_path = self.sound_fx.get('path')
+            snd_file = self.sound_fx.get('filename', '')
             if not snd_path or not os.path.isfile(snd_path):
-                snd_path = get_default_click_sound_path()
+                snd_path = get_default_click_sound_path(sound_name=snd_name, filename=snd_file)
             self._add_click_sound_fx(project.data, click_starts, volume=vol, sound_name=snd_name, sound_path=snd_path)
 
         project.clean_all_subtitles()
@@ -3158,8 +3229,9 @@ class DualStyler:
             vol = float(self.sound_fx.get('volume', 0.65))
             snd_name = self.sound_fx.get('name', 'Click_Mouse_Click_02(864360)')
             snd_path = self.sound_fx.get('path')
+            snd_file = self.sound_fx.get('filename', '')
             if not snd_path or not os.path.isfile(snd_path):
-                snd_path = get_default_click_sound_path()
+                snd_path = get_default_click_sound_path(sound_name=snd_name, filename=snd_file)
             self._add_click_sound_fx(project.data, click_starts, volume=vol, sound_name=snd_name, sound_path=snd_path)
 
         project._parse_subtitles()

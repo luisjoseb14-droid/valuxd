@@ -151,6 +151,47 @@ class TestAbdePreset(unittest.TestCase):
         self.assertIn("NUNCA coloques comas", prompt_without_punc)
         self.assertIn("NUNCA coloques puntos", prompt_without_punc)
 
+    def test_intermittent_click_filtering(self):
+        styler = DualStyler.from_preset("abde")
+        self.assertEqual(styler.sound_fx.get("variation"), "intermittent")
+
+        # 7 highlights spaced ~2.5s apart (like in Abde 1)
+        starts = [1466666, 4200000, 6933333, 9800000, 13300000, 15666666, 18300000]
+        filtered = styler.filter_sound_fx_timestamps(starts)
+
+        # Must NOT play on all highlights: should be an intermittent subset (~40-60%)
+        self.assertLess(len(filtered), len(starts), "Intermittent variation must NOT play on all highlights")
+        self.assertGreaterEqual(len(filtered), 2, "Must keep at least 2 highlights")
+        self.assertIn(len(filtered), (3, 4), f"Expected 3 or 4 highlights for 7 inputs, got {len(filtered)}")
+
+    def test_intermittent_burst_preservation(self):
+        styler = DualStyler.from_preset("abde")
+        # 3 rapid list items (e.g. 'zanahoria, mango, calabaza') separated by 400ms
+        starts = [2000000, 10000000, 10400000, 10800000, 18000000]
+        filtered = styler.filter_sound_fx_timestamps(starts)
+        # All 3 burst items must be preserved
+        self.assertIn(10000000, filtered)
+        self.assertIn(10400000, filtered)
+        self.assertIn(10800000, filtered)
+
+    def test_intermittent_avoids_existing_sfx(self):
+        styler = DualStyler.from_preset("abde")
+        starts = [1466666, 4200000, 6933333, 9800000, 13300000, 15666666, 18300000]
+        mock_draft = {
+            "tracks": [
+                {
+                    "type": "audio",
+                    "name": "Chimes",
+                    "segments": [
+                        {"target_timerange": {"start": 18300000, "duration": 700000}} # Glocken on 18.30s
+                    ]
+                }
+            ]
+        }
+        filtered = styler.filter_sound_fx_timestamps(starts, draft_data=mock_draft)
+        # 18.30s must NOT be included because a chime already exists there
+        self.assertNotIn(18300000, filtered)
+
 
 if __name__ == "__main__":
     unittest.main()
