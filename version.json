@@ -1,8 +1,8 @@
 {
-  "version": "1.0.19",
-  "version_code": 20,
-  "date": "2026-11-02",
-  "description": "Fix keep_punctuation OpenRouter, preset Abde y correccion de imports",
+  "version": "1.0.20",
+  "version_code": 21,
+  "date": "2026-11-03",
+  "description": "Nuevo preset Paco (Gotham Light + Anton dual layout) y soporte de audio click",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

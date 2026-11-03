@@ -426,6 +426,14 @@ class CCSubsProGUI(tk.Tk):
             command=self._on_preset_change
         )
         r_abde.grid(row=12, column=0, columnspan=2, sticky=tk.W, pady=2)
+        r_paco = ttk.Radiobutton(
+            presets_frame,
+            text="🩺 Paco  (Gotham Light blanco 10 | Anton blanco grande 20 + Click fx)",
+            variable=self.doctor_preset,
+            value="paco",
+            command=self._on_preset_change
+        )
+        r_paco.grid(row=13, column=0, columnspan=2, sticky=tk.W, pady=2)
 
         # Dynamic detail line for the selected doctor
         self.lbl_preset_detail = tk.Label(
@@ -553,7 +561,10 @@ class CCSubsProGUI(tk.Tk):
             "manuel": "👥 María y Manuel: Mukta Mahee blanco arriba (11.0, y=-0.113) | Marydale blanco (#FFFFFF) abajo (22.38, y=-0.196) + Mini zoom + Stickers + Click fx",
             "maria": "👥 María y Manuel: Mukta Mahee blanco arriba (11.0, y=-0.113) | Marydale blanco (#FFFFFF) abajo (22.38, y=-0.196) + Mini zoom + Stickers + Click fx",
             "abde": "🩺 Abde: Akzidenz Grotesk Black blanco arriba (9.0, y=0.0) | Akzidenz azul cielo (#6D94FF) abajo (11.0, y=-0.079) + Descenso + Clicks chinos variados + Puntos y comas",
-            "letra abde": "🩺 Abde: Akzidenz Grotesk Black blanco arriba (9.0, y=0.0) | Akzidenz azul cielo (#6D94FF) abajo (11.0, y=-0.079) + Descenso + Clicks chinos variados + Puntos y comas"
+            "letra abde": "🩺 Abde: Akzidenz Grotesk Black blanco arriba (9.0, y=0.0) | Akzidenz azul cielo (#6D94FF) abajo (11.0, y=-0.079) + Descenso + Clicks chinos variados + Puntos y comas",
+            "paco": "🩺 Paco: Gotham Light blanco arriba (10.0, y=-0.113) | Anton blanco (#FFFFFF) abajo (20.0, y=-0.222) + Click fx",
+            "letra paco": "🩺 Paco: Gotham Light blanco arriba (10.0, y=-0.113) | Anton blanco (#FFFFFF) abajo (20.0, y=-0.222) + Click fx",
+            "dr paco": "🩺 Paco: Gotham Light blanco arriba (10.0, y=-0.113) | Anton blanco (#FFFFFF) abajo (20.0, y=-0.222) + Click fx"
         }
         if hasattr(self, 'lbl_preset_detail'):
             self.lbl_preset_detail.config(text=details.get(p, ""))

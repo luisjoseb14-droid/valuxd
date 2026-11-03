@@ -98,6 +98,10 @@ PRESET_PATTERNS: List[Tuple[str, List[str]]] = [
     ("abde", [
         r'\b(abde|adbe)\b',
     ]),
+    # 21. Paco
+    ("paco", [
+        r'\bpaco\b',
+    ]),
 ]
 
 

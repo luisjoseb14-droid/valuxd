@@ -1,0 +1,110 @@
+{
+  "name": "Letra Paco",
+  "version": "1.0.0",
+  "description": "Estilo de 2 capas de Paco: Gotham Light blanco arriba (tamaño 10.0, y=-0.113) y Anton Regular blanco grande abajo (tamaño 20.0, y=-0.222) con sombra suave (#000000, alpha 0.50, distancia 3.0) y sonido de click Click_Mouse_Click_02 (volumen 0.52).",
+  "layout": "dual",
+  "uppercase": false,
+  "top": {
+    "font_name": "Gotham Light",
+    "font_title": "Gotham Light",
+    "font_path": "Gotham Light.otf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 10.0,
+    "x": 0.0,
+    "y": -0.113110651153092,
+    "scale": {
+      "x": 1.1531433040899965,
+      "y": 1.1531433040899965
+    },
+    "shadow": {
+      "color": "#000000",
+      "alpha": 0.4952380955219269,
+      "angle": -45.0,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45.0,
+      "thickness_projection_distance": 0.0,
+      "thickness_projection_enable": false
+    },
+    "uppercase": false
+  },
+  "bottom": {
+    "font_name": "Anton",
+    "font_title": "Anton",
+    "font_path": "Anton-Regular.ttf",
+    "color": "#FFFFFF",
+    "rgb_color": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "font_size": 20.0,
+    "x": 0.0,
+    "y": -0.22180630332700504,
+    "scale": {
+      "x": 1.355000404236397,
+      "y": 1.355000404236397
+    },
+    "animation": {
+      "enabled": false,
+      "resource_id": "7646371622298914068",
+      "name": "Mini zoom",
+      "path": "",
+      "duration": 500000,
+      "type": "in"
+    },
+    "shadow": {
+      "color": "#000000",
+      "alpha": 0.4952380955219269,
+      "angle": -45.0,
+      "diffuse": 0.02500000037252903,
+      "distance": 2.9999992847442627,
+      "content": {
+        "render_type": "solid",
+        "solid": {
+          "color": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "thickness_projection_angle": -45.0,
+      "thickness_projection_distance": 0.0,
+      "thickness_projection_enable": false
+    },
+    "useLetterColor": false,
+    "uppercase": false
+  },
+  "sound_fx": {
+    "enabled": true,
+    "name": "Click_Mouse_Click_02(864360)",
+    "filename": "click_mouse_02.mp3",
+    "path": "",
+    "duration": 866666,
+    "volume": 0.52
+  },
+  "pacing": {
+    "min_seconds": 1.8,
+    "max_seconds": 3.5
+  },
+  "margins": {
+    "max_chars_per_line": 22,
+    "max_words_per_line": 4
+  }
+}

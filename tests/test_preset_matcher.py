@@ -72,6 +72,10 @@ class TestPresetMatcher(unittest.TestCase):
         self.assertEqual(detect_preset_from_name("Dr. Dentok"), "dentok")
         self.assertEqual(detect_preset_from_name(r"B:\capc\SEP Dentok 8.0"), "dentok")
 
+        self.assertEqual(detect_preset_from_name("Paco 6"), "paco")
+        self.assertEqual(detect_preset_from_name("Letra Paco"), "paco")
+        self.assertEqual(detect_preset_from_name(r"B:\capc\Paco 6"), "paco")
+
     def test_unmatched_returns_none(self):
         self.assertIsNone(detect_preset_from_name("Mi Video de Vacaciones"))
         self.assertIsNone(detect_preset_from_name("Proyecto 123"))
