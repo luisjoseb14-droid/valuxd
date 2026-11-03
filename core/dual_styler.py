@@ -4,7 +4,7 @@ import json
 import uuid
 import copy
 import logging
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any, Optional, Tuple, Callable
 from core.capcut_draft import CapCutProject, SubtitleItem
 from core.animator import Animator
 from core.platform_paths import resolve_font_path, get_default_click_sound_path, resolve_effect_path, resolve_sticker_path

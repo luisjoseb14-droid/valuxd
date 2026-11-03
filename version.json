@@ -1,8 +1,8 @@
 {
-  "version": "1.0.18",
-  "version_code": 19,
+  "version": "1.0.19",
+  "version_code": 20,
   "date": "2026-11-02",
-  "description": "Aplicación estricta de variaciones intermitentes para 鼠标单击1 en preset Abde (reproducción en subconjunto selectivo y prevención de colisión sonora)",
+  "description": "Fix keep_punctuation OpenRouter, preset Abde y correccion de imports",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

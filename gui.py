@@ -10,6 +10,7 @@ import json
 import shutil
 import tempfile
 import threading
+from typing import List, Optional, Dict, Any, Tuple
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 
