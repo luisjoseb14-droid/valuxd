@@ -309,6 +309,32 @@ def check_project_grammar(
     if log_fn:
         log_fn(f"[*] Analizando {len(segments)} subtítulo(s) con OpenRouter ({getattr(client, 'model', 'gemini')})...")
 
+    if not hasattr(client, "check_grammar"):
+        if log_fn:
+            log_fn("[*] Detectado módulo ai/openrouter_client.py desactualizado; sincronizando módulos de IA desde GitHub...")
+        try:
+            from core.updater import ensure_ai_modules_up_to_date
+            _, updated_files = ensure_ai_modules_up_to_date(force=True)
+            if updated_files and log_fn:
+                log_fn(f"[OK] Módulos de IA sincronizados: {', '.join(updated_files)}")
+        except Exception as sync_err:
+            if log_fn:
+                log_fn(f"[!] Aviso al sincronizar módulos de IA: {sync_err}")
+
+        import ai.openrouter_client as orc_mod
+        refreshed_cls = getattr(orc_mod, "OpenRouterClient", None)
+        if refreshed_cls is not None and hasattr(refreshed_cls, "check_grammar"):
+            client = refreshed_cls(
+                api_key=getattr(client, "api_key", ""),
+                model=getattr(client, "model", None) or getattr(orc_mod, "DEFAULT_MODEL", "google/gemini-2.5-flash"),
+            )
+        else:
+            raise RuntimeError(
+                "El módulo 'ai/openrouter_client.py' de esta instalación está desactualizado "
+                "(no contiene 'check_grammar') y no pudo descargarse automáticamente desde GitHub.\n\n"
+                "Verifica tu conexión a internet o haz clic en 'Actualizar' arriba para sincronizar la carpeta 'ai/'."
+            )
+
     payload_segs = [
         {"index": s["index"], "start": s["start"], "end": s["end"], "text": s["text"]}
         for s in segments

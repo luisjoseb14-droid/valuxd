@@ -1,8 +1,8 @@
 {
-  "version": "1.0.22",
-  "version_code": 23,
+  "version": "1.0.23",
+  "version_code": 24,
   "date": "2026-11-13",
-  "description": "Nuevo boton 'Comprobar Gramatica' junto a Estilizar (revision de tildes y ortografia con OpenRouter IA)",
+  "description": "Correccion del auto-actualizador para sincronizar tambien la carpeta ai/ (OpenRouterClient.check_grammar) y auto-reparacion al iniciar",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

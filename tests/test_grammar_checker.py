@@ -264,6 +264,40 @@ class TestGrammarChecker(unittest.TestCase):
         self.assertEqual(res[0]["index"], 0)
         self.assertEqual(res[1]["index"], 80)
 
+    def test_check_grammar_recovers_legacy_client_without_method(self):
+        proj = self._write_sample_project()
+
+        class LegacyOpenRouterClient:
+            def __init__(self, api_key="k", model="m"):
+                self.api_key = api_key
+                self.model = model
+
+        legacy_client = LegacyOpenRouterClient(api_key="test-key-123", model="google/gemini-2.5-flash")
+        mock_api_reply = {
+            "choices": [
+                {
+                    "message": {
+                        "content": json.dumps({
+                            "corrections": [
+                                {"index": 0, "corrected_text": "En la clínica", "reason": "tilde"}
+                            ]
+                        })
+                    }
+                }
+            ]
+        }
+
+        logs = []
+        with patch("core.updater.ensure_ai_modules_up_to_date", return_value=(True, ["ai/openrouter_client.py"])) as mock_sync, \
+             patch("urllib.request.urlopen", return_value=_DummyHTTPResponse(mock_api_reply)):
+            fixes = check_project_grammar(proj, client=legacy_client, log_fn=logs.append)
+
+        mock_sync.assert_called_once_with(force=True)
+        self.assertIsNotNone(fixes)
+        self.assertEqual(len(fixes), 1)
+        self.assertEqual(fixes[0]["corrected_text"], "En la clínica")
+        self.assertTrue(any("ai/openrouter_client.py" in line for line in logs))
+
     def test_gui_has_grammar_button_and_compiles(self):
         gui_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "gui.py")
         with open(gui_path, "r", encoding="utf-8") as f:

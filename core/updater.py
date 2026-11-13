@@ -8,16 +8,18 @@ Instala fuentes automáticamente en Windows y recarga presets sin requerir Git.
 import os
 import sys
 import json
+import time
 import zipfile
 import shutil
 import tempfile
+import importlib
 import urllib.request
 import urllib.error
 import ssl
 import subprocess
 import stat
 import logging
-from typing import Dict, Any, Tuple, Optional, Callable
+from typing import Dict, Any, Tuple, Optional, Callable, List
 
 if __name__ == '__main__' and __package__ is None:
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -31,9 +33,11 @@ GITHUB_USER = "luisjoseb14-droid"
 GITHUB_REPO = "valuxd"
 BRANCH = "main"
 
-VERSION_URL = f"https://raw.githubusercontent.com/{GITHUB_USER}/{GITHUB_REPO}/{BRANCH}/version.json"
+RAW_BASE_URL = f"https://raw.githubusercontent.com/{GITHUB_USER}/{GITHUB_REPO}/{BRANCH}"
+VERSION_URL = f"{RAW_BASE_URL}/version.json"
 ZIP_URL = f"https://github.com/{GITHUB_USER}/{GITHUB_REPO}/archive/refs/heads/{BRANCH}.zip"
 USER_AGENT = "CCSubsPro-Updater/1.0"
+AI_MODULE_FILES = ("openrouter_client.py", "highlighter.py", "transcriber.py")
 
 
 def _safe_urlopen(req, timeout=30):
@@ -80,6 +84,173 @@ def _safe_copy_file(src: str, dst: str, is_font: bool = False) -> bool:
         if os.path.exists(dst):
             return False
         raise
+
+
+def _remove_stale_pyc(pkg_dir: str, module_stems: Optional[List[str]] = None) -> None:
+    """Elimina archivos .pyc obsoletos en __pycache__ tras actualizar módulos .py."""
+    pycache_dir = os.path.join(pkg_dir, '__pycache__')
+    if not os.path.isdir(pycache_dir):
+        return
+    try:
+        stems = set(module_stems) if module_stems else None
+        for entry in os.listdir(pycache_dir):
+            if not entry.endswith('.pyc'):
+                continue
+            mod_stem = entry.split('.')[0]
+            if stems is None or mod_stem in stems:
+                try:
+                    os.remove(os.path.join(pycache_dir, entry))
+                except OSError:
+                    pass
+    except OSError:
+        pass
+
+
+def _copy_python_package_dir(src_dir: str, dst_dir: str) -> List[str]:
+    """Copia recursivamente todos los .py de src_dir a dst_dir y limpia .pyc obsoletos."""
+    copied: List[str] = []
+    if not os.path.isdir(src_dir):
+        return copied
+    for root, dirs, files in os.walk(src_dir):
+        dirs[:] = [d for d in dirs if d != '__pycache__']
+        rel_root = os.path.relpath(root, src_dir)
+        target_root = dst_dir if rel_root == '.' else os.path.join(dst_dir, rel_root)
+        os.makedirs(target_root, exist_ok=True)
+        updated_stems: List[str] = []
+        for f in files:
+            if f.endswith('.py'):
+                _safe_copy_file(os.path.join(root, f), os.path.join(target_root, f))
+                rel_path = f if rel_root == '.' else os.path.join(rel_root, f)
+                copied.append(rel_path)
+                updated_stems.append(os.path.splitext(f)[0])
+        if updated_stems:
+            _remove_stale_pyc(target_root, updated_stems)
+    return copied
+
+
+def _fetch_github_text(rel_path: str, timeout: int = 15) -> str:
+    """Descarga un archivo de texto UTF-8 desde GitHub raw evitando caché del CDN."""
+    clean_rel = rel_path.replace('\\', '/').lstrip('/')
+    url = f"{RAW_BASE_URL}/{clean_rel}?nocache={int(time.time())}"
+    req = urllib.request.Request(
+        url,
+        headers={"User-Agent": USER_AGENT, "Cache-Control": "no-cache"}
+    )
+    try:
+        with _safe_urlopen(req, timeout=timeout) as resp:
+            return resp.read().decode('utf-8')
+    except Exception as dl_err:
+        logger.warning(f"Fallo urllib descargando {clean_rel}: {dl_err}. Intentando curl...")
+        curl_exe = "curl.exe" if sys.platform == 'win32' else "curl"
+        res = subprocess.run(
+            [curl_exe, "-k", "-s", "-L", "-f", "-A", USER_AGENT, url],
+            capture_output=True,
+            text=True,
+            encoding='utf-8',
+            timeout=timeout
+        )
+        if res.returncode == 0 and res.stdout:
+            return res.stdout
+        raise RuntimeError(f"No se pudo descargar {clean_rel} desde GitHub: {res.stderr or dl_err}")
+
+
+def _is_valid_python_source(code: str, filename: str) -> bool:
+    """Verifica que el contenido descargado sea Python válido y no una página de error."""
+    if not code or len(code.strip()) < 100:
+        return False
+    try:
+        compile(code, filename, 'exec')
+        return True
+    except SyntaxError:
+        return False
+
+
+def _reload_ai_modules() -> None:
+    """Recarga módulos de ai/ en memoria y actualiza referencias heredadas de OpenRouterClient."""
+    importlib.invalidate_caches()
+    orc_mod = sys.modules.get('ai.openrouter_client')
+    if orc_mod is not None:
+        orc_mod = importlib.reload(orc_mod)
+    else:
+        orc_mod = importlib.import_module('ai.openrouter_client')
+
+    for extra_mod in ('ai.highlighter', 'ai.transcriber'):
+        mod_obj = sys.modules.get(extra_mod)
+        if mod_obj is not None:
+            try:
+                importlib.reload(mod_obj)
+            except Exception as e:
+                logger.warning(f"No se pudo recargar {extra_mod}: {e}")
+
+    new_cls = getattr(orc_mod, 'OpenRouterClient', None)
+    new_model = getattr(orc_mod, 'DEFAULT_MODEL', None)
+    if new_cls is not None:
+        for consumer_name in ('ai.highlighter', 'core.dual_styler', 'gui', '__main__'):
+            consumer = sys.modules.get(consumer_name)
+            if consumer is not None and hasattr(consumer, 'OpenRouterClient'):
+                setattr(consumer, 'OpenRouterClient', new_cls)
+            if new_model is not None and consumer is not None and hasattr(consumer, 'DEFAULT_MODEL'):
+                setattr(consumer, 'DEFAULT_MODEL', new_model)
+
+
+def _disk_openrouter_has_grammar(base_dir: str) -> bool:
+    """Comprueba si ai/openrouter_client.py en disco ya incluye check_grammar."""
+    orc_path = os.path.join(base_dir, 'ai', 'openrouter_client.py')
+    if not os.path.isfile(orc_path):
+        return False
+    try:
+        with open(orc_path, 'r', encoding='utf-8') as f:
+            src = f.read()
+        return 'def check_grammar(' in src and 'def get_system_prompt_grammar(' in src
+    except OSError:
+        return False
+
+
+def sync_ai_modules_from_github() -> List[str]:
+    """Descarga y actualiza todos los archivos de ai/ directamente desde GitHub."""
+    base_dir = get_base_dir()
+    dst_ai = os.path.join(base_dir, 'ai')
+    os.makedirs(dst_ai, exist_ok=True)
+    updated: List[str] = []
+    temp_dir = tempfile.mkdtemp(prefix="ccsubs_ai_sync_")
+    try:
+        for fname in AI_MODULE_FILES:
+            rel_path = f"ai/{fname}"
+            code = _fetch_github_text(rel_path)
+            if not _is_valid_python_source(code, fname):
+                raise RuntimeError(f"Contenido inválido recibido para {rel_path}")
+            tmp_file = os.path.join(temp_dir, fname)
+            with open(tmp_file, 'w', encoding='utf-8', newline='\n') as f:
+                f.write(code)
+            _safe_copy_file(tmp_file, os.path.join(dst_ai, fname))
+            updated.append(rel_path)
+        _remove_stale_pyc(dst_ai, [os.path.splitext(fn)[0] for fn in AI_MODULE_FILES])
+    finally:
+        shutil.rmtree(temp_dir, ignore_errors=True)
+    return updated
+
+
+def ensure_ai_modules_up_to_date(force: bool = False) -> Tuple[bool, List[str]]:
+    """
+    Repara automáticamente instalaciones actualizadas por versiones previas del updater
+    que no copiaban la carpeta ai/ (causando falta de OpenRouterClient.check_grammar).
+    """
+    base_dir = get_base_dir()
+    orc_mod = sys.modules.get('ai.openrouter_client')
+    loaded_ok = orc_mod is not None and hasattr(getattr(orc_mod, 'OpenRouterClient', object), 'check_grammar')
+    disk_ok = _disk_openrouter_has_grammar(base_dir)
+
+    if not force and disk_ok and loaded_ok:
+        return False, []
+
+    updated_files: List[str] = []
+    if force or not disk_ok:
+        updated_files = sync_ai_modules_from_github()
+    else:
+        _remove_stale_pyc(os.path.join(base_dir, 'ai'), [os.path.splitext(fn)[0] for fn in AI_MODULE_FILES])
+
+    _reload_ai_modules()
+    return True, updated_files
 
 
 def get_local_version_info() -> Dict[str, Any]:
@@ -278,20 +449,29 @@ def download_and_apply_update(
                         except Exception as e:
                             logger.warning(f"Error al copiar sticker {stk_id}: {e}")
 
-        # 5. Copiar core/
-        src_core = os.path.join(src_root, 'core')
-        dst_core = os.path.join(base_dir, 'core')
-        if os.path.isdir(src_core):
-            os.makedirs(dst_core, exist_ok=True)
-            for f in os.listdir(src_core):
-                if f.endswith('.py'):
-                    _safe_copy_file(os.path.join(src_core, f), os.path.join(dst_core, f))
+        # 5. Copiar core/ y ai/ (recursivo, limpiando .pyc obsoletos)
+        for pkg_name in ('core', 'ai'):
+            src_pkg = os.path.join(src_root, pkg_name)
+            dst_pkg = os.path.join(base_dir, pkg_name)
+            if os.path.isdir(src_pkg):
+                _copy_python_package_dir(src_pkg, dst_pkg)
 
-        # 6. Copiar gui.py y archivos clave
-        for root_file in ['gui.py', 'cc_subs_pro.py', 'version.json', 'README.md']:
+        # 6. Copiar gui.py, lanzadores y archivos clave
+        root_files = [
+            'gui.py',
+            'cc_subs_pro.py',
+            'version.json',
+            'README.md',
+            'Iniciar_CC_Subs_Pro.bat',
+            'Instalar_CC_Subs_Pro.bat',
+            'Iniciar_CC_Subs_Pro.command',
+            'Instalar_Mac.command',
+        ]
+        for root_file in root_files:
             src_file = os.path.join(src_root, root_file)
             if os.path.isfile(src_file):
                 _safe_copy_file(src_file, os.path.join(base_dir, root_file))
+        _remove_stale_pyc(base_dir, ['gui', 'cc_subs_pro'])
 
         if progress_callback:
             progress_callback("Instalando fuentes en el sistema Windows...", 0.88)

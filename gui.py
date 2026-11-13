@@ -48,6 +48,7 @@ except Exception:
 from core.updater import (
     check_for_updates,
     download_and_apply_update,
+    ensure_ai_modules_up_to_date,
     get_local_version_info
 )
 
@@ -795,6 +796,22 @@ class CCSubsProGUI(tk.Tk):
         threading.Thread(target=run_install, daemon=True).start()
 
     def _background_check_updates(self):
+        try:
+            repaired, updated_files = ensure_ai_modules_up_to_date()
+            if repaired:
+                def notify_ai_sync():
+                    import ai.openrouter_client as _orc
+                    globals()['OpenRouterClient'] = _orc.OpenRouterClient
+                    globals()['DEFAULT_MODEL'] = _orc.DEFAULT_MODEL
+                    msg = (
+                        f"[Actualizador] Módulos de IA reparados automáticamente ({', '.join(updated_files)})."
+                        if updated_files
+                        else "[Actualizador] Módulos de IA recargados correctamente."
+                    )
+                    self._log(msg)
+                self.after(0, notify_ai_sync)
+        except Exception:
+            pass
         try:
             has_update, remote_info = check_for_updates()
             if has_update:
