@@ -297,6 +297,14 @@ def clean_spanish_casing(text: str, is_sentence_start: bool = True) -> str:
                 out.append(f"{lead}{core.lower()}{trail}")
             continue
 
+        # Capitalize recognized clinic/brand names immediately following 'clínica'/'clinica'
+        if out:
+            prev_bare = re.sub(r'[¿¡?!,.;:\'"\(\)\[\]\{\}]', '', out[-1]).lower()
+            if prev_bare in ('clínica', 'clinica') and core.lower() in ('gala', 'galaunick', 'dentok'):
+                core = core[0].upper() + core[1:].lower()
+                out.append(f"{lead}{core}{trail}")
+                continue
+
         # Check Titlecase words mid-sentence
         if core[0].isupper() and not is_word_sent_start:
             if core.lower() in COMMON_LOWERCASE_WORDS:
@@ -308,6 +316,43 @@ def clean_spanish_casing(text: str, is_sentence_start: bool = True) -> str:
         out.append(f"{lead}{core}{trail}")
 
     return " ".join(out)
+
+
+def _normalize_spanish_punct_spacing(text: str) -> str:
+    """Fix spaces and mid-word misplacements around ¿, ¡, ?, !."""
+    if not text:
+        return ""
+    s = str(text)
+    # Deduplicate repeated ¿, ?, ¡, !
+    s = re.sub(r'¿+', '¿', s)
+    s = re.sub(r'\?+', '?', s)
+    s = re.sub(r'¡+', '¡', s)
+    s = re.sub(r'!+', '!', s)
+
+    # Fix mid-word ¿ or ¡ (e.g. t¿ienes -> ¿tienes) and mid-word ? or ! (e.g. problema?s -> problemas?)
+    fixed_tokens = []
+    for tok in s.split():
+        if '¿' in tok and not tok.startswith('¿'):
+            tok = '¿' + tok.replace('¿', '')
+        if '¡' in tok and not tok.startswith('¡'):
+            tok = '¡' + tok.replace('¡', '')
+        if '?' in tok and not tok.endswith('?') and not re.fullmatch(r'[?!.,;:]+', tok):
+            # Preserve any trailing punctuation after '?' when moving '?' to the end
+            m_trail = re.match(r'^(.*?)([.,;:!]+)$', tok.replace('?', ''))
+            if m_trail:
+                tok = m_trail.group(1) + '?' + m_trail.group(2)
+            else:
+                tok = tok.replace('?', '') + '?'
+        if '!' in tok and not tok.endswith('!') and not re.fullmatch(r'[?!.,;:]+', tok):
+            tok = tok.replace('!', '') + '!'
+        fixed_tokens.append(tok)
+    s = " ".join(fixed_tokens)
+
+    # Remove spaces after opening ¿/¡ and before closing ?/!/./,
+    s = re.sub(r'([¿¡])\s+', r'\1', s)
+    s = re.sub(r'\s+([?!])', r'\1', s)
+    s = re.sub(r'\s+([.,])', r'\1', s)
+    return s
 
 
 def clean_subtitle_text(text: str, is_sentence_start: bool = True, preserve_case: bool = False, keep_punctuation: bool = False) -> str:
@@ -324,17 +369,22 @@ def clean_subtitle_text(text: str, is_sentence_start: bool = True, preserve_case
     """
     if not text:
         return ""
-    
+
+    normalized = _normalize_spanish_punct_spacing(str(text))
+
     # If preserve_case is requested or text is fully uppercase, do not apply clean_spanish_casing
-    if preserve_case or not any(c.islower() for c in text):
-        cleaned = str(text)
+    if preserve_case or not any(c.islower() for c in normalized):
+        cleaned = normalized
     else:
-        cleaned = clean_spanish_casing(str(text), is_sentence_start=is_sentence_start)
+        cleaned = clean_spanish_casing(normalized, is_sentence_start=is_sentence_start)
     
     # Remove commas, periods, colons unless keep_punctuation is True
     if not keep_punctuation:
         cleaned = re.sub(r'[,.:]+', '', cleaned)
     
+    # Re-apply tight spacing around ¿?/¡! after punctuation removal
+    cleaned = re.sub(r'([¿¡])\s+', r'\1', cleaned)
+    cleaned = re.sub(r'\s+([?!])', r'\1', cleaned)
     # Normalize multiple whitespace characters into a single space and strip
     cleaned = re.sub(r'\s+', ' ', cleaned).strip()
     
@@ -761,6 +811,632 @@ def heuristic_punctuation_fallback(raw_items: List[Dict[str, Any]]) -> None:
         it = curr.get('item')
         if it and hasattr(it, 'set_text'):
             it.set_text(curr['text'], keep_punctuation=True)
+
+
+ORPHAN_SHORT_WORDS = {
+    'el', 'la', 'lo', 'los', 'las', 'un', 'una', 'unos', 'unas',
+    'de', 'del', 'al', 'a', 'en', 'con', 'por', 'para', 'sin', 'sobre', 'tras',
+    'hacia', 'hasta', 'desde', 'contra', 'entre',
+    'y', 'e', 'ni', 'o', 'u', 'que', 'pero', 'aunque', 'porque', 'como', 'cuando', 'donde', 'si', 'sí',
+    'no', 'es', 'son', 'fue', 'era', 'se', 'te', 'me', 'nos', 'le', 'les',
+    'mi', 'tu', 'su', 'mis', 'tus', 'sus',
+    'ya', 'más', 'mas', 'muy', 'tan', 'así', 'asi', 'hoy', 'aquí', 'aqui', 'ahí', 'ahi', 'allí', 'alli',
+    'este', 'esta', 'estos', 'estas', 'esto', 'ese', 'esa', 'esos', 'esas', 'eso'
+}
+
+PROCLITIC_ORPHAN_WORDS = {
+    'el', 'la', 'lo', 'los', 'las', 'un', 'una', 'unos', 'unas',
+    'de', 'del', 'al', 'a', 'en', 'con', 'por', 'para', 'sin', 'sobre', 'tras',
+    'hacia', 'hasta', 'desde', 'contra', 'entre',
+    'y', 'e', 'ni', 'o', 'u', 'que', 'pero', 'aunque', 'porque', 'como', 'cuando', 'donde', 'si',
+    'no', 'es', 'son', 'fue', 'era', 'se', 'te', 'me', 'nos', 'le', 'les',
+    'mi', 'tu', 'su', 'mis', 'tus', 'sus', 'muy', 'tan',
+    'este', 'esta', 'estos', 'estas', 'ese', 'esa', 'esos', 'esas'
+}
+
+
+def _strip_edge_punct(word: str) -> str:
+    return re.sub(r'^[¿¡"\'\(\[\{.,;:?!]+|[¿¡"\'\)\]\},.;:?!]+$', '', word or '')
+
+
+def _extract_word_tokens(item: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """
+    Returns per-word token dicts [{'word': str, 'start_us': int, 'end_us': int}, ...]
+    aligned with item['words'] metadata when available, or proportional character timing.
+    """
+    txt = (item.get('text') or '').strip()
+    words = txt.split()
+    seg_start = int(item.get('start', 0))
+    seg_dur = int(item.get('duration', max(0, int(item.get('end', seg_start)) - seg_start)))
+    seg_end = int(item.get('end', seg_start + seg_dur))
+    if seg_end < seg_start:
+        seg_end = seg_start + max(0, seg_dur)
+    if not words:
+        return []
+
+    w_meta = item.get('words')
+    meta_tokens = []
+    if isinstance(w_meta, dict):
+        m_texts = w_meta.get('text', [])
+        m_starts = w_meta.get('start_time', [])
+        m_ends = w_meta.get('end_time', [])
+        for mt, ms, me in zip(m_texts, m_starts, m_ends):
+            if str(mt).strip():
+                abs_s = seg_start + int(ms) * 1000
+                abs_e = seg_start + int(me) * 1000
+                if abs_e <= abs_s:
+                    abs_e = abs_s + 50000
+                meta_tokens.append((abs_s, abs_e))
+
+    if len(meta_tokens) == len(words):
+        out = []
+        for idx, w in enumerate(words):
+            s_us, e_us = meta_tokens[idx]
+            s_us = max(seg_start, min(s_us, seg_end))
+            e_us = max(s_us, min(e_us, seg_end))
+            out.append({'word': w, 'start_us': s_us, 'end_us': e_us})
+        out[0]['start_us'] = seg_start
+        out[-1]['end_us'] = seg_end
+        return out
+
+    # Proportional fallback weighted by visible characters (+2 overhead per word)
+    weights = [max(1, len(_strip_edge_punct(w)) + 2) for w in words]
+    total_w = float(sum(weights)) or 1.0
+    total_dur = max(len(words) * 40000, seg_end - seg_start)
+    cur_t = float(seg_start)
+    out = []
+    for idx, (w, wt) in enumerate(zip(words, weights)):
+        slice_dur = total_dur * (wt / total_w)
+        s_us = int(round(cur_t))
+        e_us = int(round(cur_t + slice_dur)) if idx < len(words) - 1 else max(seg_end, seg_start + total_dur)
+        if e_us <= s_us:
+            e_us = s_us + 20000
+        out.append({'word': w, 'start_us': s_us, 'end_us': e_us})
+        cur_t += slice_dur
+    return out
+
+
+def _build_item_from_tokens(
+    template: Dict[str, Any],
+    tokens: List[Dict[str, Any]],
+    keep_punctuation: bool = False
+) -> Dict[str, Any]:
+    """Builds a segment item dict from word tokens with synchronized word timings."""
+    raw_text = " ".join(t['word'] for t in tokens).strip()
+    is_all_caps = bool(raw_text) and not any(c.islower() for c in raw_text)
+    cleaned = clean_subtitle_text(raw_text, preserve_case=is_all_caps, keep_punctuation=keep_punctuation)
+    start_us = int(tokens[0]['start_us'])
+    end_us = max(start_us + 50000, int(tokens[-1]['end_us']))
+    dur_us = end_us - start_us
+
+    rebuilt_words = cleaned.split() if cleaned else [t['word'] for t in tokens]
+    # Preserve original sub-word acoustic timings when text boundaries and count are unchanged
+    tpl_words = (template.get('text') or '').split()
+    if (
+        template.get('words')
+        and rebuilt_words == tpl_words
+        and start_us == int(template.get('start', start_us))
+        and end_us == int(template.get('end', end_us))
+    ):
+        words_dict = template.get('words')
+    # Otherwise rebuild per-word timing count matching rebuilt_words
+    elif len(rebuilt_words) == len(tokens):
+        w_texts = []
+        w_starts = []
+        w_ends = []
+        for idx, (rw, tok) in enumerate(zip(rebuilt_words, tokens)):
+            if idx > 0:
+                w_texts.append(' ')
+                prev_e = w_ends[-1]
+                cur_s = max(0, int((tok['start_us'] - start_us) // 1000))
+                w_starts.append(prev_e)
+                w_ends.append(max(prev_e, cur_s))
+            w_texts.append(rw)
+            ws_ms = max(0, int((tok['start_us'] - start_us) // 1000))
+            we_ms = max(ws_ms + 20, int((tok['end_us'] - start_us) // 1000))
+            w_starts.append(ws_ms)
+            w_ends.append(we_ms)
+        words_dict = {'text': w_texts, 'start_time': w_starts, 'end_time': w_ends}
+    else:
+        words_dict = template.get('words')
+
+    new_item = dict(template)
+    new_item['text'] = cleaned
+    new_item['orig_text'] = cleaned
+    new_item['start'] = start_us
+    new_item['end'] = end_us
+    new_item['duration'] = dur_us
+    new_item['words'] = words_dict
+
+    it_obj = new_item.get('item')
+    if it_obj:
+        if hasattr(it_obj, 'set_text'):
+            try:
+                it_obj.set_text(cleaned, keep_punctuation=keep_punctuation)
+            except Exception:
+                pass
+        elif hasattr(it_obj, 'text'):
+            try:
+                it_obj.text = cleaned
+            except Exception:
+                pass
+    return new_item
+
+
+def fix_question_marks_and_broken_tokens(
+    raw_items: List[Dict[str, Any]],
+    keep_punctuation: bool = False
+) -> List[Dict[str, Any]]:
+    """
+    Repairs broken single-letter plural suffixes ('s'), standalone punctuation segments
+    ('?', '¿', '!', '¡'), misplaced spacing around ¿?/¡!, and unclosed/unpaired
+    Spanish question marks across segments.
+    """
+    if not raw_items:
+        return []
+
+    seg_list = []
+    for it in raw_items:
+        toks = _extract_word_tokens(it)
+        if toks:
+            seg_list.append({'template': dict(it), 'tokens': toks, 'absorbed': list(it.get('absorbed_indices', []))})
+
+    if not seg_list:
+        return []
+
+    full_sample = " ".join(t['word'] for s in seg_list for t in s['tokens'])
+    preserve_all_caps = bool(full_sample) and not any(c.islower() for c in full_sample)
+
+    # Pass 1: Fuse standalone punctuation and stray plural 's' tokens with adjacent segments
+    i = 0
+    while i < len(seg_list):
+        toks = seg_list[i]['tokens']
+        if not toks:
+            seg_list.pop(i)
+            continue
+
+        # 1a. Intra-segment cleanup: fuse standalone punct tokens inside a segment
+        cleaned_toks = []
+        for t in toks:
+            w = t['word'].strip()
+            if re.fullmatch(r'[?!.,;:]+', w):
+                if cleaned_toks:
+                    cleaned_toks[-1]['word'] = _normalize_spanish_punct_spacing(cleaned_toks[-1]['word'] + w)
+                    cleaned_toks[-1]['end_us'] = max(cleaned_toks[-1]['end_us'], t['end_us'])
+                else:
+                    cleaned_toks.append(t)
+            elif w in ('¿', '¡'):
+                cleaned_toks.append(t)
+            else:
+                if cleaned_toks and cleaned_toks[-1]['word'] in ('¿', '¡'):
+                    prefix_punc = cleaned_toks.pop()
+                    t = dict(t)
+                    t['word'] = prefix_punc['word'] + w
+                    t['start_us'] = min(prefix_punc['start_us'], t['start_us'])
+                cleaned_toks.append(t)
+        toks = cleaned_toks
+        seg_list[i]['tokens'] = toks
+
+        first_w = toks[0]['word'].strip()
+        last_w = toks[-1]['word'].strip()
+
+        # 1b. Leading standalone closing punct ('?', '!', '.', ',') -> attach to previous segment
+        if re.fullmatch(r'[?!.,;:]+', first_w) and i > 0:
+            prev_last = seg_list[i - 1]['tokens'][-1]
+            prev_last['word'] = _normalize_spanish_punct_spacing(prev_last['word'] + first_w)
+            prev_last['end_us'] = max(prev_last['end_us'], toks[0]['end_us'])
+            toks.pop(0)
+            if not toks:
+                seg_list[i - 1]['absorbed'].append(seg_list[i]['template'].get('index'))
+                seg_list[i - 1]['absorbed'].extend(seg_list[i]['absorbed'])
+                seg_list.pop(i)
+                continue
+
+        # 1c. Leading stray plural 's' (e.g. 'dermatiti' + 's', 'escape' + 's') -> fuse into previous word
+        first_bare = _strip_edge_punct(toks[0]['word'])
+        if first_bare.lower() == 's' and i > 0 and seg_list[i - 1]['tokens']:
+            prev_last = seg_list[i - 1]['tokens'][-1]
+            prev_bare = _strip_edge_punct(prev_last['word'])
+            if len(prev_bare) >= 4 and not prev_last['word'].endswith(('s', 'S', '?', '!')):
+                # Preserve any trailing punct from the 's' token (e.g. 's?')
+                trail_m = re.search(r'([?!.,;:]+)$', toks[0]['word'])
+                trail_punc = trail_m.group(1) if trail_m else ''
+                prev_last['word'] = prev_last['word'] + toks[0]['word'][0] + trail_punc
+                prev_last['end_us'] = max(prev_last['end_us'], toks[0]['end_us'])
+                toks.pop(0)
+                if not toks:
+                    seg_list[i - 1]['absorbed'].append(seg_list[i]['template'].get('index'))
+                    seg_list[i - 1]['absorbed'].extend(seg_list[i]['absorbed'])
+                    seg_list.pop(i)
+                    continue
+
+        # 1d. Trailing standalone opening punct ('¿', '¡') -> prepend to next segment
+        if seg_list[i]['tokens'] and seg_list[i]['tokens'][-1]['word'].strip() in ('¿', '¡') and i + 1 < len(seg_list):
+            p_tok = seg_list[i]['tokens'].pop()
+            nxt_first = seg_list[i + 1]['tokens'][0]
+            nxt_first['word'] = p_tok['word'].strip() + nxt_first['word']
+            nxt_first['start_us'] = min(p_tok['start_us'], nxt_first['start_us'])
+            if not seg_list[i]['tokens']:
+                seg_list[i + 1]['absorbed'].append(seg_list[i]['template'].get('index'))
+                seg_list[i + 1]['absorbed'].extend(seg_list[i]['absorbed'])
+                seg_list.pop(i)
+                continue
+
+        i += 1
+
+    # Pass 2: Normalize punct spacing & balance ¿ / ? across nearby segments
+    for seg in seg_list:
+        for t in seg['tokens']:
+            t['word'] = _normalize_spanish_punct_spacing(t['word'])
+
+    n = len(seg_list)
+    # Close unclosed ¿ or open missing ¿ for trailing ?
+    open_q_seg = None
+    for idx in range(n):
+        toks = seg_list[idx]['tokens']
+        seg_text = " ".join(t['word'] for t in toks)
+        has_open = '¿' in seg_text
+        has_close = '?' in seg_text
+
+        if has_open and not has_close:
+            open_q_seg = idx
+        elif has_close and not has_open:
+            if open_q_seg is not None and (idx - open_q_seg) <= 3:
+                open_q_seg = None
+            else:
+                # Attach ¿ at the start of the question clause (walk back at most 1 continuous segment)
+                start_idx = idx
+                if idx > 0:
+                    prev_toks = seg_list[idx - 1]['tokens']
+                    prev_text = " ".join(t['word'] for t in prev_toks)
+                    gap_us = toks[0]['start_us'] - prev_toks[-1]['end_us']
+                    if gap_us <= 300000 and not any(p in prev_text for p in ('.', '?', '!', '¿')) and len(prev_toks) <= 3 and len(toks) <= 2:
+                        start_idx = idx - 1
+                first_tok = seg_list[start_idx]['tokens'][0]
+                if not first_tok['word'].startswith('¿'):
+                    first_tok['word'] = '¿' + first_tok['word']
+                open_q_seg = None
+        elif has_open and has_close:
+            # Verify '?' isn't before '¿' in the same segment
+            if seg_text.find('?') < seg_text.find('¿'):
+                open_q_seg = idx
+            else:
+                open_q_seg = None
+        elif open_q_seg is not None:
+            # We have an earlier unclosed ¿
+            gap_to_curr = toks[0]['start_us'] - seg_list[idx - 1]['tokens'][-1]['end_us']
+            first_bare = _strip_edge_punct(toks[0]['word']).lower()
+            ANSWER_STARTERS = {'sí', 'si', 'no', 'pero', 'porque', 'en', 'pues', 'bueno', 'mira'}
+            if gap_to_curr >= 350000 or first_bare in ANSWER_STARTERS or (idx - open_q_seg) >= 3:
+                prev_last = seg_list[idx - 1]['tokens'][-1]
+                if not prev_last['word'].endswith(('?', '!', '.')):
+                    prev_last['word'] = prev_last['word'] + '?'
+                open_q_seg = None
+
+    if open_q_seg is not None and seg_list:
+        last_tok = seg_list[-1]['tokens'][-1]
+        if not last_tok['word'].endswith(('?', '!', '.')):
+            last_tok['word'] = last_tok['word'] + '?'
+
+    # Capitalize the word immediately following ¿ or ¡ (unless entire script is ALL-CAPS)
+    if not preserve_all_caps:
+        for seg in seg_list:
+            for t in seg['tokens']:
+                w = t['word']
+                if w.startswith(('¿', '¡')) and len(w) > 1 and w[1].islower():
+                    t['word'] = w[0] + w[1].upper() + w[2:]
+
+    result = []
+    for idx, seg in enumerate(seg_list):
+        if not seg['tokens']:
+            continue
+        item_out = _build_item_from_tokens(seg['template'], seg['tokens'], keep_punctuation=keep_punctuation)
+        item_out['index'] = idx
+        if seg['absorbed']:
+            item_out['absorbed_indices'] = [x for x in seg['absorbed'] if x is not None]
+        result.append(item_out)
+    return result
+
+
+def rebalance_subtitle_segments(
+    raw_items: List[Dict[str, Any]],
+    max_chars: int = 22,
+    max_words: int = 4,
+    keep_punctuation: bool = False
+) -> List[Dict[str, Any]]:
+    """
+    Re-chunks CapCut subtitle segments along Spanish syntactic, phrase, and acoustic
+    boundaries so that:
+    1. Broken words ('s') and standalone question marks ('¿', '?') are repaired.
+    2. Sentences keep grammatical continuity across lines (predicates stay completed,
+       'clínica Gala' stays together, 'sígueme para más' stays unified as a CTA).
+    3. Ultra-short 1-word functional lines ('que', 'la', 'el', 'es', 'con', 'para', etc.)
+       are merged with the adjacent line they grammatically belong to.
+    """
+    if not raw_items:
+        return []
+
+    fixed_items = fix_question_marks_and_broken_tokens(raw_items, keep_punctuation=keep_punctuation)
+    if not fixed_items:
+        return []
+
+    full_sample = " ".join(it.get('text', '') for it in fixed_items)
+    preserve_all_caps = bool(full_sample) and not any(c.islower() for c in full_sample)
+
+    segs = []
+    for it in fixed_items:
+        toks = _extract_word_tokens(it)
+        if toks:
+            segs.append({
+                'template': dict(it),
+                'tokens': toks,
+                'absorbed': list(it.get('absorbed_indices', []))
+            })
+
+    if not segs:
+        return []
+
+    INTENSIFIERS_AND_COPULAS = {
+        'es', 'son', 'está', 'esta', 'están', 'estan', 'fue', 'era', 'fueron', 'será', 'sera',
+        'completamente', 'totalmente', 'absolutamente', 'muy', 'tan', 'más', 'mas', 'menos',
+        'super', 'súper', 'bastante', 'demasiado', 'realmente', 'total'
+    }
+    CLAUSE_OR_PREP_STARTERS = {
+        'en', 'para', 'por', 'con', 'sin', 'sobre', 'hacia', 'hasta', 'desde', 'entre',
+        'donde', 'cuando', 'como', 'porque', 'aunque', 'pero', 'sino', 'si', 'que', 'y', 'o',
+        'sígueme', 'sigueme', 'síguenos', 'siguenos', 'escríbeme', 'escribeme', 'comenta',
+        'comparte', 'guarda', 'agenda', 'visítanos', 'visitanos'
+    }
+    PROPER_HEAD_NOUNS = {'clínica', 'clinica', 'doctor', 'doctora', 'dr', 'dra', 'hospital', 'centro', 'instituto', 'san', 'santa'}
+    PROPER_KNOWN_NAMES = {'gala', 'galaunick', 'dentok'}
+    CTA_STARTERS = {'sígueme', 'sigueme', 'síguenos', 'siguenos', 'escríbeme', 'escribeme', 'comenta', 'comparte', 'guarda', 'agenda', 'visítanos', 'visitanos', 'haz', 'dale'}
+    CTA_CONTINUATIONS = {'para', 'en', 'el', 'la', 'los', 'las', 'este', 'esta', 'más', 'mas', 'clic', 'click', 'tu', 'un', 'una', 'si', 'y'}
+    DANGLING_END_WORDS = {
+        'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas',
+        'de', 'del', 'al', 'a', 'en', 'con', 'por', 'para', 'sin', 'sobre', 'tras',
+        'que', 'y', 'e', 'o', 'u', 'pero', 'aunque', 'porque', 'como', 'cuando', 'donde', 'si',
+        'no', 'se', 'me', 'te', 'le', 'les', 'nos', 'lo', 'mi', 'tu', 'su', 'mis', 'tus', 'sus',
+        'este', 'esta', 'estos', 'estas', 'ese', 'esa', 'esos', 'esas'
+    }
+    SOFT_MAX_WORDS = max(int(max_words), 4)
+    SOFT_MAX_CHARS = max(int(max_chars) + 6, 26)
+    MAX_FLOW_GAP_US = 600000
+
+    def _seg_text(s_entry: Dict[str, Any]) -> str:
+        return " ".join(t['word'] for t in s_entry['tokens'])
+
+    def _ends_sentence(s_entry: Dict[str, Any]) -> bool:
+        w = s_entry['tokens'][-1]['word'] if s_entry['tokens'] else ''
+        return w.endswith(('?', '!', '.'))
+
+    # Pass 1: Split overcrowded multi-clause segments before rebalancing
+    def _split_multi_clause_entry(s_entry: Dict[str, Any]) -> List[Dict[str, Any]]:
+        toks = s_entry['tokens']
+        if len(toks) < 4:
+            return [s_entry]
+        split_idx = None
+        for k in range(1, len(toks)):
+            bare_k = _strip_edge_punct(toks[k]['word']).lower()
+            if bare_k in CTA_STARTERS and k + 1 < len(toks):
+                nxt_bare = _strip_edge_punct(toks[k + 1]['word']).lower()
+                if nxt_bare in CTA_CONTINUATIONS:
+                    split_idx = k
+                    break
+            if bare_k == 'en' and k + 1 < len(toks):
+                nxt_bare = _strip_edge_punct(toks[k + 1]['word']).lower()
+                if nxt_bare in PROPER_HEAD_NOUNS:
+                    split_idx = k
+                    break
+            if k >= 2 and toks[k - 1]['word'].endswith(('?', '!', '.')):
+                split_idx = k
+                break
+        if not split_idx:
+            return [s_entry]
+        t_a = toks[:split_idx]
+        t_b = toks[split_idx:]
+        tpl_b = dict(s_entry['template'])
+        tpl_b['item'] = None
+        left = {'template': s_entry['template'], 'tokens': t_a, 'absorbed': list(s_entry['absorbed'])}
+        right = {'template': tpl_b, 'tokens': t_b, 'absorbed': []}
+        return _split_multi_clause_entry(left) + _split_multi_clause_entry(right)
+
+    split_segs = []
+    for s_entry in segs:
+        split_segs.extend(_split_multi_clause_entry(s_entry))
+    segs = split_segs
+
+    # Pass 2: Iterative syntactic boundary rebalancing across adjacent segments
+    for _pass in range(4):
+        changed = False
+        i = 0
+        while i < len(segs) - 1:
+            curr = segs[i]
+            nxt = segs[i + 1]
+            c_toks = curr['tokens']
+            n_toks = nxt['tokens']
+            if not c_toks or not n_toks:
+                i += 1
+                continue
+
+            gap_us = n_toks[0]['start_us'] - c_toks[-1]['end_us']
+            if gap_us > MAX_FLOW_GAP_US or _ends_sentence(curr):
+                i += 1
+                continue
+
+            last_c = _strip_edge_punct(c_toks[-1]['word']).lower()
+            first_n = _strip_edge_punct(n_toks[0]['word']).lower()
+            second_n = _strip_edge_punct(n_toks[1]['word']).lower() if len(n_toks) >= 2 else ''
+
+            moved = False
+
+            # 2a. Pull proper compound tail backward (e.g. "en clinica" + "gala la curamos..." -> "en clínica Gala" + "la curamos...")
+            if last_c in PROPER_HEAD_NOUNS and len(n_toks) >= 2 and first_n not in CLAUSE_OR_PREP_STARTERS:
+                cand_len = len(_seg_text(curr)) + 1 + len(n_toks[0]['word'])
+                if len(c_toks) + 1 <= SOFT_MAX_WORDS and cand_len <= SOFT_MAX_CHARS:
+                    moved_tok = n_toks.pop(0)
+                    c_toks.append(moved_tok)
+                    moved = True
+
+            # 2b. Pull predicate/adjective completion backward (e.g. "es completamente" + "curable en clinica" -> "es completamente curable" + "en clinica")
+            elif (
+                last_c in INTENSIFIERS_AND_COPULAS
+                and len(n_toks) >= 2
+                and first_n not in CLAUSE_OR_PREP_STARTERS
+                and (second_n in CLAUSE_OR_PREP_STARTERS or len(n_toks) >= 3)
+            ):
+                cand_len = len(_seg_text(curr)) + 1 + len(n_toks[0]['word'])
+                if len(c_toks) + 1 <= SOFT_MAX_WORDS and cand_len <= SOFT_MAX_CHARS:
+                    moved_tok = n_toks.pop(0)
+                    c_toks.append(moved_tok)
+                    moved = True
+
+            # 2c. Push CTA starter forward (e.g. "la curamos sigueme" + "para mas" -> "la curamos" + "sigueme para mas")
+            elif len(c_toks) >= 2 and last_c in CTA_STARTERS and first_n in CTA_CONTINUATIONS:
+                cand_len = len(c_toks[-1]['word']) + 1 + len(_seg_text(nxt))
+                if len(n_toks) + 1 <= SOFT_MAX_WORDS and cand_len <= SOFT_MAX_CHARS:
+                    moved_tok = c_toks.pop()
+                    n_toks.insert(0, moved_tok)
+                    moved = True
+
+            # 2d. Move dangling article/preposition/conjunction forward so segment never ends dangling on 'la', 'en', 'de', 'que', 'para'
+            elif (
+                len(c_toks) >= 2
+                and last_c in DANGLING_END_WORDS
+                and not c_toks[-1]['word'].endswith(('?', '!', '.', ','))
+                and first_n not in CTA_STARTERS
+            ):
+                if len(n_toks) == 1 and len(c_toks) + 1 <= SOFT_MAX_WORDS and (len(_seg_text(curr)) + 1 + len(n_toks[0]['word'])) <= SOFT_MAX_CHARS:
+                    moved_tok = n_toks.pop(0)
+                    c_toks.append(moved_tok)
+                    moved = True
+                elif len(n_toks) + 1 <= SOFT_MAX_WORDS and (len(c_toks[-1]['word']) + 1 + len(_seg_text(nxt))) <= SOFT_MAX_CHARS:
+                    moved_tok = c_toks.pop()
+                    n_toks.insert(0, moved_tok)
+                    moved = True
+
+            if moved:
+                changed = True
+                if not n_toks:
+                    curr['absorbed'].append(nxt['template'].get('index'))
+                    curr['absorbed'].extend(nxt['absorbed'])
+                    segs.pop(i + 1)
+                    continue
+                if not c_toks:
+                    nxt['absorbed'].append(curr['template'].get('index'))
+                    nxt['absorbed'].extend(curr['absorbed'])
+                    segs.pop(i)
+                    continue
+
+            i += 1
+        if not changed:
+            break
+
+    # Pass 3: Unify tiny / 1-word orphan segments ('que', 'la', 'el', 'es', 'para', 'con', 'pero', etc.)
+    changed = True
+    while changed and len(segs) > 1:
+        changed = False
+        i = 0
+        while i < len(segs):
+            curr = segs[i]
+            toks = curr['tokens']
+            if len(toks) == 1:
+                w = toks[0]['word']
+                w_bare = _strip_edge_punct(w).lower()
+                is_tiny = (w_bare in ORPHAN_SHORT_WORDS) or (len(w_bare) <= 1)
+
+                if is_tiny and len(segs) > 1:
+                    prefer_forward = (
+                        (w_bare in PROCLITIC_ORPHAN_WORDS or w.startswith(('¿', '¡')))
+                        and not w.endswith(('?', '!', '.'))
+                    )
+                    if i == len(segs) - 1:
+                        prefer_forward = False
+                    elif i == 0:
+                        prefer_forward = True
+
+                    merged_ok = False
+                    directions = ('fwd', 'bwd') if prefer_forward else ('bwd', 'fwd')
+                    for direction in directions:
+                        if direction == 'fwd' and i + 1 < len(segs):
+                            nxt = segs[i + 1]
+                            gap_us = nxt['tokens'][0]['start_us'] - toks[-1]['end_us']
+                            comb_words = len(nxt['tokens']) + 1
+                            comb_chars = len(w) + 1 + len(_seg_text(nxt))
+                            if not w.endswith(('?', '!', '.')) and gap_us <= 650000 and comb_words <= (SOFT_MAX_WORDS + 1) and comb_chars <= SOFT_MAX_CHARS:
+                                nxt['tokens'].insert(0, toks[0])
+                                nxt['absorbed'].append(curr['template'].get('index'))
+                                nxt['absorbed'].extend(curr['absorbed'])
+                                segs.pop(i)
+                                merged_ok = True
+                                changed = True
+                                break
+                        elif direction == 'bwd' and i > 0:
+                            prev = segs[i - 1]
+                            gap_us = toks[0]['start_us'] - prev['tokens'][-1]['end_us']
+                            comb_words = len(prev['tokens']) + 1
+                            comb_chars = len(_seg_text(prev)) + 1 + len(w)
+                            if not w.startswith(('¿', '¡')) and not _ends_sentence(prev) and gap_us <= 650000 and comb_words <= (SOFT_MAX_WORDS + 1) and comb_chars <= SOFT_MAX_CHARS:
+                                prev['tokens'].append(toks[0])
+                                prev['absorbed'].append(curr['template'].get('index'))
+                                prev['absorbed'].extend(curr['absorbed'])
+                                segs.pop(i)
+                                merged_ok = True
+                                changed = True
+                                break
+                    if merged_ok:
+                        continue
+            i += 1
+
+    # Pass 4: Spanish orthography polish on rebalanced tokens (clinica->clínica, Gala, Sígueme para más, sentence start capitalization)
+    if not preserve_all_caps:
+        for seg_idx, s_entry in enumerate(segs):
+            toks = s_entry['tokens']
+            for k, t in enumerate(toks):
+                w = t['word']
+                m = re.match(r'^([¿¡"\'\(\[\{]*)(.*?)([?!,.;:\'"\)\]\}]*)$', w)
+                if not m:
+                    continue
+                lead, core, trail = m.groups()
+                if not core:
+                    continue
+                c_low = core.lower()
+                prev_c_low = _strip_edge_punct(toks[k - 1]['word']).lower() if k > 0 else ''
+                nxt_c_low = _strip_edge_punct(toks[k + 1]['word']).lower() if k + 1 < len(toks) else ''
+
+                if c_low == 'clinica':
+                    core = 'Clínica' if core[0].isupper() else 'clínica'
+                elif c_low == 'sigueme':
+                    core = 'Sígueme' if core[0].isupper() else 'sígueme'
+                elif c_low == 'mas' and prev_c_low in ('para', 'mucho', 'nada', 'algo', 'cada', 'aún', 'todavía'):
+                    core = 'más'
+                elif c_low in PROPER_KNOWN_NAMES:
+                    core = core[0].upper() + core[1:].lower()
+                t['word'] = f"{lead}{core}{trail}"
+
+            # Capitalize first word of video, after sentence-ending punctuation, after ¿/¡, or CTA opener
+            if toks:
+                w0 = toks[0]['word']
+                m0 = re.match(r'^([¿¡"\'\(\[\{]*)(.*?)([?!,.;:\'"\)\]\}]*)$', w0)
+                if m0:
+                    lead0, core0, trail0 = m0.groups()
+                    prev_ended = (seg_idx > 0 and _ends_sentence(segs[seg_idx - 1]))
+                    is_cta_start = _strip_edge_punct(w0).lower() in CTA_STARTERS and len(toks) >= 2 and _strip_edge_punct(toks[1]['word']).lower() in CTA_CONTINUATIONS
+                    is_q_start = ('¿' in lead0 or '¡' in lead0)
+                    if core0 and core0[0].islower() and (prev_ended or is_cta_start or is_q_start):
+                        toks[0]['word'] = f"{lead0}{core0[0].upper()}{core0[1:]}{trail0}"
+
+    out_items = []
+    for idx, s_entry in enumerate(segs):
+        if not s_entry['tokens']:
+            continue
+        it_out = _build_item_from_tokens(s_entry['template'], s_entry['tokens'], keep_punctuation=keep_punctuation)
+        it_out['index'] = idx
+        if s_entry['absorbed']:
+            it_out['absorbed_indices'] = [x for x in s_entry['absorbed'] if x is not None]
+        out_items.append(it_out)
+
+    return fix_question_marks_and_broken_tokens(out_items, keep_punctuation=keep_punctuation)
+
 
 
 

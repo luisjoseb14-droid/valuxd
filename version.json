@@ -1,8 +1,8 @@
 {
-  "version": "1.0.20",
-  "version_code": 21,
-  "date": "2026-11-03",
-  "description": "Nuevo preset Paco (Gotham Light + Anton dual layout) y soporte de audio click",
+  "version": "1.0.21",
+  "version_code": 22,
+  "date": "2026-11-13",
+  "description": "Correccion de signos ¿?, palabras partidas ('s'), unificacion de palabras cortas huerfanas y continuidad sintactica de oraciones",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

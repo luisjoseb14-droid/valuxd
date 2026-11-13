@@ -8,7 +8,19 @@ from typing import Dict, List, Any, Optional, Tuple, Callable
 from core.capcut_draft import CapCutProject, SubtitleItem
 from core.animator import Animator
 from core.platform_paths import resolve_font_path, get_default_click_sound_path, resolve_effect_path, resolve_sticker_path
-from core.text_utils import clean_subtitle_text, find_phrase_timing, convert_spanish_numbers_to_digits, sanitize_highlight_phrase, SPANISH_STOPWORDS, align_ai_corrections_to_raw_items, heuristic_punctuation_fallback
+from core.text_utils import (
+    clean_subtitle_text,
+    find_phrase_timing,
+    convert_spanish_numbers_to_digits,
+    sanitize_highlight_phrase,
+    SPANISH_STOPWORDS,
+    align_ai_corrections_to_raw_items,
+    heuristic_punctuation_fallback,
+    fix_question_marks_and_broken_tokens,
+    rebalance_subtitle_segments,
+    ORPHAN_SHORT_WORDS,
+    PROCLITIC_ORPHAN_WORDS,
+)
 from ai.openrouter_client import OpenRouterClient, DEFAULT_MODEL
 
 
@@ -558,6 +570,8 @@ class DualStyler:
 
             if top_info and top_info.get('text'):
                 top_text = clean_subtitle_text(top_info['text'], keep_punctuation=getattr(self, 'keep_punctuation', False))
+                if top_text and not re.search(r'[\wáéíóúÁÉÍÓÚñÑüÜ]', top_text):
+                    top_text = ""
                 if self.default_style.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False)):
                     top_text = top_text.upper()
                 t_start = top_info.get('start', 0)
@@ -622,6 +636,8 @@ class DualStyler:
             bot_info = item.get('bot')
             if bot_info and bot_info.get('text'):
                 bot_text = clean_subtitle_text(bot_info['text'], keep_punctuation=getattr(self, 'keep_punctuation', False))
+                if bot_text and not re.search(r'[\wáéíóúÁÉÍÓÚñÑüÜ]', bot_text):
+                    bot_text = ""
                 if self.highlight_style.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False)):
                     bot_text = bot_text.upper()
                 b_start = bot_info.get('start', 0)
@@ -1115,6 +1131,12 @@ class DualStyler:
         eff_max_words = self.margins.get('max_words_per_line', max_words_per_line)
         eff_max_hl_chars = int(self.margins.get('max_highlight_chars', self.margins.get('max_chars_per_line', 18)))
         raw_items = self._consolidate_number_segments(raw_items, max_chars=eff_max_chars, max_words=eff_max_words)
+        raw_items = rebalance_subtitle_segments(
+            raw_items,
+            max_chars=eff_max_chars,
+            max_words=eff_max_words,
+            keep_punctuation=getattr(self, 'keep_punctuation', False)
+        )
 
         # Check for OpenRouter AI Processing (Corrección de mayúsculas, ¿?, y selección de highlights)
         ai_phrases = []
@@ -1158,6 +1180,11 @@ class DualStyler:
                 logger.warning(msg)
                 if log_fn:
                     log_fn(msg)
+
+        raw_items = fix_question_marks_and_broken_tokens(
+            raw_items,
+            keep_punctuation=getattr(self, 'keep_punctuation', False)
+        )
 
         if getattr(self, 'keep_punctuation', False):
             heuristic_punctuation_fallback(raw_items)
@@ -1238,9 +1265,23 @@ class DualStyler:
                     p_clean = sanitize_highlight_phrase(p, max_chars=eff_max_hl_chars)
                     if not p_clean or p_clean.lower() in SPANISH_STOPWORDS:
                         continue
-                    # 1. Exact or substring match: phrase is in curr_text
-                    if p_clean.lower() in curr_text.lower() and len(p_clean) <= eff_max_hl_chars:
-                        if p_clean.lower() not in SPANISH_STOPWORDS:
+                    # 1. Exact whole-word or plural/stem match inside curr_text
+                    low_curr = curr_text.lower()
+                    low_p = p_clean.lower()
+                    if low_p in low_curr and len(p_clean) <= eff_max_hl_chars and low_p not in SPANISH_STOPWORDS:
+                        is_whole = bool(re.search(r'(?<!\w)' + re.escape(low_p) + r'(?!\w)', low_curr))
+                        is_stem = False
+                        if not is_whole and len(low_p) >= 4:
+                            idx_m = low_curr.find(low_p)
+                            s_i, e_i = idx_m, idx_m + len(low_p)
+                            while s_i > 0 and not curr_text[s_i - 1].isspace():
+                                s_i -= 1
+                            while e_i < len(curr_text) and not curr_text[e_i].isspace():
+                                e_i += 1
+                            tok_bare = re.sub(r'^[¿¡"\'\(\[\{.,;:?!]+|[¿¡"\'\)\]\},.;:?!]+$', '', curr_text[s_i:e_i].lower())
+                            if tok_bare.startswith(low_p) and len(tok_bare) <= len(low_p) + 2:
+                                is_stem = True
+                        if is_whole or is_stem:
                             matched_highlight = p_clean
                             matched_tone = tone
                             is_solo_entry = entry_solo
@@ -1273,13 +1314,35 @@ class DualStyler:
                     matched_highlight = clean_hl_check
 
             if matched_highlight:
-                hl_start, hl_end = find_phrase_timing(curr_start, curr_dur, words_data, curr_text, matched_highlight)
                 clean_lower_curr = curr_text.lower()
                 clean_lower_hl = matched_highlight.lower()
                 hl_idx = clean_lower_curr.find(clean_lower_hl)
 
-                prefix_raw = curr_text[:hl_idx] if hl_idx > 0 else ""
-                suffix_raw = curr_text[hl_idx + len(matched_highlight):]
+                if hl_idx != -1:
+                    # Expand highlight boundaries to full whitespace-delimited tokens so
+                    # plural suffixes ('s') or attached punctuation ('¿', '?') are never split off alone.
+                    hl_start_idx = hl_idx
+                    hl_end_idx = hl_idx + len(matched_highlight)
+                    while hl_start_idx > 0 and not curr_text[hl_start_idx - 1].isspace():
+                        hl_start_idx -= 1
+                    while hl_end_idx < len(curr_text) and not curr_text[hl_end_idx].isspace():
+                        hl_end_idx += 1
+                    matched_highlight = curr_text[hl_start_idx:hl_end_idx]
+                    prefix_raw = curr_text[:hl_start_idx]
+                    suffix_raw = curr_text[hl_end_idx:]
+                else:
+                    prefix_raw = ""
+                    suffix_raw = ""
+
+                # Never leave punctuation-only fragments ('¿', '?', '!', '.') in prefix or suffix
+                if prefix_raw.strip() and not re.search(r'[\wáéíóúÁÉÍÓÚñÑüÜ]', prefix_raw):
+                    matched_highlight = f"{prefix_raw.strip()}{matched_highlight}"
+                    prefix_raw = ""
+                if suffix_raw.strip() and not re.search(r'[\wáéíóúÁÉÍÓÚñÑüÜ]', suffix_raw):
+                    matched_highlight = f"{matched_highlight}{suffix_raw.strip()}"
+                    suffix_raw = ""
+
+                hl_start, hl_end = find_phrase_timing(curr_start, curr_dur, words_data, curr_text, matched_highlight)
 
                 # If keep_punctuation is enabled, attach trailing punctuation from suffix to matched_highlight
                 if getattr(self, "keep_punctuation", False) and suffix_raw:
@@ -1290,6 +1353,12 @@ class DualStyler:
 
                 prefix = clean_subtitle_text(prefix_raw, preserve_case=is_all_uppercase, keep_punctuation=getattr(self, "keep_punctuation", False))
                 suffix = clean_subtitle_text(suffix_raw, preserve_case=is_all_uppercase, keep_punctuation=getattr(self, "keep_punctuation", False))
+                if prefix and not re.search(r'[\wáéíóúÁÉÍÓÚñÑüÜ]', prefix):
+                    matched_highlight = f"{prefix}{matched_highlight}"
+                    prefix = ""
+                if suffix and not re.search(r'[\wáéíóúÁÉÍÓÚñÑüÜ]', suffix):
+                    matched_highlight = f"{matched_highlight}{suffix}"
+                    suffix = ""
                 if is_all_uppercase:
                     prefix = prefix.upper() if prefix else ""
                     suffix = suffix.upper() if suffix else ""
@@ -1325,6 +1394,44 @@ class DualStyler:
                         bot_end = max(hl_start + 150000, curr_end - 150000)
                     else:
                         bot_end = min(hl_end, curr_end)
+
+                    # Prevent imperceptible 1-word orphan suffix flash lines ('que', 'la', 'el', etc. or <350ms)
+                    suffix_words = suffix.split()
+                    suffix_bare = re.sub(r'^[¿¡"\'\(\[\{.,;:?!]+|[¿¡"\'\)\]\},.;:?!]+$', '', suffix.lower())
+                    if len(suffix_words) == 1 and (suffix_bare in ORPHAN_SHORT_WORDS or len(suffix_bare) <= 2 or (curr_end - bot_end) < 350000):
+                        if (
+                            suffix_bare in PROCLITIC_ORPHAN_WORDS
+                            and curr_idx + 1 < len(raw_items)
+                            and (raw_items[curr_idx + 1]['start'] - curr_end) <= 500000
+                            and not suffix.endswith(('?', '!', '.'))
+                        ):
+                            nxt_item = raw_items[curr_idx + 1]
+                            old_nxt_start = nxt_item['start']
+                            new_nxt_start = min(old_nxt_start, bot_end)
+                            shift_ms = max(0, int((old_nxt_start - new_nxt_start) // 1000))
+                            suf_dur_ms = max(50, int((curr_end - bot_end) // 1000))
+                            nw = nxt_item.get('words')
+                            if isinstance(nw, dict) and 'text' in nw:
+                                nw_copy = copy.deepcopy(nw)
+                                nw_copy['text'] = [suffix, ' '] + list(nw_copy.get('text', []))
+                                nw_copy['start_time'] = [0, suf_dur_ms] + [s + shift_ms for s in nw_copy.get('start_time', [])]
+                                nw_copy['end_time'] = [suf_dur_ms, shift_ms] + [e + shift_ms for e in nw_copy.get('end_time', [])]
+                                nxt_item['words'] = nw_copy
+                            nxt_item['text'] = f"{suffix} {nxt_item['text']}".strip()
+                            nxt_item['start'] = new_nxt_start
+                            nxt_item['duration'] = nxt_item['end'] - new_nxt_start
+                            suffix = ""
+                            curr_end = bot_end
+                        elif not prefix and len(curr_text.split()) <= 2:
+                            bot_text = clean_subtitle_text(
+                                f"{bot_text} {suffix}",
+                                preserve_case=is_all_uppercase,
+                                keep_punctuation=getattr(self, 'keep_punctuation', False)
+                            )
+                            if is_all_uppercase:
+                                bot_text = bot_text.upper()
+                            suffix = ""
+                            bot_end = curr_end
                 else:
                     bot_end = curr_end
 
@@ -2138,22 +2245,50 @@ class DualStyler:
         eff_max_chars = effective_max_chars
         eff_max_words = int(margin_cfg.get('max_words_per_line', 3))
         raw_items = self._consolidate_number_segments(raw_items, max_chars=eff_max_chars, max_words=eff_max_words)
+        raw_items = rebalance_subtitle_segments(
+            raw_items,
+            max_chars=eff_max_chars,
+            max_words=eff_max_words,
+            keep_punctuation=getattr(self, 'keep_punctuation', False)
+        )
 
-        # For inline styling: synchronize Track 0 segments if any were merged
-        absorbed_seg_ids = set()
+        # For inline styling: synchronize Track 0 segments with rebalanced items (merged, resized, or split)
+        surviving_seg_ids = set()
         for item in raw_items:
-            if 'absorbed_indices' in item and item['absorbed_indices']:
-                if item.get('item') and getattr(item['item'], 'segment', None):
-                    item['item'].segment.setdefault('target_timerange', {})['duration'] = item['duration']
-            for abs_idx in item.get('absorbed_indices', []):
-                if abs_idx < len(subs):
-                    abs_sub = subs[abs_idx]
-                    if getattr(abs_sub, 'segment', None) and 'id' in abs_sub.segment:
-                        absorbed_seg_ids.add(abs_sub.segment['id'])
+            it_obj = item.get('item')
+            if it_obj and getattr(it_obj, 'segment', None):
+                tr = it_obj.segment.setdefault('target_timerange', {})
+                tr['start'] = item['start']
+                tr['duration'] = item['duration']
+                if item.get('words') and getattr(it_obj, 'text_material', None) is not None:
+                    it_obj.text_material['words'] = item['words']
+                if 'id' in it_obj.segment:
+                    surviving_seg_ids.add(it_obj.segment['id'])
+            elif text_track_indices and subs:
+                # Split segment created by rebalancer: clone a segment + text material on Track 0
+                tpl_sub = subs[0]
+                new_mat_id = str(uuid.uuid4()).upper()
+                new_mat = copy.deepcopy(tpl_sub.text_material)
+                new_mat['id'] = new_mat_id
+                if item.get('words'):
+                    new_mat['words'] = item['words']
+                project.data.setdefault('materials', {}).setdefault('texts', []).append(new_mat)
+                new_seg = copy.deepcopy(tpl_sub.segment)
+                new_seg_id = str(uuid.uuid4()).upper()
+                new_seg['id'] = new_seg_id
+                new_seg['material_id'] = new_mat_id
+                new_seg['target_timerange'] = {'start': item['start'], 'duration': item['duration']}
+                project.data['tracks'][first_text_idx].setdefault('segments', []).append(new_seg)
+                new_sub = SubtitleItem(first_text_idx, new_seg, new_mat)
+                item['item'] = new_sub
+                surviving_seg_ids.add(new_seg_id)
 
-        if absorbed_seg_ids and text_track_indices:
+        orig_sub_ids = {s.segment['id'] for s in subs if getattr(s, 'segment', None) and 'id' in s.segment}
+        removed_ids = orig_sub_ids - surviving_seg_ids
+        if text_track_indices:
             trk = project.data['tracks'][first_text_idx]
-            trk['segments'] = [seg for seg in trk.get('segments', []) if seg.get('id') not in absorbed_seg_ids]
+            trk['segments'] = [seg for seg in trk.get('segments', []) if seg.get('id') not in removed_ids]
+            trk['segments'].sort(key=lambda seg: seg.get('target_timerange', {}).get('start', 0))
 
         # 2. AI Processing with OpenRouter
         ai_phrases = []
@@ -2196,6 +2331,11 @@ class DualStyler:
                 logger.warning(msg)
                 if log_fn:
                     log_fn(msg)
+
+        raw_items = fix_question_marks_and_broken_tokens(
+            raw_items,
+            keep_punctuation=getattr(self, 'keep_punctuation', False)
+        )
 
         if getattr(self, 'keep_punctuation', False):
             heuristic_punctuation_fallback(raw_items)
@@ -2633,7 +2773,11 @@ class DualStyler:
             line2 = ' '.join(words[best_split:])
             return f'{line1}\n{line2}'
 
-        # Preprocessing: merge orphan single words and split long overflowing cards
+        # Preprocessing: repair broken words/question marks, merge orphans, and split overflowing cards
+        raw_items = fix_question_marks_and_broken_tokens(
+            raw_items,
+            keep_punctuation=getattr(self, 'keep_punctuation', False)
+        )
         raw_items = merge_orphan_subtitles(raw_items)
         raw_items = split_long_subtitles(raw_items, max_chars=44, max_words=9)
         for idx, it in enumerate(raw_items):
@@ -3454,6 +3598,10 @@ class DualStyler:
                 i += 1
             return merged
 
+        raw_items = fix_question_marks_and_broken_tokens(
+            raw_items,
+            keep_punctuation=getattr(self, 'keep_punctuation', False)
+        )
         raw_items = merge_orphan_subtitles(raw_items)
 
         # Helper para dividir tarjetas largas que desborden los márgenes seguros de pantalla (como en Ana Otorrino)
