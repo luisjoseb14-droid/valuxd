@@ -28,6 +28,7 @@ from core.styler import Styler
 from core.font_installer import install_all_assets
 from core.text_utils import clean_subtitle_text
 from core.preset_matcher import detect_preset_from_name
+from core.grammar_checker import check_project_grammar, apply_grammar_fixes
 from core.gap_healer import (
     find_subtitle_gaps,
     verify_gap_audio_energy,
@@ -145,6 +146,9 @@ class CCSubsProGUI(tk.Tk):
         
         style.configure("Action.TButton", font=("Segoe UI", 11, "bold"), background=self.accent_color, foreground="#ffffff", borderwidth=0, padding=10)
         style.map("Action.TButton", background=[('active', self.accent_hover), ('disabled', '#585b70')])
+
+        style.configure("Grammar.TButton", font=("Segoe UI", 11, "bold"), background="#89dceb", foreground="#11111b", borderwidth=0, padding=10)
+        style.map("Grammar.TButton", background=[('active', '#94e2d5'), ('disabled', '#585b70')])
 
         style.configure("Secondary.TButton", font=("Segoe UI", 9), background="#313244", foreground="#ffffff", borderwidth=0, padding=5)
         style.map("Secondary.TButton", background=[('active', '#45475a')])
@@ -482,18 +486,21 @@ class CCSubsProGUI(tk.Tk):
         self.btn_run = ttk.Button(btn_row, text="★ ESTILIZAR SUBTÍTULOS", style="Action.TButton", command=self._start_process)
         self.btn_run.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
 
-        self.btn_repair = ttk.Button(btn_row, text="🛠️ REPARAR SUBTÍTULOS (Solo Fuentes y Efectos)", style="Repair.TButton", command=self._start_repair)
-        self.btn_repair.pack(side=tk.RIGHT, fill=tk.X, expand=True, padx=(5, 0))
+        self.btn_grammar = ttk.Button(btn_row, text="✍️ COMPROBAR GRAMÁTICA", style="Grammar.TButton", command=self._start_grammar_check)
+        self.btn_grammar.pack(side=tk.RIGHT, fill=tk.X, expand=True, padx=(5, 0))
 
         btn_row2 = tk.Frame(act_frame, bg=self.bg_color)
         btn_row2.pack(fill=tk.X, pady=(5, 0))
 
+        self.btn_repair = ttk.Button(btn_row2, text="🛠️ REPARAR SUBTÍTULOS (Fuentes y Efectos)", style="Repair.TButton", command=self._start_repair)
+        self.btn_repair.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
+
         self.btn_heal = ttk.Button(btn_row2, text="🩹 AUDITAR Y REPARAR HUECOS DE VOZ (FFmpeg + IA)", style="Heal.TButton", command=self._start_audit_gaps)
-        self.btn_heal.pack(fill=tk.X)
+        self.btn_heal.pack(side=tk.RIGHT, fill=tk.X, expand=True, padx=(5, 0))
 
         lbl_repair_hint = tk.Label(
             act_frame,
-            text="💡 'Reparar' corrige estilos sin mover tiempos. 'Auditar Huecos' detecta palabras omitidas por CapCut donde hay voz activa.",
+            text="💡 'Comprobar Gramática' revisa tildes y ortografía con OpenRouter sin cambiar tiempos ni estilos. 'Reparar' corrige fuentes/efectos.",
             font=("Segoe UI", 8),
             fg="#a6adc8",
             bg=self.bg_color
@@ -952,13 +959,22 @@ class CCSubsProGUI(tk.Tk):
             except Exception:
                 self.lbl_proj_info.config(text=f"Proyecto: {folder}{preset_tag}", fg="#a6adc8")
 
+    def _set_action_buttons_state(self, state: str):
+        for btn_attr in ('btn_run', 'btn_grammar', 'btn_repair', 'btn_heal'):
+            btn = getattr(self, btn_attr, None)
+            if btn is not None:
+                try:
+                    btn.config(state=state)
+                except Exception:
+                    pass
+
     def _start_process(self):
         proj_path = self.selected_project_path.get()
         if not proj_path:
             messagebox.showwarning("Atención", "Por favor selecciona un proyecto de CapCut primero.")
             return
 
-        self.btn_run.config(state=tk.DISABLED)
+        self._set_action_buttons_state(tk.DISABLED)
         self.lbl_status.config(text="Procesando...", fg=self.accent_yellow)
         self.txt_log.delete("1.0", tk.END)
         self._save_local_config()
@@ -1099,8 +1115,7 @@ class CCSubsProGUI(tk.Tk):
             self.lbl_status.config(text="Error durante el proceso", fg=self.accent_red)
             messagebox.showerror("Error", f"Ocurrió un error al procesar el proyecto:\n{e}")
         finally:
-            self.btn_run.config(state=tk.NORMAL)
-            self.btn_repair.config(state=tk.NORMAL)
+            self.after(0, lambda: self._set_action_buttons_state(tk.NORMAL))
 
     def _start_repair(self):
         proj_path = self.selected_project_path.get()
@@ -1108,8 +1123,7 @@ class CCSubsProGUI(tk.Tk):
             messagebox.showwarning("Atención", "Por favor selecciona un proyecto de CapCut primero.")
             return
 
-        self.btn_run.config(state=tk.DISABLED)
-        self.btn_repair.config(state=tk.DISABLED)
+        self._set_action_buttons_state(tk.DISABLED)
         self.lbl_status.config(text="Reparando fuentes y efectos...", fg=self.accent_yellow)
         self.txt_log.delete("1.0", tk.END)
         self._save_local_config()
@@ -1175,10 +1189,7 @@ class CCSubsProGUI(tk.Tk):
             self.lbl_status.config(text="Error durante la reparación", fg=self.accent_red)
             messagebox.showerror("Error", f"Ocurrió un error al reparar el proyecto:\n{e}")
         finally:
-            self.btn_run.config(state=tk.NORMAL)
-            self.btn_repair.config(state=tk.NORMAL)
-            if hasattr(self, 'btn_heal'):
-                self.btn_heal.config(state=tk.NORMAL)
+            self.after(0, lambda: self._set_action_buttons_state(tk.NORMAL))
 
     def _start_audit_gaps(self):
         proj_path = self.selected_project_path.get()
@@ -1186,10 +1197,7 @@ class CCSubsProGUI(tk.Tk):
             messagebox.showwarning("Atención", "Por favor selecciona un proyecto de CapCut primero.")
             return
 
-        self.btn_run.config(state=tk.DISABLED)
-        self.btn_repair.config(state=tk.DISABLED)
-        if hasattr(self, 'btn_heal'):
-            self.btn_heal.config(state=tk.DISABLED)
+        self._set_action_buttons_state(tk.DISABLED)
 
         self.lbl_status.config(text="Auditando huecos con FFmpeg...", fg=self.accent_yellow)
         self.txt_log.delete("1.0", tk.END)
@@ -1271,13 +1279,100 @@ class CCSubsProGUI(tk.Tk):
             self.lbl_status.config(text="Error durante la auditoría", fg=self.accent_red)
             messagebox.showerror("Error", f"Ocurrió un error al auditar el proyecto:\n{e}")
         finally:
-            self.btn_run.config(state=tk.NORMAL)
-            self.btn_repair.config(state=tk.NORMAL)
-            if hasattr(self, 'btn_heal'):
-                self.btn_heal.config(state=tk.NORMAL)
+            self.after(0, lambda: self._set_action_buttons_state(tk.NORMAL))
 
     def _open_gap_dialog(self, gaps, project, styler, temp_dir):
         GapReviewDialog(self, gaps, project, styler, temp_dir)
+
+    def _start_grammar_check(self):
+        proj_path = self.selected_project_path.get()
+        if not proj_path:
+            messagebox.showwarning("Atención", "Por favor selecciona un proyecto de CapCut primero.")
+            return
+
+        api_key = self.openrouter_key_var.get().strip() or os.environ.get('OPENROUTER_API_KEY', '').strip()
+        if not api_key:
+            if messagebox.askyesno(
+                "API Key Requerida",
+                "Para comprobar tildes y ortografía con IA necesitas una API Key de OpenRouter.\n\n"
+                "¿Deseas abrir Configuración para ingresarla ahora?"
+            ):
+                self._open_settings_dialog()
+            return
+
+        self._set_action_buttons_state(tk.DISABLED)
+        self.lbl_status.config(text="Comprobando gramática con IA...", fg=self.accent_yellow)
+        self.txt_log.delete("1.0", tk.END)
+        self._log("[*] Modo: COMPROBAR GRAMÁTICA, TILDES Y ORTOGRAFÍA (OpenRouter)")
+        self._log(f"[*] Abriendo proyecto: {os.path.basename(proj_path)}")
+        self._save_local_config()
+        threading.Thread(target=self._run_grammar_check_thread, args=(proj_path, api_key), daemon=True).start()
+
+    def _run_grammar_check_thread(self, proj_path: str, api_key: str):
+        try:
+            preset_name = self.doctor_preset.get()
+            proj = CapCutProject(proj_path)
+
+            if not proj.subtitles:
+                self.after(0, lambda: self._log("[!] El proyecto contiene 0 subtítulos."))
+                self.after(0, lambda: self.lbl_status.config(text="0 subtítulos encontrados", fg=self.accent_red))
+                self.after(0, lambda: messagebox.showwarning(
+                    "Sin Subtítulos",
+                    "Este proyecto no contiene subtítulos para revisar.\n\n"
+                    "En CapCut: Texto -> Subtítulos automáticos -> Crear y luego Refrescar."
+                ))
+                return
+
+            client = OpenRouterClient(api_key=api_key, model=DEFAULT_MODEL)
+
+            def _thread_log(msg: str):
+                self.after(0, lambda m=msg: self._log(m))
+
+            fixes = check_project_grammar(
+                proj,
+                client=client,
+                preset_name=preset_name,
+                log_fn=_thread_log
+            )
+
+            if fixes is None:
+                self.after(0, lambda: self._log("[ERROR] No se pudo completar la revisión con OpenRouter."))
+                self.after(0, lambda: self.lbl_status.config(text="Error conectando con OpenRouter", fg=self.accent_red))
+                self.after(0, lambda: messagebox.showerror(
+                    "Error de OpenRouter",
+                    "No se pudo conectar o procesar la respuesta de OpenRouter.\n"
+                    "Verifica tu API Key o tu conexión a internet en Configuración."
+                ))
+                return
+
+            if not fixes:
+                self.after(0, lambda: self._log("\n[+] ¡Revisión completada! Todas las tildes y palabras están escritas correctamente."))
+                self.after(0, lambda: self.lbl_status.config(text="Gramática y tildes correctas ✓", fg=self.accent_green))
+                self.after(0, lambda: messagebox.showinfo(
+                    "Gramática Perfecta",
+                    f"Se revisaron todos los subtítulos de '{os.path.basename(proj.project_path)}'.\n\n"
+                    "¡No se encontraron errores de ortografía ni tildes faltantes!"
+                ))
+                return
+
+            self.after(0, lambda: self._log(f"[!] Se detectaron {len(fixes)} subtítulo(s) con correcciones sugeridas:"))
+            for fx in fixes:
+                self.after(0, lambda f=fx: self._log(
+                    f"  • [{f['time_str']}] '{f['original_text']}'  ──►  '{f['corrected_text']}' ({f['reason']})"
+                ))
+            self.after(0, lambda: self.lbl_status.config(text=f"{len(fixes)} corrección(es) sugerida(s)", fg=self.accent_yellow))
+            self.after(0, lambda: self._open_grammar_dialog(fixes, proj))
+
+        except Exception as e:
+            err_msg = str(e)
+            self.after(0, lambda: self._log(f"\n[ERROR EN GRAMÁTICA] {err_msg}"))
+            self.after(0, lambda: self.lbl_status.config(text="Error comprobando gramática", fg=self.accent_red))
+            self.after(0, lambda: messagebox.showerror("Error", f"Ocurrió un error al comprobar la gramática:\n{err_msg}"))
+        finally:
+            self.after(0, lambda: self._set_action_buttons_state(tk.NORMAL))
+
+    def _open_grammar_dialog(self, fixes: List[Dict[str, Any]], project: CapCutProject):
+        GrammarReviewDialog(self, fixes, project)
 
 
 class GapReviewDialog(tk.Toplevel):
@@ -1449,6 +1544,203 @@ class GapReviewDialog(tk.Toplevel):
             self._on_close()
         except Exception as e:
             messagebox.showerror("Error", f"Error al insertar subtítulos reparados:\n{e}")
+
+
+class GrammarReviewDialog(tk.Toplevel):
+    def __init__(self, parent, fixes: List[Dict[str, Any]], project: CapCutProject):
+        super().__init__(parent)
+        self.parent = parent
+        self.fixes = fixes
+        self.project = project
+        self.row_controls = []
+
+        self.title("Comprobar Gramática y Tildes - CC Subs Pro")
+        self.geometry("860x620")
+        self.minsize(760, 480)
+        self.configure(bg="#181825")
+        self.transient(parent)
+        self.grab_set()
+
+        top_frame = tk.Frame(self, bg="#181825", padx=16, pady=12)
+        top_frame.pack(fill=tk.X)
+
+        tk.Label(
+            top_frame,
+            text=f"✍️ Se encontraron {len(fixes)} corrección(es) de tildes u ortografía",
+            font=("Segoe UI", 12, "bold"),
+            fg="#89dceb",
+            bg="#181825"
+        ).pack(anchor=tk.W)
+
+        tk.Label(
+            top_frame,
+            text="Verifica o ajusta cada cambio antes de aplicarlo en CapCut. Los tiempos, fuentes y animaciones permanecerán intactos.",
+            font=("Segoe UI", 9),
+            fg="#a6adc8",
+            bg="#181825"
+        ).pack(anchor=tk.W, pady=(2, 6))
+
+        sel_bar = tk.Frame(top_frame, bg="#181825")
+        sel_bar.pack(fill=tk.X)
+        ttk.Button(
+            sel_bar,
+            text="✓ Seleccionar todos",
+            style="Secondary.TButton",
+            command=lambda: self._set_all_checked(True)
+        ).pack(side=tk.LEFT, padx=(0, 6))
+        ttk.Button(
+            sel_bar,
+            text="✗ Desmarcar todos",
+            style="Secondary.TButton",
+            command=lambda: self._set_all_checked(False)
+        ).pack(side=tk.LEFT)
+
+        canvas_frame = tk.Frame(self, bg="#181825", padx=16)
+        canvas_frame.pack(fill=tk.BOTH, expand=True)
+
+        self.canvas = tk.Canvas(canvas_frame, bg="#181825", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(canvas_frame, orient="vertical", command=self.canvas.yview)
+        scrollable_frame = tk.Frame(self.canvas, bg="#181825")
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        )
+
+        win_id = self.canvas.create_window((0, 0), window=scrollable_frame, anchor="nw", width=800)
+        self.canvas.bind("<Configure>", lambda e: self.canvas.itemconfigure(win_id, width=max(400, e.width - 8)))
+        self.canvas.configure(xscrollcommand=None, yscrollcommand=scrollbar.set)
+
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        def _on_mousewheel(event):
+            if abs(event.delta) >= 120:
+                step = int(-1 * (event.delta / 120))
+            else:
+                step = -1 if event.delta > 0 else 1
+            self.canvas.yview_scroll(step, "units")
+
+        self.canvas.bind_all("<MouseWheel>", _on_mousewheel)
+
+        for i, fx in enumerate(fixes):
+            card = tk.Frame(
+                scrollable_frame,
+                bg="#1e1e2e",
+                padx=12,
+                pady=10,
+                relief="flat",
+                highlightbackground="#313244",
+                highlightthickness=1
+            )
+            card.pack(fill=tk.X, pady=5)
+
+            hdr = tk.Frame(card, bg="#1e1e2e")
+            hdr.pack(fill=tk.X)
+
+            chk_var = tk.BooleanVar(value=True)
+            chk = ttk.Checkbutton(
+                hdr,
+                text=f"Aplicar cambio #{i+1}  |  ⏱️ {fx['time_str']} (Pista {fx['track_index'] + 1})",
+                variable=chk_var
+            )
+            chk.pack(side=tk.LEFT)
+
+            tk.Label(
+                hdr,
+                text=fx.get('reason', ''),
+                font=("Segoe UI", 9, "italic"),
+                fg="#f9e2af",
+                bg="#1e1e2e"
+            ).pack(side=tk.RIGHT)
+
+            orig_row = tk.Frame(card, bg="#1e1e2e")
+            orig_row.pack(fill=tk.X, pady=(6, 4))
+            tk.Label(orig_row, text="Original:   ", font=("Segoe UI", 9, "bold"), fg="#a6adc8", bg="#1e1e2e").pack(side=tk.LEFT)
+            tk.Label(
+                orig_row,
+                text=fx['original_text'].replace("\n", " / "),
+                font=("Segoe UI", 10),
+                fg="#f38ba8",
+                bg="#1e1e2e",
+                anchor="w"
+            ).pack(side=tk.LEFT, fill=tk.X, expand=True)
+
+            edit_row = tk.Frame(card, bg="#1e1e2e")
+            edit_row.pack(fill=tk.X)
+            tk.Label(edit_row, text="Corregido: ", font=("Segoe UI", 9, "bold"), fg="#cdd6f4", bg="#1e1e2e").pack(side=tk.LEFT)
+
+            txt_var = tk.StringVar(value=fx['corrected_text'].replace("\n", " | "))
+            ent = tk.Entry(
+                edit_row,
+                textvariable=txt_var,
+                font=("Segoe UI", 10, "bold"),
+                bg="#11111b",
+                fg="#a6e3a1",
+                insertbackground="#ffffff"
+            )
+            ent.pack(side=tk.LEFT, fill=tk.X, expand=True)
+
+            self.row_controls.append((fx, chk_var, txt_var, '\n' in fx['original_text']))
+
+        bot_bar = tk.Frame(self, bg="#181825", padx=16, pady=12)
+        bot_bar.pack(fill=tk.X)
+
+        btn_cancel = ttk.Button(bot_bar, text="Cancelar", style="Secondary.TButton", command=self._on_close)
+        btn_cancel.pack(side=tk.RIGHT, padx=(6, 0))
+
+        btn_apply = ttk.Button(bot_bar, text="✅ APLICAR CORRECCIONES EN CAPCUT", style="Action.TButton", command=self._apply_fixes)
+        btn_apply.pack(side=tk.RIGHT)
+
+        self.protocol("WM_DELETE_WINDOW", self._on_close)
+
+    def _set_all_checked(self, checked: bool):
+        for _, chk_var, _, _ in self.row_controls:
+            chk_var.set(checked)
+
+    def _on_close(self):
+        try:
+            self.canvas.unbind_all("<MouseWheel>")
+        except Exception:
+            pass
+        self.destroy()
+
+    def _apply_fixes(self):
+        selected_fixes = []
+        for fx, chk_var, txt_var, had_newline in self.row_controls:
+            if not chk_var.get():
+                continue
+            val = txt_var.get().strip()
+            if had_newline and "|" in val:
+                val = "\n".join(part.strip() for part in val.split("|") if part.strip())
+            if val:
+                fx_copy = dict(fx)
+                fx_copy['corrected_text'] = val
+                selected_fixes.append(fx_copy)
+
+        if not selected_fixes:
+            messagebox.showwarning("Atención", "No seleccionaste ninguna corrección para aplicar.")
+            return
+
+        try:
+            self.project.create_backup()
+            count = apply_grammar_fixes(self.project, selected_fixes)
+            self.project.save(create_backup=False)
+
+            self.parent._log(f"\n[+] Se aplicaron {count} corrección(es) gramatical(es) en '{os.path.basename(self.project.project_path)}'.")
+            self.parent.lbl_status.config(text=f"¡{count} corrección(es) aplicada(s)!", fg=self.parent.accent_green)
+
+            messagebox.showinfo(
+                "¡Correcciones Aplicadas!",
+                f"Se corrigieron {count} subtítulo(s) con éxito en '{os.path.basename(self.project.project_path)}'.\n\n"
+                f"• Tildes y ortografía actualizadas\n"
+                f"• Tiempos, fuentes, colores y animaciones: 100% INTACTOS\n"
+                f"• Copia de seguridad guardada automáticamente.\n\n"
+                f"Nota: Si tienes CapCut abierto, sal al menú de proyectos y vuelve a entrar para ver los cambios."
+            )
+            self._on_close()
+        except Exception as e:
+            messagebox.showerror("Error", f"Error al guardar las correcciones:\n{e}")
 
 
 ValuSubsGUI = CCSubsProGUI

@@ -112,6 +112,46 @@ def get_system_prompt_subtitles(keep_punctuation: bool = False) -> str:
 
 SYSTEM_PROMPT_SUBTITLES = get_system_prompt_subtitles(keep_punctuation=False)
 
+SYSTEM_PROMPT_GRAMMAR_CHECK = """Eres un corrector ortográfico y lingüista profesional de español (normativa RAE) especializado en subtítulos de video.
+
+Los editores humanos a menudo editan manualmente los subtítulos pero olvidan colocar tildes o cometen errores tipográficos u ortográficos (por ejemplo: "clinica" en vez de "clínica", "mas" en vez de "más", "asi" o "haci" en vez de "así", "despues" en vez de "después", "a veses" o "habeses" en vez de "a veces", "esposicion" en vez de "exposición", "tambien", "rapido", "diagnostico", "nutricion", "llevo" vs "llevó", "esta" vs "está", "te" vs "té", "tu" vs "tú", "si" vs "sí", "que/como/cuando/donde/cual/por que" en preguntas directas o indirectas).
+
+REGLAS ESTRICTAS:
+1. Analiza la secuencia cronológica de segmentos teniendo en cuenta el CONTEXTO COMPLETO de la oración (incluso si la oración continúa entre segmentos consecutivos o pistas superpuestas) para determinar tildes diacríticas y tiempos verbales con precisión.
+2. Corrige ÚNICAMENTE:
+   - Tildes faltantes o sobrantes (agudas, graves, esdrújulas y tildes diacríticas: más/mas, tú/tu, él/el, sí/si, sé/se, té/te, mí/mi, aún/aun, está/esta, qué/que, cómo/como, cuándo/cuando, dónde/donde, cuál/cual, quién/quien, por qué/porque, verbos en pretérito/futuro/condicional).
+   - Palabras mal escritas o con errores de ortografía / tipeo (b/v, c/s/z, g/j, ll/y, r/rr, h omitida o sobrante, letras cambiadas, omitidas o duplicadas, errores frecuentes de edición).
+   - Signos de interrogación/exclamación claramente mal pegados o sin su apertura ¿ o cierre ? correspondiente.
+3. PROHIBICIONES IMPORTANTES:
+   - JAMÁS cambies palabras válidas por sinónimos ni reescribas o parafrasees el guion.
+   - JAMÁS fusiones, dividas o elimines segmentos, ni cambies el orden de las palabras.
+   - JAMÁS alteres anglicismos, marcas comerciales o nombres propios válidos ya bien escritos (por ejemplo: "barefoot", "dentok", "Galaunick", "Alharilla", "Abde", "Emilia", "Cuidus", "botox", "lifting", "peeling", "spray", "clip", "reels", "tiktok").
+   - RESPETA EL ESTILO DE MAYÚSCULAS DEL SEGMENTO: Si el segmento de entrada tiene "is_upper": true (TODO EN MAYÚSCULAS), devuelve "corrected_text" también TODO EN MAYÚSCULAS manteniendo las tildes (ejemplo: "ATENCION MEDICA" -> "ATENCIÓN MÉDICA"). Si el texto original está en minúsculas por continuación de frase, mantenlo en minúsculas salvo nombres propios o inicio tras punto/¿/¡.
+   - RESPETA los saltos de línea ("\\n") si el texto original tiene dos líneas.
+   - {punct_instruction}
+
+FORMATO DE RESPUESTA:
+Responde EXCLUSIVAMENTE un objeto JSON válido con las correcciones encontradas (incluye ÚNICAMENTE los índices que realmente necesitan corrección; si todo está bien, devuelve una lista vacía):
+{{
+  "corrections": [
+    {{
+      "index": 3,
+      "corrected_text": "texto corregido exacto",
+      "reason": "explicación breve (ej. 'Falta tilde en clínica')"
+    }}
+  ]
+}}
+"""
+
+
+def get_system_prompt_grammar(keep_punctuation: bool = False) -> str:
+    if keep_punctuation:
+        punct_instr = "Mantén puntos (.) y comas (,) donde correspondan gramaticalmente, sin inventar dos puntos ni puntos suspensivos."
+    else:
+        punct_instr = "Mantén los puntos o comas solo si el segmento original ya los tenía; NO agregues comas ni puntos nuevos si el original no tenía."
+    return SYSTEM_PROMPT_GRAMMAR_CHECK.format(punct_instruction=punct_instr)
+
+
 class OpenRouterClient:
     def __init__(self, api_key: Optional[str] = None, model: str = DEFAULT_MODEL):
         self.api_key = api_key or os.environ.get('OPENROUTER_API_KEY') or ""
@@ -257,3 +297,124 @@ class OpenRouterClient:
 
         logger.error("Todos los modelos candidatos de OpenRouter fallaron.")
         return None
+
+    def check_grammar(
+        self,
+        segments: List[Dict[str, Any]],
+        keep_punctuation: bool = False,
+        batch_size: int = 75
+    ) -> Optional[List[Dict[str, Any]]]:
+        """
+        Envía los subtítulos a OpenRouter para revisar únicamente tildes,
+        ortografía y palabras mal escritas manteniendo la estructura original.
+
+        Retorna:
+          - Lista de dicts {index, corrected_text, reason} con los cambios propuestos
+            (vacía `[]` si no hay errores).
+          - `None` si OpenRouter no está configurado o falló la conexión.
+        """
+        if not self.is_configured():
+            logger.warning("OpenRouter API key not configured.")
+            return None
+
+        if not segments:
+            return []
+
+        sys_prompt = get_system_prompt_grammar(keep_punctuation=keep_punctuation)
+        candidates = [self.model]
+        for fb in FALLBACK_MODELS:
+            if fb not in candidates:
+                candidates.append(fb)
+
+        all_corrections: List[Dict[str, Any]] = []
+        n = len(segments)
+        step = max(10, int(batch_size))
+
+        for start_i in range(0, n, step):
+            end_i = min(n, start_i + step)
+            batch_segs = segments[start_i:end_i]
+            ctx_before = [s.get('text', '') for s in segments[max(0, start_i - 4):start_i]]
+            ctx_after = [s.get('text', '') for s in segments[end_i:min(n, end_i + 4)]]
+
+            items_payload = []
+            for s in batch_segs:
+                txt = s.get('text', '')
+                is_upper = bool(txt) and not any(c.islower() for c in txt) and any(c.isalpha() for c in txt)
+                items_payload.append({
+                    "index": s.get('index', 0),
+                    "start": f"{s.get('start', 0) / 1e6:.2f}s",
+                    "text": txt,
+                    "is_upper": is_upper
+                })
+
+            user_payload = {
+                "context_before": ctx_before,
+                "segments_to_check": items_payload,
+                "context_after": ctx_after
+            }
+            user_content = (
+                "Revisa las tildes y ortografía de 'segments_to_check' usando 'context_before' "
+                "y 'context_after' solo como referencia contextual. Devuelve en 'corrections' "
+                "únicamente los elementos de 'segments_to_check' que requieran corrección:\n\n"
+                + json.dumps(user_payload, ensure_ascii=False, indent=2)
+            )
+
+            batch_parsed = None
+            for m in candidates:
+                payload = {
+                    "model": m,
+                    "messages": [
+                        {"role": "system", "content": sys_prompt},
+                        {"role": "user", "content": user_content}
+                    ],
+                    "response_format": {"type": "json_object"},
+                    "temperature": 0.1
+                }
+                try:
+                    req = urllib.request.Request(
+                        OPENROUTER_API_URL,
+                        data=json.dumps(payload).encode('utf-8'),
+                        headers={
+                            "Content-Type": "application/json",
+                            "Authorization": f"Bearer {self.api_key.strip()}",
+                            "HTTP-Referer": "https://ccsubspro.local",
+                            "X-Title": "CC Subs Pro"
+                        },
+                        method='POST'
+                    )
+                    with urllib.request.urlopen(req, timeout=45) as resp:
+                        data = json.loads(resp.read().decode('utf-8'))
+                        raw_text = data['choices'][0]['message']['content'].strip()
+                        if raw_text.startswith("```"):
+                            raw_text = re.sub(r'^```(?:json)?\s*', '', raw_text)
+                            raw_text = re.sub(r'\s*```$', '', raw_text)
+                        parsed = json.loads(raw_text)
+                        self.model = m
+                        batch_parsed = parsed.get('corrections', [])
+                        if not isinstance(batch_parsed, list):
+                            batch_parsed = []
+                        break
+                except Exception as e:
+                    logger.warning(f"Intento fallido en check_grammar con modelo {m}: {e}")
+
+            if batch_parsed is None:
+                logger.error("Todos los modelos candidatos de OpenRouter fallaron en check_grammar.")
+                return None
+
+            valid_indices = {s.get('index') for s in batch_segs}
+            for item in batch_parsed:
+                if not isinstance(item, dict):
+                    continue
+                idx_val = item.get('index')
+                if idx_val not in valid_indices:
+                    continue
+                corr_txt = str(item.get('corrected_text', '')).strip()
+                reason = str(item.get('reason', '')).strip()
+                if corr_txt:
+                    all_corrections.append({
+                        "index": idx_val,
+                        "corrected_text": corr_txt,
+                        "reason": reason or "Corrección ortográfica / tilde"
+                    })
+
+        return all_corrections

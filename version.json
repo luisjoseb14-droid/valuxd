@@ -1,8 +1,8 @@
 {
-  "version": "1.0.21",
-  "version_code": 22,
+  "version": "1.0.22",
+  "version_code": 23,
   "date": "2026-11-13",
-  "description": "Correccion de signos ¿?, palabras partidas ('s'), unificacion de palabras cortas huerfanas y continuidad sintactica de oraciones",
+  "description": "Nuevo boton 'Comprobar Gramatica' junto a Estilizar (revision de tildes y ortografia con OpenRouter IA)",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }
