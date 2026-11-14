@@ -162,6 +162,32 @@ class TestUpdater(unittest.TestCase):
         finally:
             shutil.rmtree(test_dir, ignore_errors=True)
 
+    def test_check_for_updates_nocache_and_curl_fallback(self):
+        import core.updater as up_mod
+
+        class DummyProc:
+            returncode = 0
+            stdout = json.dumps({"version": "9.9.9", "version_code": 999})
+            stderr = ""
+
+        captured_urls = []
+
+        def failing_urlopen(req, timeout=7):
+            captured_urls.append(getattr(req, 'full_url', str(req)))
+            raise RuntimeError("SSL failed")
+
+        with patch.object(up_mod, 'get_local_version_info', return_value={"version": "1.0.22", "version_code": 23}), \
+             patch.object(up_mod, '_safe_urlopen', side_effect=failing_urlopen), \
+             patch.object(up_mod.subprocess, 'run', return_value=DummyProc()) as mock_run:
+            has_update, info = check_for_updates()
+
+        self.assertTrue(has_update)
+        self.assertEqual(info["version"], "9.9.9")
+        self.assertEqual(len(captured_urls), 1)
+        self.assertIn("?nocache=", captured_urls[0])
+        curl_args = mock_run.call_args[0][0]
+        self.assertTrue(any("?nocache=" in str(a) for a in curl_args))
+
 
 if __name__ == '__main__':
     unittest.main()

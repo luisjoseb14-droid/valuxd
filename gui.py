@@ -824,8 +824,23 @@ class CCSubsProGUI(tk.Tk):
                         )
                     self._log(f"[Actualizador] ¡Nueva versión v{v} disponible en GitHub!")
                 self.after(0, notify_ui)
+            elif isinstance(remote_info, dict) and remote_info.get("error"):
+                err_txt = remote_info["error"]
+                self.after(0, lambda m=err_txt: self._log(f"[Actualizador] No se pudo verificar versión en GitHub: {m}"))
         except Exception:
             pass
+
+    def _ask_yes_no_threadsafe(self, title: str, msg: str) -> bool:
+        ev = threading.Event()
+        ans = [False]
+        def _prompt():
+            try:
+                ans[0] = bool(messagebox.askyesno(title, msg))
+            finally:
+                ev.set()
+        self.after(0, _prompt)
+        ev.wait()
+        return ans[0]
 
     def _on_update_clicked(self):
         self.txt_log.delete("1.0", tk.END)
@@ -836,25 +851,28 @@ class CCSubsProGUI(tk.Tk):
             try:
                 has_update, info = check_for_updates()
                 if "error" in info:
-                    self._log(f"[!] Aviso de GitHub: {info['error']}")
+                    err_info = info["error"]
+                    self.after(0, lambda m=err_info: self._log(f"[!] Aviso de GitHub: {m}"))
 
                 cur_v = self.local_version_info.get("version", "1.0.0")
 
                 if not has_update:
-                    ans = messagebox.askyesno(
+                    ans = self._ask_yes_no_threadsafe(
                         "Versión al Día",
                         f"Ya tienes instalada la versión v{cur_v}.\n\n"
                         "¿Deseas forzar la descarga y sincronización de todos los presets y fuentes desde GitHub?"
                     )
                     if not ans:
-                        self.lbl_status.config(text="Listo para procesar")
+                        self.after(0, lambda: self.lbl_status.config(text="Listo para procesar"))
                         return
 
-                self._log("[*] Iniciando sincronización con el repositorio...")
+                self.after(0, lambda: self._log("[*] Iniciando sincronización con el repositorio..."))
 
                 def update_progress(msg, pct):
-                    self._log(f"  [{int(pct*100)}%] {msg}")
-                    self.lbl_status.config(text=msg)
+                    self.after(0, lambda m=msg, p=pct: (
+                        self._log(f"  [{int(p*100)}%] {m}"),
+                        self.lbl_status.config(text=m)
+                    ))
 
                 res = download_and_apply_update(progress_callback=update_progress, force=True)
 
@@ -863,12 +881,14 @@ class CCSubsProGUI(tk.Tk):
                     desc = res.get("description", "")
                     fonts_count = len(res.get("installed_fonts", []))
 
-                    self._log(f"\n[OK] ¡CC Subs Pro actualizado exitosamente a v{new_v}!")
-                    self._log(f"  + Fuentes registradas: {fonts_count}")
-                    self._log(f"  + Cambios: {desc}")
-                    self.lbl_status.config(text=f"Actualizado v{new_v}")
+                    def _log_success():
+                        self._log(f"\n[OK] ¡CC Subs Pro actualizado exitosamente a v{new_v}!")
+                        self._log(f"  + Fuentes registradas: {fonts_count}")
+                        self._log(f"  + Cambios: {desc}")
+                        self.lbl_status.config(text=f"Actualizado v{new_v}")
+                    self.after(0, _log_success)
 
-                    reboot = messagebox.askyesno(
+                    reboot = self._ask_yes_no_threadsafe(
                         "Actualización Exitosa",
                         f"¡Herramienta actualizada con éxito a la versión v{new_v}!\n\n"
                         f"Cambios:\n{desc}\n\n"
@@ -876,17 +896,22 @@ class CCSubsProGUI(tk.Tk):
                         "¿Deseas reiniciar la aplicación ahora para cargar todas las nuevas letras?"
                     )
                     if reboot:
-                        self._restart_app()
+                        self.after(0, self._restart_app)
                 else:
                     err_msg = "; ".join(res.get("errors", ["Error desconocido"]))
-                    self._log(f"[ERROR] No se pudo completar la actualización: {err_msg}")
-                    messagebox.showerror("Error al Actualizar", f"No se pudo completar la actualización:\n{err_msg}")
-                    self.lbl_status.config(text="Error al actualizar")
+                    self.after(0, lambda m=err_msg: (
+                        self._log(f"[ERROR] No se pudo completar la actualización: {m}"),
+                        messagebox.showerror("Error al Actualizar", f"No se pudo completar la actualización:\n{m}"),
+                        self.lbl_status.config(text="Error al actualizar")
+                    ))
 
             except Exception as e:
-                self._log(f"[ERROR] {e}")
-                messagebox.showerror("Error", f"Error inesperado al actualizar:\n{e}")
-                self.lbl_status.config(text="Error al actualizar")
+                err_str = str(e)
+                self.after(0, lambda m=err_str: (
+                    self._log(f"[ERROR] {m}"),
+                    messagebox.showerror("Error", f"Error inesperado al actualizar:\n{m}"),
+                    self.lbl_status.config(text="Error al actualizar")
+                ))
 
         threading.Thread(target=run_update, daemon=True).start()
 

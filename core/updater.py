@@ -242,7 +242,7 @@ def ensure_ai_modules_up_to_date(force: bool = False) -> Tuple[bool, List[str]]:
     """
     base_dir = get_base_dir()
     orc_mod = sys.modules.get('ai.openrouter_client')
-    loaded_ok = orc_mod is not None and hasattr(getattr(orc_mod, 'OpenRouterClient', object), 'check_grammar')
+    loaded_ok = (orc_mod is None) or hasattr(getattr(orc_mod, 'OpenRouterClient', object), 'check_grammar')
     disk_ok = _disk_openrouter_has_grammar(base_dir)
 
     if not force and disk_ok and loaded_ok:
@@ -284,8 +284,9 @@ def check_for_updates() -> Tuple[bool, Dict[str, Any]]:
     local_info = get_local_version_info()
     local_code = local_info.get("version_code", 1)
 
+    nocache_url = f"{VERSION_URL}?nocache={int(time.time())}"
     req = urllib.request.Request(
-        VERSION_URL,
+        nocache_url,
         headers={"User-Agent": USER_AGENT, "Cache-Control": "no-cache"}
     )
 
@@ -299,11 +300,28 @@ def check_for_updates() -> Tuple[bool, Dict[str, Any]]:
     except urllib.error.HTTPError as e:
         logger.warning(f"HTTP error al consultar versión en GitHub: {e.code}")
         return False, {"error": f"Error del servidor de GitHub ({e.code})"}
-    except urllib.error.URLError as e:
-        logger.warning(f"Error de conexión al consultar GitHub: {e.reason}")
-        return False, {"error": "Sin conexión a internet o repositorio no accesible"}
     except Exception as e:
-        logger.warning(f"Error inesperado al buscar actualizaciones: {e}")
+        logger.warning(f"Error consultando versión en GitHub con urllib: {e}. Intentando fallback curl...")
+        try:
+            curl_exe = "curl.exe" if sys.platform == 'win32' else "curl"
+            res = subprocess.run(
+                [curl_exe, "-k", "-s", "-L", "-f", "-A", USER_AGENT, nocache_url],
+                capture_output=True,
+                text=True,
+                encoding='utf-8',
+                timeout=8
+            )
+            if res.returncode == 0 and res.stdout:
+                remote_info = json.loads(res.stdout)
+                remote_code = remote_info.get("version_code", 1)
+                has_update = remote_code > local_code
+                return has_update, remote_info
+        except Exception as curl_err:
+            logger.warning(f"Error fallback curl al consultar GitHub: {curl_err}")
+
+        if isinstance(e, urllib.error.URLError):
+            logger.warning(f"Error de conexión al consultar GitHub: {e.reason}")
+            return False, {"error": "Sin conexión a internet o repositorio no accesible"}
         return False, {"error": str(e)}
 
     return False, local_info

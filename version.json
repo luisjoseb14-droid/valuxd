@@ -1,8 +1,8 @@
 {
-  "version": "1.0.25",
-  "version_code": 26,
+  "version": "1.0.26",
+  "version_code": 27,
   "date": "2026-11-13",
-  "description": "Preset Gala: Gala Unique siempre destacada abajo con su click FX, agrupada bajo su contexto general (ej. En clínica arriba) y respetando mayúsculas exactas",
+  "description": "Actualizador con consulta anti-cache y respaldo curl en version.json + interfaz de actualizacion segura en hilo principal de Windows",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }
