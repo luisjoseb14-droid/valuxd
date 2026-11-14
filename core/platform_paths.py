@@ -79,34 +79,56 @@ def resolve_font_path(font_path_or_name: str) -> str:
 
     return font_path_or_name.replace('\\', '/')
 
-def get_default_click_sound_path(sound_name: str = "Click_Mouse_Click_02(864360)", filename: str = "") -> str:
+def _resolve_sound_asset(cache_filename: str, bundled_filenames: tuple) -> str:
+    """Resolve an audio asset from CapCut music cache first, then bundled assets/audio."""
     base_dir = get_base_dir()
-
-    # 1. If Chinese mouse click 1 is requested
-    if "鼠标单击1" in str(sound_name) or "25b5bc6c42f453173fbf056859eec22b" in str(filename):
-        for cache_dir in get_capcut_cache_dirs():
-            cached_mp3 = os.path.join(cache_dir, 'music', '25b5bc6c42f453173fbf056859eec22b.mp3')
-            if os.path.isfile(cached_mp3):
-                return cached_mp3.replace('\\', '/')
-        bundled_ch = os.path.join(base_dir, 'assets', 'audio', '25b5bc6c42f453173fbf056859eec22b.mp3')
-        if os.path.isfile(bundled_ch):
-            return bundled_ch.replace('\\', '/')
-        bundled_alt = os.path.join(base_dir, 'assets', 'audio', 'mouse_click_1.mp3')
-        if os.path.isfile(bundled_alt):
-            return bundled_alt.replace('\\', '/')
-
-    # 2. Default standard click sound
-    bundled = os.path.join(base_dir, 'assets', 'audio', 'click_mouse_02.mp3')
-    
-    # Check CapCut music cache on current platform
     for cache_dir in get_capcut_cache_dirs():
-        cached_mp3 = os.path.join(cache_dir, 'music', '33f11a55221681b3fefec3346290169e.mp3')
+        cached_mp3 = os.path.join(cache_dir, 'music', cache_filename)
         if os.path.isfile(cached_mp3):
             return cached_mp3.replace('\\', '/')
-            
-    if os.path.isfile(bundled):
-        return bundled.replace('\\', '/')
-    return bundled.replace('\\', '/')
+
+    for fname in bundled_filenames:
+        bundled_path = os.path.join(base_dir, 'assets', 'audio', fname)
+        if os.path.isfile(bundled_path):
+            return bundled_path.replace('\\', '/')
+
+    return os.path.join(base_dir, 'assets', 'audio', bundled_filenames[0]).replace('\\', '/')
+
+
+def get_default_click_sound_path(sound_name: str = "Click_Mouse_Click_02(864360)", filename: str = "") -> str:
+    # 1. Enter / Click / Select sound (used for top-left step numbers)
+    lower_name = str(sound_name).lower()
+    lower_file = str(filename).lower()
+    if (
+        "enter / click" in lower_name
+        or "enter_click" in lower_file
+        or "4cd0c7ee14c07e29164fd10df012a008" in lower_file
+    ):
+        return _resolve_sound_asset(
+            '4cd0c7ee14c07e29164fd10df012a008.mp3',
+            ('enter_click_select.mp3', '4cd0c7ee14c07e29164fd10df012a008.mp3'),
+        )
+
+    # 2. Chinese mouse click 1
+    if "鼠标单击1" in str(sound_name) or "25b5bc6c42f453173fbf056859eec22b" in str(filename):
+        return _resolve_sound_asset(
+            '25b5bc6c42f453173fbf056859eec22b.mp3',
+            ('25b5bc6c42f453173fbf056859eec22b.mp3', 'mouse_click_1.mp3'),
+        )
+
+    # 3. Default standard click sound
+    return _resolve_sound_asset(
+        '33f11a55221681b3fefec3346290169e.mp3',
+        ('click_mouse_02.mp3',),
+    )
+
+
+def get_step_enter_sound_path() -> str:
+    """Resolve the bundled/cached 'Enter / Click / Select sound' asset for step badges."""
+    return get_default_click_sound_path(
+        sound_name="Enter / Click / Select sound",
+        filename="enter_click_select.mp3",
+    )
 
 def resolve_effect_path(resource_id: str, default_subpath: str = "") -> str:
     if not resource_id:

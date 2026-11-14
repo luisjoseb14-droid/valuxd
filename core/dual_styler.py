@@ -7,7 +7,13 @@ import logging
 from typing import Dict, List, Any, Optional, Tuple, Callable
 from core.capcut_draft import CapCutProject, SubtitleItem
 from core.animator import Animator
-from core.platform_paths import resolve_font_path, get_default_click_sound_path, resolve_effect_path, resolve_sticker_path
+from core.platform_paths import (
+    resolve_font_path,
+    get_default_click_sound_path,
+    get_step_enter_sound_path,
+    resolve_effect_path,
+    resolve_sticker_path,
+)
 from core.text_utils import (
     clean_subtitle_text,
     find_phrase_timing,
@@ -42,6 +48,28 @@ NEGATIVE_KEYWORDS = {
     'ampolla', 'ampollas', 'herida', 'heridas', 'sobrecarga', 'tensión',
     'rigidez', 'desgaste', 'irritación', 'molesta', 'duele', 'doliendo',
     'roto', 'rotura', 'pronación', 'pronas', 'supinación'
+}
+
+STEP_BADGE_TRACK_NAME = "Pasos"
+STEP_AUDIO_TRACK_NAME = "Pasos Audio"
+STEP_BADGE_POS_X = -0.68
+STEP_BADGE_POS_Y = 0.54
+STEP_BADGE_FONT_SIZE = 52.0
+STEP_MINI_ZOOM_ANIM = {
+    'enabled': True,
+    'resource_id': '6763469998330483213',
+    'name': 'Mini zoom',
+    'type': 'in',
+    'duration': 400000,
+    'category_id': 'ruchang_fav',
+    'category_name': 'Favoritos',
+    'path': '',
+}
+STEP_ENTER_SOUND_CFG = {
+    'name': 'Enter / Click / Select sound',
+    'duration': 966666,
+    'volume': 1.0,
+    'effect_id': '6817134850143684610',
 }
 
 def get_effective_font_size(style_cfg: Dict[str, Any], text_str: str) -> float:
@@ -230,9 +258,20 @@ class DualStyler:
 
         return cls(preset_data=preset_dict)
 
-    def _create_text_material(self, draft_data: Dict[str, Any], text_str: str, style_cfg: Dict[str, Any], is_highlight: bool = False) -> str:
+    def _create_text_material(
+        self,
+        draft_data: Dict[str, Any],
+        text_str: str,
+        style_cfg: Dict[str, Any],
+        is_highlight: bool = False,
+        recognize_task_id: str = "manual_styled",
+        mat_type: str = "subtitle",
+        force_font_size: Optional[float] = None,
+    ) -> str:
         text_str = clean_subtitle_text(text_str, keep_punctuation=getattr(self, 'keep_punctuation', False))
-        if style_cfg.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False)):
+        if recognize_task_id != "step_badge" and (
+            style_cfg.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False))
+        ):
             text_str = text_str.upper()
         materials = draft_data.setdefault('materials', {})
         texts = materials.setdefault('texts', [])
@@ -241,9 +280,10 @@ class DualStyler:
         font_info = style_cfg.get('font', {})
         font_name = font_info.get('name') or style_cfg.get('font_name', 'none')
         font_path = resolve_font_path(font_info.get('path') or style_cfg.get('font_path', ''))
-        font_size = get_effective_font_size(style_cfg, text_str)
+        font_size = float(force_font_size) if force_font_size is not None else get_effective_font_size(style_cfg, text_str)
         base_rgb = style_cfg.get('rgb_color', [1.0, 1.0, 1.0])
         shadow_cfg = style_cfg.get('shadow')
+        strokes_cfg = style_cfg.get('strokes')
 
         styles = []
         is_rich = False
@@ -328,6 +368,12 @@ class DualStyler:
             }
             if is_highlight:
                 style_entry["useLetterColor"] = True
+            if strokes_cfg:
+                style_entry["strokes"] = copy.deepcopy(strokes_cfg)
+            if style_cfg.get('bold'):
+                style_entry["bold"] = True
+            if style_cfg.get('italic'):
+                style_entry["italic"] = True
 
             if shadow_cfg:
                 style_entry["shadows"] = [copy.deepcopy(shadow_cfg)]
@@ -340,8 +386,8 @@ class DualStyler:
 
         mat_obj = {
             "id": mat_id,
-            "type": "subtitle",
-            "recognize_task_id": "manual_styled",
+            "type": mat_type,
+            "recognize_task_id": recognize_task_id,
             "recognize_text": text_str,
             "name": "",
             "content": json.dumps(inner_content, ensure_ascii=False, separators=(',', ':')),
@@ -370,9 +416,13 @@ class DualStyler:
         texts.append(mat_obj)
         return mat_id
 
-    def _create_animation(self, draft_data: Dict[str, Any], duration_us: int = 500000) -> Optional[str]:
-        anim_cfg = self.highlight_style.get('animation', {})
-        if not anim_cfg.get('enabled', True):
+    def _create_animation_from_config(
+        self,
+        draft_data: Dict[str, Any],
+        anim_cfg: Dict[str, Any],
+        duration_us: int = 500000,
+    ) -> Optional[str]:
+        if not anim_cfg or not anim_cfg.get('enabled', True):
             return None
 
         materials = draft_data.setdefault('materials', {})
@@ -415,9 +465,19 @@ class DualStyler:
         mat_anims.append(new_anim)
         return anim_id
 
+    def _create_animation(self, draft_data: Dict[str, Any], duration_us: int = 500000) -> Optional[str]:
+        return self._create_animation_from_config(
+            draft_data,
+            self.highlight_style.get('animation', {}),
+            duration_us=duration_us,
+        )
+
     def _ensure_text_tracks(self, draft_data: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         tracks = draft_data.setdefault('tracks', [])
-        text_tracks = [t for t in tracks if t.get('type') == 'text']
+        text_tracks = [
+            t for t in tracks
+            if t.get('type') == 'text' and t.get('name') != STEP_BADGE_TRACK_NAME
+        ]
 
         # Remove any excess text tracks beyond the 2 dual tracks
         if len(text_tracks) > 2:
@@ -1256,6 +1316,253 @@ class DualStyler:
             it['index'] = idx
         return items
 
+    def _strip_existing_step_tracks(self, draft_data: Dict[str, Any]) -> None:
+        """Elimina pistas y materiales previos de números de paso ('Pasos' / 'Pasos Audio') para idempotencia."""
+        if not isinstance(draft_data, dict):
+            return
+        tracks = draft_data.get('tracks', [])
+        removed_mat_ids = set()
+        kept_tracks = []
+        for trk in tracks:
+            is_step_text = trk.get('type') == 'text' and trk.get('name') == STEP_BADGE_TRACK_NAME
+            is_step_audio = trk.get('type') == 'audio' and trk.get('name') == STEP_AUDIO_TRACK_NAME
+            if is_step_text:
+                for seg in trk.get('segments', []):
+                    if seg.get('material_id'):
+                        removed_mat_ids.add(seg['material_id'])
+                continue
+            if is_step_audio:
+                continue
+            kept_tracks.append(trk)
+        draft_data['tracks'] = kept_tracks
+
+        materials = draft_data.get('materials', {})
+        texts = materials.get('texts', [])
+        if texts:
+            materials['texts'] = [
+                t for t in texts
+                if t.get('recognize_task_id') != 'step_badge' and t.get('id') not in removed_mat_ids
+            ]
+
+    def _resolve_openrouter_client(
+        self,
+        highlighter: Optional[Any] = None,
+        openrouter_key: Optional[str] = None,
+        model: Optional[str] = None,
+    ) -> Optional[OpenRouterClient]:
+        """Resuelve la clave y modelo activos de OpenRouter reutilizando config de UI/entorno."""
+        effective_key = (
+            openrouter_key
+            or (getattr(highlighter, 'api_key', None) if getattr(highlighter, 'provider', None) == 'openrouter' else None)
+            or os.environ.get('OPENROUTER_API_KEY')
+        )
+        cfg_model = None
+        if not effective_key or not model:
+            cfg_p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.cc_subs_pro_config.json')
+            if os.path.isfile(cfg_p):
+                try:
+                    with open(cfg_p, 'r', encoding='utf-8') as f:
+                        cfg_d = json.load(f)
+                        if not effective_key:
+                            effective_key = cfg_d.get('openrouter_key') or cfg_d.get('api_key')
+                        cfg_model = cfg_d.get('openrouter_model') or cfg_d.get('model')
+                except Exception:
+                    pass
+        if not effective_key:
+            return None
+        chosen_model = model or getattr(highlighter, 'model', None) or cfg_model or DEFAULT_MODEL
+        return OpenRouterClient(api_key=effective_key, model=chosen_model)
+
+    def _get_step_badge_style(self) -> Dict[str, Any]:
+        """Obtiene el estilo de letra destacada del doctor/preset activo para los números de paso."""
+        for candidate in (
+            getattr(self, 'highlight_cfg', None),
+            getattr(self, 'highlight_style', None),
+            getattr(self, 'escalera_cfg', None),
+            getattr(self, 'default_style', None),
+        ):
+            if isinstance(candidate, dict) and (
+                candidate.get('font_path') or candidate.get('font_name') or candidate.get('rgb_color')
+            ):
+                return copy.deepcopy(candidate)
+        return copy.deepcopy(getattr(self, 'highlight_style', None) or getattr(self, 'default_style', None) or {})
+
+    @staticmethod
+    def _build_step_badge_plan(
+        raw_items: List[Dict[str, Any]],
+        step_detections: List[Dict[str, Any]],
+    ) -> List[Dict[str, Any]]:
+        """
+        Convierte las detecciones contextuales de OpenRouter en segmentos con tiempo exacto:
+        - Empiezan en el segmento donde se introduce el paso.
+        - Duran hasta que empieza el siguiente número (si el discurso continúa en la secuencia)
+          o hasta que el hablante deja de hablar de ese paso.
+        """
+        if not raw_items or not step_detections:
+            return []
+
+        idx_to_pos = {item.get('index', pos): pos for pos, item in enumerate(raw_items)}
+        step_plan: List[Dict[str, Any]] = []
+        n_items = len(raw_items)
+        max_bridge_gap_us = 2500000  # 2.5s puente continuo entre un paso y el siguiente
+
+        for i, det in enumerate(step_detections):
+            s_pos = det.get('start_pos')
+            if s_pos is None or not (0 <= s_pos < n_items):
+                s_pos = idx_to_pos.get(det.get('start_index'))
+            e_pos = det.get('end_pos')
+            if e_pos is None or not (0 <= e_pos < n_items):
+                e_pos = idx_to_pos.get(det.get('end_index'), s_pos)
+            if s_pos is None or e_pos is None or not (0 <= s_pos <= e_pos < n_items):
+                continue
+
+            start_us = int(raw_items[s_pos]['start'])
+            end_us = int(raw_items[e_pos]['end'])
+
+            if i + 1 < len(step_detections):
+                nxt = step_detections[i + 1]
+                nxt_pos = nxt.get('start_pos')
+                if nxt_pos is None or not (0 <= nxt_pos < n_items):
+                    nxt_pos = idx_to_pos.get(nxt.get('start_index'))
+                if nxt_pos is not None and nxt_pos > s_pos:
+                    next_start_us = int(raw_items[nxt_pos]['start'])
+                    if (next_start_us - end_us) <= max_bridge_gap_us and next_start_us > start_us:
+                        end_us = next_start_us
+                    end_us = min(end_us, next_start_us)
+
+            if end_us - start_us < 250000:
+                continue
+
+            step_plan.append({
+                'number': str(det['number']),
+                'start': start_us,
+                'end': end_us,
+                'duration': end_us - start_us,
+            })
+
+        return step_plan
+
+    def _apply_step_badges_to_project(
+        self,
+        project: CapCutProject,
+        step_plan: List[Dict[str, Any]],
+    ) -> int:
+        """Inserta los números de paso en la esquina superior izquierda con Mini zoom y Enter / Click."""
+        data = project.data
+        self._strip_existing_step_tracks(data)
+        if not step_plan:
+            return 0
+
+        badge_style = self._get_step_badge_style()
+        tracks = data.setdefault('tracks', [])
+        badge_track = {
+            "id": str(uuid.uuid4()).upper(),
+            "type": "text",
+            "flag": 1,
+            "attribute": 0,
+            "name": STEP_BADGE_TRACK_NAME,
+            "is_default_name": False,
+            "segments": [],
+        }
+
+        text_indices = [i for i, t in enumerate(tracks) if t.get('type') == 'text']
+        insert_pos = max(text_indices) + 1 if text_indices else len(tracks)
+        tracks.insert(insert_pos, badge_track)
+
+        enter_starts: List[int] = []
+        for idx, step in enumerate(step_plan):
+            start_us = int(step['start'])
+            end_us = int(step['end'])
+            if idx + 1 < len(step_plan):
+                end_us = min(end_us, int(step_plan[idx + 1]['start']))
+            dur_us = end_us - start_us
+            if dur_us < 250000:
+                continue
+
+            mat_id = self._create_text_material(
+                data,
+                str(step['number']),
+                badge_style,
+                is_highlight=True,
+                recognize_task_id="step_badge",
+                mat_type="text",
+                force_font_size=STEP_BADGE_FONT_SIZE,
+            )
+            anim_ref = self._create_animation_from_config(data, STEP_MINI_ZOOM_ANIM, duration_us=dur_us)
+            extra_refs = [anim_ref] if anim_ref else []
+
+            badge_track['segments'].append({
+                "id": str(uuid.uuid4()).upper(),
+                "material_id": mat_id,
+                "target_timerange": {"start": start_us, "duration": dur_us},
+                "source_timerange": None,
+                "render_timerange": {"start": 0, "duration": 0},
+                "clip": {
+                    "scale": {"x": 1.0, "y": 1.0},
+                    "transform": {"x": STEP_BADGE_POS_X, "y": STEP_BADGE_POS_Y},
+                    "rotation": 0.0,
+                    "flip": {"vertical": False, "horizontal": False},
+                    "alpha": 1.0,
+                },
+                "extra_material_refs": extra_refs,
+                "uniform_scale": {"on": True, "value": 1.0},
+                "state": 0,
+                "speed": 1.0,
+                "visible": True,
+                "render_index": 14500,
+            })
+            enter_starts.append(start_us)
+
+        if enter_starts:
+            self._add_sound_track_fx(
+                data,
+                enter_starts,
+                volume=float(STEP_ENTER_SOUND_CFG['volume']),
+                sound_name=STEP_ENTER_SOUND_CFG['name'],
+                sound_path=get_step_enter_sound_path(),
+                duration_us=int(STEP_ENTER_SOUND_CFG['duration']),
+                track_name=STEP_AUDIO_TRACK_NAME,
+                effect_id=STEP_ENTER_SOUND_CFG['effect_id'],
+            )
+            return len(enter_starts)
+
+        self._strip_existing_step_tracks(data)
+        return 0
+
+    def _detect_and_apply_step_badges(
+        self,
+        project: CapCutProject,
+        raw_items: List[Dict[str, Any]],
+        openrouter_key: Optional[str] = None,
+        highlighter: Optional[Any] = None,
+        model: Optional[str] = None,
+        log_fn=None,
+    ) -> int:
+        """Analiza el contexto del guion con OpenRouter antes de insertar números de paso."""
+        client = self._resolve_openrouter_client(highlighter=highlighter, openrouter_key=openrouter_key, model=model)
+        if not client:
+            return 0
+        try:
+            detections = client.detect_step_numbers(raw_items)
+        except Exception as e:
+            logger.warning(f"Step number detection failed: {e}")
+            return 0
+
+        if detections is None:
+            return 0
+
+        step_plan = self._build_step_badge_plan(raw_items, detections)
+        if not step_plan:
+            if log_fn:
+                log_fn("[-] OpenRouter analizó el contexto: sin secuencia de pasos numerados (se omiten números sueltos).")
+            return 0
+
+        added = self._apply_step_badges_to_project(project, step_plan)
+        if added and log_fn:
+            nums_preview = ", ".join(s['number'] for s in step_plan[:added])
+            log_fn(f"[+] Pasos numerados aplicados en esquina sup. izquierda ({nums_preview}) con Mini zoom + Enter / Click.")
+        return added
+
     def auto_dual_process(
         self,
         project: CapCutProject,
@@ -1315,6 +1622,10 @@ class DualStyler:
             min_pacing_sec = float(pacing_cfg['min_seconds'])
         if (max_pacing_sec == 5.0 or max_pacing_sec is None) and 'max_seconds' in pacing_cfg:
             max_pacing_sec = float(pacing_cfg['max_seconds'])
+
+        # Reiniciar pistas previas de números de paso para idempotencia
+        self._strip_existing_step_tracks(project.data)
+        project._parse_subtitles()
 
         # Check if project text tracks are already styled into dual layers (Track 0 top, Track 1 bottom with temporal overlap)
         # or if they are separate sequential tracks generated in batches by the user.
@@ -1944,7 +2255,17 @@ class DualStyler:
 
 
 
-        return self.apply_plan(project, plan)
+        res = self.apply_plan(project, plan)
+        self._detect_and_apply_step_badges(
+            project,
+            raw_items,
+            openrouter_key=openrouter_key,
+            highlighter=highlighter,
+            model=model,
+            log_fn=log_fn,
+        )
+        project._parse_subtitles()
+        return res
 
     def filter_sound_fx_timestamps(
         self,
@@ -2023,43 +2344,42 @@ class DualStyler:
 
         return filtered
 
-    def _add_click_sound_fx(
+    def _add_sound_track_fx(
         self,
         draft_data: Dict[str, Any],
         start_times_us: List[int],
         volume: float = 0.65,
         sound_name: str = "Click_Mouse_Click_02(864360)",
-        sound_path: str = ""
+        sound_path: str = "",
+        duration_us: int = 866666,
+        track_name: str = "Efectos de Sonido",
+        effect_id: str = "6873506883139799041",
     ):
-        """Injects Click_Mouse_Click_02 sound effect on an audio track for each highlight timestamp."""
+        """Injects a synchronized SFX audio track with full CapCut companion metadata."""
         if not start_times_us:
             return
-
-        start_times_us = self.filter_sound_fx_timestamps(start_times_us, draft_data=draft_data)
-        if not start_times_us:
-            return
-
-        if not sound_path or not os.path.isfile(sound_path):
-            snd_file = getattr(self, "sound_fx", {}).get("filename", "")
-            sound_path = get_default_click_sound_path(sound_name=sound_name, filename=snd_file)
 
         materials = draft_data.setdefault('materials', {})
         audios = materials.setdefault('audios', [])
-        
-        click_mat = None
+
+        snd_mat = None
         for a in audios:
-            if 'Click_Mouse' in a.get('name', '') or a.get('path') == sound_path:
-                click_mat = a
+            a_name = a.get('name', '')
+            if (sound_path and a.get('path') == sound_path) or (sound_name and a_name == sound_name):
+                snd_mat = a
+                break
+            if 'Click_Mouse' in sound_name and 'Click_Mouse' in a_name:
+                snd_mat = a
                 break
 
-        if not click_mat:
-            click_id = str(uuid.uuid4()).upper()
-            click_mat = {
-                "id": click_id,
+        if not snd_mat:
+            snd_id = str(uuid.uuid4()).upper()
+            snd_mat = {
+                "id": snd_id,
                 "unique_id": "",
                 "type": "sound",
                 "name": sound_name,
-                "duration": int(getattr(self, "sound_fx", {}).get("duration", 866666)),
+                "duration": int(duration_us),
                 "path": sound_path,
                 "category_name": "Favoritos",
                 "wave_points": [],
@@ -2069,7 +2389,7 @@ class DualStyler:
                 "tone_type": "",
                 "source_platform": 0,
                 "video_id": "",
-                "effect_id": "6873506883139799041",
+                "effect_id": effect_id,
                 "resource_id": "",
                 "third_resource_id": "",
                 "category_id": "-100",
@@ -2099,9 +2419,9 @@ class DualStyler:
                 "tts_benefit_info": {"benefit_type": "none", "benefit_log_id": "", "benefit_log_extra": "", "benefit_amount": -1},
                 "tts_language_info": None
             }
-            audios.append(click_mat)
+            audios.append(snd_mat)
         else:
-            click_id = click_mat['id']
+            snd_id = snd_mat['id']
 
         speeds = materials.setdefault('speeds', [])
         placeholder_infos = materials.setdefault('placeholder_infos', [])
@@ -2113,7 +2433,10 @@ class DualStyler:
         audio_tracks = [t for t in tracks if t.get('type') == 'audio']
         eff_track = None
         for at in audio_tracks:
-            if at.get('name') == "Efectos de Sonido" or any(s.get('material_id') == click_id for s in at.get('segments', [])):
+            if at.get('name') == track_name or (
+                track_name == "Efectos de Sonido"
+                and any(s.get('material_id') == snd_id for s in at.get('segments', []))
+            ):
                 eff_track = at
                 break
 
@@ -2123,15 +2446,15 @@ class DualStyler:
                 "type": "audio",
                 "flag": 0,
                 "attribute": 0,
-                "name": "Efectos de Sonido",
-                "is_default_name": True,
+                "name": track_name,
+                "is_default_name": (track_name == "Efectos de Sonido"),
                 "segments": []
             }
             tracks.append(eff_track)
         else:
             eff_track['segments'] = []
 
-        CLICK_DUR = int(getattr(self, 'sound_fx', {}).get('duration', 866666))
+        CLICK_DUR = int(duration_us)
         for st in start_times_us:
             s_id = str(uuid.uuid4()).upper()
             p_id = str(uuid.uuid4()).upper()
@@ -2179,7 +2502,7 @@ class DualStyler:
                 "last_nonzero_volume": 1.0,
                 "clip": None,
                 "uniform_scale": None,
-                "material_id": click_id,
+                "material_id": snd_id,
                 "extra_material_refs": [s_id, p_id, b_id, scm_id, vs_id],
                 "render_index": 0,
                 "keyframe_refs": [],
@@ -2217,6 +2540,37 @@ class DualStyler:
                 "segment_color_tag": ""
             })
 
+    def _add_click_sound_fx(
+        self,
+        draft_data: Dict[str, Any],
+        start_times_us: List[int],
+        volume: float = 0.65,
+        sound_name: str = "Click_Mouse_Click_02(864360)",
+        sound_path: str = ""
+    ):
+        """Injects Click_Mouse_Click_02 sound effect on an audio track for each highlight timestamp."""
+        if not start_times_us:
+            return
+
+        start_times_us = self.filter_sound_fx_timestamps(start_times_us, draft_data=draft_data)
+        if not start_times_us:
+            return
+
+        if not sound_path or not os.path.isfile(sound_path):
+            snd_file = getattr(self, "sound_fx", {}).get("filename", "")
+            sound_path = get_default_click_sound_path(sound_name=sound_name, filename=snd_file)
+
+        self._add_sound_track_fx(
+            draft_data=draft_data,
+            start_times_us=start_times_us,
+            volume=volume,
+            sound_name=sound_name,
+            sound_path=sound_path,
+            duration_us=int(getattr(self, "sound_fx", {}).get("duration", 866666)),
+            track_name="Efectos de Sonido",
+            effect_id="6873506883139799041",
+        )
+
     def repair_project_subtitles(self, project: CapCutProject) -> Tuple[int, int]:
         """
         Repara la tipografía, tamaño, escala, posición y efectos de los subtítulos existentes
@@ -2230,7 +2584,10 @@ class DualStyler:
         materials = data.setdefault('materials', {})
         texts = {t['id']: t for t in materials.setdefault('texts', [])}
         tracks = data.setdefault('tracks', [])
-        text_tracks = [t for t in tracks if t.get('type') == 'text']
+        text_tracks = [
+            t for t in tracks
+            if t.get('type') == 'text' and t.get('name') != STEP_BADGE_TRACK_NAME
+        ]
 
         if not text_tracks:
             logger.warning("No se encontraron pistas de texto para reparar.")
@@ -2559,6 +2916,9 @@ class DualStyler:
         margin_cfg = getattr(self, 'margins', {})
         effective_max_chars = max_chars_per_line if (max_chars_per_line is not None and max_chars_per_line != 18) else int(margin_cfg.get('max_chars_per_line', 20))
 
+        self._strip_existing_step_tracks(project.data)
+        project._parse_subtitles()
+
         # 1. Read Track 0 speech subtitles
         text_track_indices = [i for i, t in enumerate(project.data.get('tracks', [])) if t.get('type') == 'text']
         if text_track_indices:
@@ -2880,6 +3240,14 @@ class DualStyler:
                 snd_path = get_default_click_sound_path(sound_name=snd_name, filename=snd_file)
             self._add_click_sound_fx(project.data, click_starts, volume=vol, sound_name=snd_name, sound_path=snd_path)
 
+        self._detect_and_apply_step_badges(
+            project,
+            raw_items,
+            openrouter_key=openrouter_key,
+            highlighter=highlighter,
+            model=model,
+            log_fn=log_fn,
+        )
         project.clean_all_subtitles()
         project._parse_subtitles()
         return len(raw_items), highlight_count
@@ -2912,6 +3280,9 @@ class DualStyler:
 
         margin_cfg = getattr(self, 'margins', {})
         eff_max_chars = max_chars_per_line if (max_chars_per_line is not None and max_chars_per_line != 18) else int(margin_cfg.get('max_chars_per_line', 21))
+
+        self._strip_existing_step_tracks(project.data)
+        project._parse_subtitles()
 
         # 1. Read Track 0 speech subtitles
         text_track_indices = [i for i, t in enumerate(project.data.get('tracks', [])) if t.get('type') == 'text']
@@ -3724,6 +4095,14 @@ class DualStyler:
                 snd_path = get_default_click_sound_path(sound_name=snd_name, filename=snd_file)
             self._add_click_sound_fx(project.data, click_starts, volume=vol, sound_name=snd_name, sound_path=snd_path)
 
+        self._detect_and_apply_step_badges(
+            project,
+            raw_items,
+            openrouter_key=openrouter_key,
+            highlighter=highlighter,
+            model=model,
+            log_fn=log_fn,
+        )
         project._parse_subtitles()
         return len(raw_items), highlight_count
 
@@ -3837,6 +4216,9 @@ class DualStyler:
           tamaño 6.2, y=-0.167.
         - Pista 0 (flag=1) aloja subtítulos generales; Pistas 1..4 (flag=0) alojan los 4 peldaños de escalera.
         """
+        self._strip_existing_step_tracks(project.data)
+        project._parse_subtitles()
+
         # 1. Extraer subtítulos de todas las pistas de texto
         text_track_indices = [i for i, t in enumerate(project.data.get('tracks', [])) if t.get('type') == 'text']
         if not text_track_indices:
@@ -4374,6 +4756,14 @@ class DualStyler:
         materials['texts'] = new_texts
         materials['text_templates'] = []
 
+        self._detect_and_apply_step_badges(
+            project,
+            raw_items,
+            openrouter_key=openrouter_key,
+            highlighter=highlighter,
+            model=model,
+            log_fn=log_fn,
+        )
         project._parse_subtitles()
         if log_fn:
             log_fn(f"[+] Preset Dentok aplicado: {len(general_segments)} subtítulos generales, {highlight_count} tarjeta(s) en escalera.")

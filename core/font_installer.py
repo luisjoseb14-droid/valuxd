@@ -156,7 +156,8 @@ def install_all_assets() -> Dict[str, Any]:
     # 2. Install Audio Click to CapCut cache
     sounds_to_install = [
         ('click_mouse_02.mp3', '33f11a55221681b3fefec3346290169e.mp3', 'Click_Mouse_Click_02(864360)'),
-        ('25b5bc6c42f453173fbf056859eec22b.mp3', '25b5bc6c42f453173fbf056859eec22b.mp3', '鼠标单击1')
+        ('25b5bc6c42f453173fbf056859eec22b.mp3', '25b5bc6c42f453173fbf056859eec22b.mp3', '鼠标单击1'),
+        ('enter_click_select.mp3', '4cd0c7ee14c07e29164fd10df012a008.mp3', 'Enter / Click / Select sound')
     ]
     for src_name, dst_cache_name, display_name in sounds_to_install:
         src_sound = os.path.join(base_dir, 'assets', 'audio', src_name)

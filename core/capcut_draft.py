@@ -140,6 +140,9 @@ class CapCutProject:
         tracks = self.data.get('tracks', [])
         for trk_idx, trk in enumerate(tracks):
             if trk.get('type') == 'text':
+                # Ignore corner step-badge overlay track so numbers aren't parsed as spoken subtitles
+                if trk.get('name') == 'Pasos':
+                    continue
                 for seg in trk.get('segments', []):
                     mat_id = seg.get('material_id')
                     text_mat = None
@@ -153,6 +156,8 @@ class CapCutProject:
                             if t_mat_id in texts_by_id:
                                 text_mat = texts_by_id[t_mat_id]
                     if text_mat:
+                        if text_mat.get('recognize_task_id') == 'step_badge':
+                            continue
                         sub_item = SubtitleItem(trk_idx, seg, text_mat)
                         self.subtitles.append(sub_item)
 

@@ -1,8 +1,8 @@
 {
-  "version": "1.0.27",
-  "version_code": 28,
+  "version": "1.0.28",
+  "version_code": 29,
   "date": "2026-11-14",
-  "description": "Preset Gala: corrige y destaca siempre Gala Unique automaticamente incluso ante transcripciones foneticas de CapCut (galaunick, galauni, gala unik, gala unix) o proyectos ya duales",
+  "description": "Deteccion contextual con OpenRouter de pasos/numeros ordenados (1, 2, 3...) colocados en esquina superior izquierda con la letra destacada del doctor, animacion Mini zoom y sonido Enter / Click sincronizado",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

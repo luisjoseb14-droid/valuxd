@@ -144,6 +144,158 @@ Responde EXCLUSIVAMENTE un objeto JSON válido con las correcciones encontradas 
 """
 
 
+SYSTEM_PROMPT_STEP_NUMBERS = """Eres un director de edición experto en Reels y TikToks educativos en español.
+Analiza el guion completo de subtítulos con sus índices y tiempos para determinar si el orador está enumerando PASOS, REGLAS, SEÑALES, ERRORES, CONSEJOS, HÁBITOS, MOTIVOS o PUNTOS EN ORDEN NUMÉRICO que deban mostrarse como un número grande (1, 2, 3...) en la esquina superior izquierda de la pantalla.
+
+REGLAS ESTRICTAS DE CONTEXTO:
+1. SOLO activa "is_ordered_steps": true cuando exista una secuencia clara y ordenada de al menos 2 elementos numerados o consecutivos (por ejemplo: 1, 2, 3...).
+   Formas válidas en el habla aunque no digan el dígito exacto:
+   - "Primero...", "Segundo...", "Tercero...", "Cuarto...", "Quinto..."
+   - "Lo primero...", "Lo segundo...", "Y lo tercero..." o "Y por último..." (cerrando una serie iniciada con 1 y 2)
+   - "Paso 1...", "Paso 2...", "Paso número 3..."
+   - "Señal número uno...", "Señal número dos...", "Señal número tres..."
+   - "Punto 1...", "Error 1...", "Consejo 2...", "Regla 3...", "Número 1...", "Número 2..."
+   - Rankings o cuentas regresivas explícitas de puntos ordenados ("3...", "2...", "1...")
+
+2. PROHIBIDO CONFUNDIR CON NÚMEROS NORMALES O TÍTULOS INTRODUCTORIOS:
+   - NO cuentes la frase introductoria donde anuncian cuántos pasos o errores hay (ej.: "Mi método tiene 3 pasos", "3 señales de alerta", "Te doy 5 consejos" -> ese número del título NO es un paso).
+   - NO incluyas cantidades, frecuencias, dosis, tiempos, porcentajes, edades, precios ni medidas (ej.: "una o 2 veces por semana", "2 años", "5 golpes", "10 días", "30 minutos", "al 80%", "3 meses").
+   - NO incluyas teléfonos de emergencia ni códigos (ej.: "llama al 112", "091").
+   - NO incluyas conteos de repeticiones físicas o demostraciones (ej.: "1, 2, 3, 4, 5" al contar golpes o respiraciones).
+   - NO actives una lista si solo aparece una palabra aislada como "primero" de forma conversacional sin continuación de otros pasos.
+
+3. DURACIÓN EXACTA DE CADA NÚMERO ("start_index" y "end_index"):
+   - "number": número entero lógico del paso (ej. 1, 2, 3).
+   - "start_index": índice del segmento exacto donde comienza a nombrarse o introducirse ese paso (donde entra el número con animación). Si el paso empieza con "Necesitas primero..." o "Y lo tercero...", usa el índice donde empieza ese giro ("Necesitas" / "Y lo tercero"). Si el paso dice "Señal / número dos", empieza en "Señal" o "número dos" según donde inicia el enunciado del paso.
+   - "end_index": índice del ÚLTIMO segmento donde el orador sigue explicando ese paso concreto:
+     * Si los pasos van seguidos uno tras otro, cada paso termina justo en el segmento anterior al inicio del siguiente paso (start_index_siguiente - 1).
+     * Para el ÚLTIMO paso (o si cambia de tema antes del siguiente paso), termina en el último segmento de la explicación de ese paso, ANTES de cualquier cierre/CTA final ("sígueme para más", "guarda este vídeo", "comenta", etc.).
+
+FORMATO DE RESPUESTA (EXCLUSIVAMENTE JSON válido):
+{
+  "is_ordered_steps": true,
+  "reason": "Explicación breve basada en el contexto del guion",
+  "steps": [
+    {"number": 1, "start_index": 4, "end_index": 11},
+    {"number": 2, "start_index": 12, "end_index": 17},
+    {"number": 3, "start_index": 18, "end_index": 23}
+  ]
+}
+Si NO hay una lista ordenada de pasos reales (solo números normales o texto corrido), responde:
+{
+  "is_ordered_steps": false,
+  "reason": "Solo menciona números/cantidades normales o no hay secuencia de pasos",
+  "steps": []
+}
+"""
+
+
+def get_system_prompt_step_numbers() -> str:
+    return SYSTEM_PROMPT_STEP_NUMBERS
+
+
+def _coerce_step_int(value: Any) -> Optional[int]:
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, int):
+        return value
+    if isinstance(value, str):
+        stripped = value.strip()
+        if stripped.isdigit():
+            return int(stripped)
+    return None
+
+
+def validate_step_numbers_response(
+    parsed: Any,
+    segments: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """
+    Valida y filtra estrictamente la respuesta contextual de OpenRouter sobre pasos numerados:
+    - Exige bandera `is_ordered_steps` verdadera y al menos 2 pasos.
+    - Verifica índices válidos dentro de `segments` y orden temporal creciente.
+    - Exige continuidad numérica coherente (1, 2, 3... o cuenta regresiva N..1 sin saltos)
+      para garantizar que nunca se cuelen números sueltos como "112" o "2 veces".
+    """
+    if not isinstance(parsed, dict) or not segments:
+        return []
+    if not bool(parsed.get('is_ordered_steps', False)):
+        return []
+    raw_steps = parsed.get('steps', [])
+    if not isinstance(raw_steps, list) or len(raw_steps) < 2:
+        return []
+
+    idx_to_pos: Dict[Any, int] = {}
+    for pos, seg in enumerate(segments):
+        seg_idx = seg.get('index', pos)
+        idx_to_pos[seg_idx] = pos
+        idx_to_pos[pos] = pos
+
+    normalized: List[Dict[str, Any]] = []
+    for entry in raw_steps:
+        if not isinstance(entry, dict):
+            continue
+        num = _coerce_step_int(entry.get('number'))
+        if num is None or num < 1 or num > 20:
+            continue
+        s_raw = entry.get('start_index')
+        e_raw = entry.get('end_index', s_raw)
+        if s_raw not in idx_to_pos or e_raw not in idx_to_pos:
+            continue
+        s_pos = idx_to_pos[s_raw]
+        e_pos = max(s_pos, idx_to_pos[e_raw])
+        normalized.append({
+            'number': num,
+            'start_pos': s_pos,
+            'end_pos': e_pos,
+            'start_index': segments[s_pos].get('index', s_pos),
+            'end_index': segments[e_pos].get('index', e_pos),
+        })
+
+    if len(normalized) < 2:
+        return []
+
+    normalized.sort(key=lambda x: (x['start_pos'], x['number']))
+
+    # Deduplicate by number and enforce strictly increasing start positions
+    deduped: List[Dict[str, Any]] = []
+    seen_nums = set()
+    last_start_pos = -1
+    for item in normalized:
+        if item['number'] in seen_nums or item['start_pos'] <= last_start_pos:
+            continue
+        seen_nums.add(item['number'])
+        last_start_pos = item['start_pos']
+        deduped.append(item)
+
+    if len(deduped) < 2:
+        return []
+
+    nums = [item['number'] for item in deduped]
+    is_ascending = nums == list(range(1, len(nums) + 1))
+    is_descending = nums[-1] == 1 and nums == list(range(nums[0], 0, -1))
+    if not (is_ascending or is_descending):
+        return []
+
+    # Clamp end_pos so adjacent steps do not overlap by segment index
+    result: List[Dict[str, Any]] = []
+    for i, item in enumerate(deduped):
+        e_pos = item['end_pos']
+        if i + 1 < len(deduped):
+            next_s = deduped[i + 1]['start_pos']
+            if e_pos >= next_s:
+                e_pos = max(item['start_pos'], next_s - 1)
+        result.append({
+            'number': item['number'],
+            'start_index': item['start_index'],
+            'end_index': segments[e_pos].get('index', e_pos),
+            'start_pos': item['start_pos'],
+            'end_pos': e_pos,
+        })
+
+    return result
+
+
 def get_system_prompt_grammar(keep_punctuation: bool = False) -> str:
     if keep_punctuation:
         punct_instr = "Mantén puntos (.) y comas (,) donde correspondan gramaticalmente, sin inventar dos puntos ni puntos suspensivos."
@@ -159,6 +311,57 @@ class OpenRouterClient:
 
     def is_configured(self) -> bool:
         return bool(self.api_key and self.api_key.strip())
+
+    def _post_chat_json(
+        self,
+        sys_prompt: str,
+        user_content: str,
+        temperature: float = 0.2,
+        timeout: int = 45,
+        op_name: str = "OpenRouter",
+    ) -> Optional[Dict[str, Any]]:
+        """Envía un prompt JSON a OpenRouter probando el modelo activo y fallbacks configurados."""
+        candidates = [self.model]
+        for fb in FALLBACK_MODELS:
+            if fb not in candidates:
+                candidates.append(fb)
+
+        for m in candidates:
+            payload = {
+                "model": m,
+                "messages": [
+                    {"role": "system", "content": sys_prompt},
+                    {"role": "user", "content": user_content},
+                ],
+                "response_format": {"type": "json_object"},
+                "temperature": temperature,
+            }
+            try:
+                req = urllib.request.Request(
+                    OPENROUTER_API_URL,
+                    data=json.dumps(payload).encode('utf-8'),
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {self.api_key.strip()}",
+                        "HTTP-Referer": "https://ccsubspro.local",
+                        "X-Title": "CC Subs Pro",
+                    },
+                    method='POST',
+                )
+                with urllib.request.urlopen(req, timeout=timeout) as resp:
+                    data = json.loads(resp.read().decode('utf-8'))
+                    raw_text = data['choices'][0]['message']['content'].strip()
+                    if raw_text.startswith("```"):
+                        raw_text = re.sub(r'^```(?:json)?\s*', '', raw_text)
+                        raw_text = re.sub(r'\s*```$', '', raw_text)
+                    parsed = json.loads(raw_text)
+                    self.model = m
+                    return parsed if isinstance(parsed, dict) else None
+            except Exception as e:
+                logger.warning(f"Intento fallido en {op_name} con modelo {m}: {e}")
+
+        logger.error(f"Todos los modelos candidatos de OpenRouter fallaron en {op_name}.")
+        return None
 
     def test_connection(self) -> Tuple[bool, str]:
         """Prueba la conexión con OpenRouter enviando un prompt mínimo."""
@@ -237,66 +440,72 @@ class OpenRouterClient:
 
         user_content = f"Procesa los siguientes {len(items_payload)} segmentos de subtítulos transcritos por CapCut:\n\n{json.dumps(items_payload, ensure_ascii=False, indent=2)}"
 
-        candidates = [self.model]
-        for fb in FALLBACK_MODELS:
-            if fb not in candidates:
-                candidates.append(fb)
-
         sys_prompt = get_system_prompt_subtitles(keep_punctuation=keep_punctuation)
+        parsed = self._post_chat_json(sys_prompt, user_content, temperature=0.2, timeout=45, op_name="process_subtitles")
+        if not parsed:
+            return None
 
-        for m in candidates:
-            payload = {
-                "model": m,
-                "messages": [
-                    {"role": "system", "content": sys_prompt},
-                    {"role": "user", "content": user_content}
-                ],
-                "response_format": {"type": "json_object"},
-                "temperature": 0.2
-            }
+        # Sanitizar respuestas para garantizar puntuación según preset y números en dígitos
+        corrected = parsed.get('corrected_subtitles', [])
+        for item in corrected:
+            item['text'] = convert_spanish_numbers_to_digits(clean_subtitle_text(item.get('text', ''), keep_punctuation=keep_punctuation))
 
-            try:
-                req = urllib.request.Request(
-                    OPENROUTER_API_URL,
-                    data=json.dumps(payload).encode('utf-8'),
-                    headers={
-                        "Content-Type": "application/json",
-                        "Authorization": f"Bearer {self.api_key.strip()}",
-                        "HTTP-Referer": "https://ccsubspro.local",
-                        "X-Title": "CC Subs Pro"
-                    },
-                    method='POST'
-                )
-                with urllib.request.urlopen(req, timeout=45) as resp:
-                    data = json.loads(resp.read().decode('utf-8'))
-                    raw_text = data['choices'][0]['message']['content'].strip()
-                    if raw_text.startswith("```"):
-                        import re
-                        raw_text = re.sub(r'^```(?:json)?\s*', '', raw_text)
-                        raw_text = re.sub(r'\s*```$', '', raw_text)
-                    parsed = json.loads(raw_text)
+        highlights = parsed.get('highlights', [])
+        for hl in highlights:
+            hl['phrase'] = convert_spanish_numbers_to_digits(sanitize_highlight_phrase(hl.get('phrase', '')))
+            hl['tone'] = 'negative' if hl.get('tone') == 'negative' else 'normal'
+            hl['is_solo'] = bool(hl.get('is_solo', False))
 
-                    # Sanitizar respuestas para garantizar puntuación según preset y números en dígitos
-                    corrected = parsed.get('corrected_subtitles', [])
-                    for item in corrected:
-                        item['text'] = convert_spanish_numbers_to_digits(clean_subtitle_text(item.get('text', ''), keep_punctuation=keep_punctuation))
+        return {
+            "corrected_subtitles": corrected,
+            "highlights": highlights
+        }
 
-                    highlights = parsed.get('highlights', [])
-                    for hl in highlights:
-                        hl['phrase'] = convert_spanish_numbers_to_digits(sanitize_highlight_phrase(hl.get('phrase', '')))
-                        hl['tone'] = 'negative' if hl.get('tone') == 'negative' else 'normal'
-                        hl['is_solo'] = bool(hl.get('is_solo', False))
+    def detect_step_numbers(
+        self,
+        segments: List[Dict[str, Any]],
+    ) -> Optional[List[Dict[str, Any]]]:
+        """
+        Analiza el contexto completo del guion con OpenRouter para identificar pasos o
+        enumeraciones ordenadas reales (1, 2, 3...) ignorando números normales del habla.
+        Retorna una lista validada de dicts `{number, start_index, end_index, start_pos, end_pos}`,
+        `[]` si el guion no contiene una secuencia de pasos, o `None` si OpenRouter no está disponible/falló.
+        """
+        if not self.is_configured():
+            logger.warning("OpenRouter API key not configured.")
+            return None
+        if not segments or len(segments) < 2:
+            return []
 
-                    self.model = m
-                    return {
-                        "corrected_subtitles": corrected,
-                        "highlights": highlights
-                    }
-            except Exception as e:
-                logger.warning(f"Intento fallido con modelo {m}: {e}")
+        items_payload = []
+        for pos, s in enumerate(segments):
+            idx = s.get('index', pos)
+            st_s = s.get('start', 0) / 1e6
+            et_s = s.get('end', 0) / 1e6
+            txt = clean_subtitle_text(s.get('text', ''), keep_punctuation=True)
+            items_payload.append({
+                "index": idx,
+                "start": f"{st_s:.2f}s",
+                "end": f"{et_s:.2f}s",
+                "text": txt,
+            })
 
-        logger.error("Todos los modelos candidatos de OpenRouter fallaron.")
-        return None
+        user_content = (
+            f"Analiza el contexto completo de estos {len(items_payload)} subtítulos y determina "
+            f"si hay pasos o puntos ordenados (1, 2, 3...) que deban mostrarse como número grande "
+            f"en la esquina superior izquierda:\n\n{json.dumps(items_payload, ensure_ascii=False, indent=2)}"
+        )
+        parsed = self._post_chat_json(
+            get_system_prompt_step_numbers(),
+            user_content,
+            temperature=0.0,
+            timeout=45,
+            op_name="detect_step_numbers",
+        )
+        if parsed is None:
+            return None
+
+        return validate_step_numbers_response(parsed, segments)
 
     def check_grammar(
         self,
@@ -321,11 +530,6 @@ class OpenRouterClient:
             return []
 
         sys_prompt = get_system_prompt_grammar(keep_punctuation=keep_punctuation)
-        candidates = [self.model]
-        for fb in FALLBACK_MODELS:
-            if fb not in candidates:
-                candidates.append(fb)
-
         all_corrections: List[Dict[str, Any]] = []
         n = len(segments)
         step = max(10, int(batch_size))
@@ -359,47 +563,13 @@ class OpenRouterClient:
                 + json.dumps(user_payload, ensure_ascii=False, indent=2)
             )
 
-            batch_parsed = None
-            for m in candidates:
-                payload = {
-                    "model": m,
-                    "messages": [
-                        {"role": "system", "content": sys_prompt},
-                        {"role": "user", "content": user_content}
-                    ],
-                    "response_format": {"type": "json_object"},
-                    "temperature": 0.1
-                }
-                try:
-                    req = urllib.request.Request(
-                        OPENROUTER_API_URL,
-                        data=json.dumps(payload).encode('utf-8'),
-                        headers={
-                            "Content-Type": "application/json",
-                            "Authorization": f"Bearer {self.api_key.strip()}",
-                            "HTTP-Referer": "https://ccsubspro.local",
-                            "X-Title": "CC Subs Pro"
-                        },
-                        method='POST'
-                    )
-                    with urllib.request.urlopen(req, timeout=45) as resp:
-                        data = json.loads(resp.read().decode('utf-8'))
-                        raw_text = data['choices'][0]['message']['content'].strip()
-                        if raw_text.startswith("```"):
-                            raw_text = re.sub(r'^```(?:json)?\s*', '', raw_text)
-                            raw_text = re.sub(r'\s*```$', '', raw_text)
-                        parsed = json.loads(raw_text)
-                        self.model = m
-                        batch_parsed = parsed.get('corrections', [])
-                        if not isinstance(batch_parsed, list):
-                            batch_parsed = []
-                        break
-                except Exception as e:
-                    logger.warning(f"Intento fallido en check_grammar con modelo {m}: {e}")
-
-            if batch_parsed is None:
-                logger.error("Todos los modelos candidatos de OpenRouter fallaron en check_grammar.")
+            parsed = self._post_chat_json(sys_prompt, user_content, temperature=0.1, timeout=45, op_name="check_grammar")
+            if parsed is None:
                 return None
+
+            batch_parsed = parsed.get('corrections', [])
+            if not isinstance(batch_parsed, list):
+                batch_parsed = []
 
             valid_indices = {s.get('index') for s in batch_segs}
             for item in batch_parsed:
