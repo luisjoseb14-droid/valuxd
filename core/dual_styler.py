@@ -20,6 +20,8 @@ from core.text_utils import (
     rebalance_subtitle_segments,
     ORPHAN_SHORT_WORDS,
     PROCLITIC_ORPHAN_WORDS,
+    GALA_UNIQUE_SECOND_WORDS,
+    normalize_gala_brand_text,
 )
 from ai.openrouter_client import OpenRouterClient, DEFAULT_MODEL
 
@@ -1005,6 +1007,8 @@ class DualStyler:
         if not text or not phrases:
             return text
         out = text
+        if any(p and p.strip().lower() == 'gala unique' for p in phrases):
+            out = normalize_gala_brand_text(out, all_upper=all_upper)
         for phrase in phrases:
             if not phrase:
                 continue
@@ -1016,6 +1020,87 @@ class DualStyler:
                 flags=re.IGNORECASE,
             )
         return out
+
+    @staticmethod
+    def _normalize_words_for_forced_phrases(
+        words_data: Any,
+        phrases: List[str],
+        all_upper: bool = False
+    ) -> Any:
+        """Expands fused CapCut brand transcriptions (e.g. 'galaunick' -> 'Gala', ' ', 'Unique') in word timing metadata."""
+        if not isinstance(words_data, dict) or 'text' not in words_data or not phrases:
+            return words_data
+        has_gala_brand = any(p and p.strip().lower() == 'gala unique' for p in phrases)
+        if not has_gala_brand:
+            return words_data
+
+        orig_t = list(words_data.get('text', []))
+        orig_s = list(words_data.get('start_time', []))
+        orig_e = list(words_data.get('end_time', []))
+        if not orig_t or len(orig_s) != len(orig_t) or len(orig_e) != len(orig_t):
+            return words_data
+
+        gala_label = 'GALA' if all_upper else 'Gala'
+        uniq_label = 'UNIQUE' if all_upper else 'Unique'
+        fused_pat = re.compile(r'^(?P<lead>[^\wáéíóúÁÉÍÓÚñÑüÜ]*)(?P<core>gala(?:[yj]?un[iy](?:ck|ke|ch|c|k|x|q|g)?|unique))(?P<trail>[^\wáéíóúÁÉÍÓÚñÑüÜ]*)$', re.IGNORECASE)
+
+        new_t, new_s, new_e = [], [], []
+        changed = False
+        idx = 0
+        while idx < len(orig_t):
+            w_tok = str(orig_t[idx])
+            s_ms = int(orig_s[idx])
+            e_ms = int(orig_e[idx])
+            m = fused_pat.match(w_tok)
+            if m:
+                changed = True
+                lead, trail = m.group('lead'), m.group('trail')
+                mid_ms = s_ms + int(round((e_ms - s_ms) * 0.42))
+                new_t.extend([f"{lead}{gala_label}", ' ', f"{uniq_label}{trail}"])
+                new_s.extend([s_ms, mid_ms, mid_ms])
+                new_e.extend([mid_ms, mid_ms, e_ms])
+                idx += 1
+                continue
+
+            # Also check adjacent non-space tokens: 'Gala' + ' ' + 'Unik'/'Unix'/'Unic'
+            bare = re.sub(r'[^\wáéíóúÁÉÍÓÚñÑüÜ]', '', w_tok.lower())
+            if bare == 'gala':
+                j = idx + 1
+                while j < len(orig_t) and not str(orig_t[j]).strip():
+                    j += 1
+                if j < len(orig_t):
+                    nxt_tok = str(orig_t[j])
+                    nxt_m = re.match(r'^([^\wáéíóúÁÉÍÓÚñÑüÜ]*)([\wáéíóúÁÉÍÓÚñÑüÜ]+)([^\wáéíóúÁÉÍÓÚñÑüÜ]*)$', nxt_tok)
+                    if nxt_m and nxt_m.group(2).lower() in GALA_UNIQUE_SECOND_WORDS:
+                        w_fixed = re.sub(r'gala', gala_label, w_tok, flags=re.IGNORECASE)
+                        n_fixed = f"{nxt_m.group(1)}{uniq_label}{nxt_m.group(3)}"
+                        if w_fixed != w_tok or n_fixed != nxt_tok:
+                            changed = True
+                        new_t.append(w_fixed)
+                        new_s.append(s_ms)
+                        new_e.append(e_ms)
+                        for sp in range(idx + 1, j):
+                            new_t.append(orig_t[sp])
+                            new_s.append(int(orig_s[sp]))
+                            new_e.append(int(orig_e[sp]))
+                        new_t.append(n_fixed)
+                        new_s.append(int(orig_s[j]))
+                        new_e.append(int(orig_e[j]))
+                        idx = j + 1
+                        continue
+
+            new_t.append(orig_t[idx])
+            new_s.append(s_ms)
+            new_e.append(e_ms)
+            idx += 1
+
+        if not changed:
+            return words_data
+        out_w = copy.deepcopy(words_data)
+        out_w['text'] = new_t
+        out_w['start_time'] = new_s
+        out_w['end_time'] = new_e
+        return out_w
 
     @staticmethod
     def _match_forced_highlight(text: str, phrases: List[str], all_upper: bool = False) -> Optional[str]:
@@ -1098,8 +1183,10 @@ class DualStyler:
             return raw_items
 
         multi_phrases = [p.split() for p in phrases if len(p.split()) == 2]
+        has_gala_brand = any(p and p.strip().lower() == 'gala unique' for p in phrases)
         items = [dict(it) for it in raw_items]
         for it in items:
+            it['words'] = cls._normalize_words_for_forced_phrases(it.get('words'), phrases, all_upper=all_upper)
             it['text'] = cls._normalize_forced_brand_text(it.get('text', ''), phrases, all_upper=all_upper)
 
         if not multi_phrases:
@@ -1119,6 +1206,8 @@ class DualStyler:
             c_last_bare = re.sub(r'^[¿¡"\'\(\[\{.,;:?!]+|[¿¡"\'\)\]\},.;:?!]+$', '', c_toks[-1].lower())
             n_first_bare = re.sub(r'^[¿¡"\'\(\[\{.,;:?!]+|[¿¡"\'\)\]\},.;:?!]+$', '', n_toks[0].lower())
             matched_pair = any(c_last_bare == pw[0].lower() and n_first_bare == pw[1].lower() for pw in multi_phrases)
+            if not matched_pair and has_gala_brand:
+                matched_pair = (c_last_bare == 'gala' and n_first_bare in GALA_UNIQUE_SECOND_WORDS)
             if not matched_pair:
                 i += 1
                 continue
@@ -1244,7 +1333,29 @@ class DualStyler:
 
         if is_already_dual:
             first_text_idx = next(i for i, t in enumerate(project.data.get('tracks', [])) if t.get('type') == 'text')
-            subs = [s for s in project.subtitles if s.track_index == first_text_idx]
+            top_subs = [s for s in project.subtitles if s.track_index == first_text_idx]
+            other_subs = [s for s in project.subtitles if s.track_index != first_text_idx]
+
+            def _norm_alnum(t: str) -> str:
+                return re.sub(r'[^\wáéíóúÁÉÍÓÚñÑüÜ]+', ' ', (t or '').lower()).strip()
+
+            recovered_subs = []
+            for s2 in other_subs:
+                n2 = _norm_alnum(s2.text)
+                if not n2:
+                    continue
+                s2_st, s2_et = s2.start_us, s2.start_us + s2.duration_us
+                duplicated = False
+                for s0 in top_subs:
+                    s0_st, s0_et = s0.start_us, s0.start_us + s0.duration_us
+                    if max(s0_st, s2_st) < min(s0_et, s2_et) + 150000:
+                        n0 = _norm_alnum(s0.text)
+                        if n2 in n0:
+                            duplicated = True
+                            break
+                if not duplicated:
+                    recovered_subs.append(s2)
+            subs = top_subs + recovered_subs
         else:
             subs = project.subtitles
 
@@ -1296,11 +1407,24 @@ class DualStyler:
         if not raw_items:
             return 0, 0
 
+        if is_already_dual and len(raw_items) > 1:
+            for k in range(len(raw_items) - 1):
+                if raw_items[k]['end'] > raw_items[k + 1]['start'] and raw_items[k]['start'] < raw_items[k + 1]['start']:
+                    raw_items[k]['end'] = raw_items[k + 1]['start']
+                    raw_items[k]['duration'] = raw_items[k]['end'] - raw_items[k]['start']
+
         # Consolidate split numbers and convert words to digits
         eff_max_chars = self.margins.get('max_chars_per_line', max_chars_per_line)
         eff_max_words = self.margins.get('max_words_per_line', max_words_per_line)
         eff_max_hl_chars = int(self.margins.get('max_highlight_chars', self.margins.get('max_chars_per_line', 18)))
         raw_items = self._consolidate_number_segments(raw_items, max_chars=eff_max_chars, max_words=eff_max_words)
+        forced_phrases = list(getattr(self, 'always_highlight_phrases', []) or [])
+        if forced_phrases:
+            raw_items = self._regroup_forced_phrases_in_items(
+                raw_items,
+                forced_phrases,
+                all_upper=is_all_uppercase,
+            )
         raw_items = rebalance_subtitle_segments(
             raw_items,
             max_chars=eff_max_chars,

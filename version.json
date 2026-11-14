@@ -1,8 +1,8 @@
 {
-  "version": "1.0.26",
-  "version_code": 27,
-  "date": "2026-11-13",
-  "description": "Actualizador con consulta anti-cache y respaldo curl en version.json + interfaz de actualizacion segura en hilo principal de Windows",
+  "version": "1.0.27",
+  "version_code": 28,
+  "date": "2026-11-14",
+  "description": "Preset Gala: corrige y destaca siempre Gala Unique automaticamente incluso ante transcripciones foneticas de CapCut (galaunick, galauni, gala unik, gala unix) o proyectos ya duales",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

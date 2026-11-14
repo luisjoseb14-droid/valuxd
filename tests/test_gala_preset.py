@@ -197,6 +197,102 @@ class TestGalaPresetForcedHighlight(unittest.TestCase):
         self.assertEqual([b["text"] for b in bot], ["Gala Unique", "Gala Unique", "Gala Unique"])
         self.assertEqual(len(clicks), 3)
 
+    def test_whisper_phonetic_variants_galaunick_galauni_unik_unix(self):
+        """Auto-normalizes CapCut phonetic errors ('galaunick', 'galauni', 'gala unik', 'gala unix') to highlighted 'Gala Unique'."""
+        proj, data = _make_mock_project(
+            [
+                ("en clínica", 0, 630000),
+                ("galaunick Murcia", 640000, 1130000),
+                ("en clínica", 3000000, 870000),
+                ("galauni", 3870000, 570000),
+                ("en clínica", 6000000, 800000),
+                ("gala unik", 6800000, 800000),
+                ("ya en gala unix", 9000000, 830000),
+            ]
+        )
+
+        class EmptyHL:
+            def suggest_highlights(self, text, count=10):
+                return []
+
+        styler = DualStyler.from_preset("gala")
+        styler.auto_dual_process(proj, highlighter=EmptyHL())
+
+        top, bot, clicks = _extract_dual_layers(data)
+        self.assertEqual([b["text"] for b in bot], ["Gala Unique", "Gala Unique", "Gala Unique", "Gala Unique"])
+        top_texts = [t["text"] for t in top]
+        self.assertIn("Murcia", top_texts)
+        self.assertIn("ya en", top_texts)
+        self.assertFalse(any("galaun" in t.lower() or "unik" in t.lower() or "unix" in t.lower() for t in top_texts), f"Got top: {top_texts}")
+        self.assertEqual(len(clicks), 4)
+
+    def test_split_gala_and_unik_with_trailing_city(self):
+        """Split 'En clínica Gala' + 'Unik Murcia' regroups 'Gala Unique' highlighted below 'En clínica', keeping 'Murcia' after."""
+        proj, data = _make_mock_project(
+            [
+                ("En clínica Gala", 0, 1030000),
+                ("Unik Murcia", 1030000, 830000),
+            ]
+        )
+
+        class EmptyHL:
+            def suggest_highlights(self, text, count=10):
+                return []
+
+        styler = DualStyler.from_preset("gala")
+        styler.auto_dual_process(proj, highlighter=EmptyHL())
+
+        top, bot, _ = _extract_dual_layers(data)
+        self.assertEqual([b["text"] for b in bot], ["Gala Unique"])
+        top_texts = [t["text"] for t in top]
+        self.assertEqual(top_texts, ["En clínica", "Murcia"])
+        self.assertGreaterEqual(top[0]["end"], bot[0]["end"])
+
+    def test_restyle_already_dual_preserves_gala_unique_on_track2(self):
+        """Re-styling an already-dual project recovers 'Gala Unique' from track 2 instead of dropping it."""
+        proj, data = _make_mock_project(
+            [
+                ("En clínica", 0, 1200000),
+                ("Murcia", 1200000, 670000),
+            ]
+        )
+        # Add track 2 with 'Gala Unique ' overlapping 'En clínica'
+        data["materials"]["texts"].append(
+            {
+                "id": "M_BOT",
+                "content": json.dumps({"text": "Gala Unique ", "styles": [{"range": [0, 12]}]}),
+                "words": None,
+            }
+        )
+        data["tracks"].append(
+            {
+                "id": "T2",
+                "type": "text",
+                "segments": [
+                    {
+                        "id": "S_BOT",
+                        "material_id": "M_BOT",
+                        "target_timerange": {"start": 660000, "duration": 530000},
+                        "extra_material_refs": [],
+                    }
+                ],
+            }
+        )
+        proj.subtitles.append(
+            SubtitleItem(1, data["tracks"][1]["segments"][0], data["materials"]["texts"][-1])
+        )
+
+        class EmptyHL:
+            def suggest_highlights(self, text, count=10):
+                return []
+
+        styler = DualStyler.from_preset("gala")
+        styler.auto_dual_process(proj, highlighter=EmptyHL())
+
+        top, bot, _ = _extract_dual_layers(data)
+        self.assertEqual([b["text"] for b in bot], ["Gala Unique"])
+        self.assertEqual([t["text"] for t in top], ["En clínica", "Murcia"])
+
 
 if __name__ == "__main__":
     unittest.main()

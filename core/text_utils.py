@@ -236,6 +236,31 @@ COMMON_LOWERCASE_WORDS = {
     'este', 'esta', 'estos', 'estas', 'esto', 'ese', 'esa', 'esos', 'esas', 'eso'
 }
 
+GALA_UNIQUE_SECOND_WORDS = {
+    'unique', 'unik', 'unic', 'únic', 'unix', 'unick', 'unike',
+    'uniq', 'uni', 'yunick', 'yunik', 'yunic', 'junik', 'junic'
+}
+
+_GALA_BRAND_FUSED_RE = re.compile(
+    r'(?<!\w)gala(?:[yj]?un[iy](?:ck|ke|ch|c|k|x|q|g)?|unique)(?!\w)',
+    re.IGNORECASE,
+)
+_GALA_BRAND_TWO_WORD_RE = re.compile(
+    r'(?<!\w)gala\s+(?:unique|unick|unik|unic|únic|unix|unike|uniq|uni|yunick|yunik|yunic|junik|junic)(?!\w)',
+    re.IGNORECASE,
+)
+
+
+def normalize_gala_brand_text(text: str, all_upper: bool = False) -> str:
+    """Normalizes phonetic CapCut Whisper spellings of 'Gala Unique' into canonical casing."""
+    if not text:
+        return text
+    target = "GALA UNIQUE" if all_upper else "Gala Unique"
+    out = _GALA_BRAND_FUSED_RE.sub(lambda _m: target, text)
+    out = _GALA_BRAND_TWO_WORD_RE.sub(lambda _m: target, out)
+    return out
+
+
 def clean_spanish_casing(text: str, is_sentence_start: bool = True) -> str:
     """
     Cleans Spanish casing in subtitle text:
@@ -252,6 +277,8 @@ def clean_spanish_casing(text: str, is_sentence_start: bool = True) -> str:
     # Intentional ALL-CAPS must be respected (e.g. presets like Dr. Carrillo).
     if not any(c.islower() for c in text):
         return text
+
+    text = normalize_gala_brand_text(text, all_upper=False)
 
     words = text.split()
     if not words:
@@ -284,10 +311,13 @@ def clean_spanish_casing(text: str, is_sentence_start: bool = True) -> str:
         next_bare = re.sub(r'[¿¡?!,.;:\'"\(\)\[\]\{\}]', '', words[idx + 1]).lower() if idx + 1 < len(words) else ''
         if (
             (prev_bare in ('clínica', 'clinica') and core.lower() in ('gala', 'dentok'))
-            or (core.lower() == 'gala' and next_bare == 'unique')
-            or (prev_bare == 'gala' and core.lower() == 'unique')
+            or (core.lower() == 'gala' and next_bare in GALA_UNIQUE_SECOND_WORDS)
+            or (prev_bare == 'gala' and core.lower() in GALA_UNIQUE_SECOND_WORDS)
         ):
-            core = core[0].upper() + core[1:].lower()
+            if prev_bare == 'gala' and core.lower() in GALA_UNIQUE_SECOND_WORDS:
+                core = 'Unique'
+            else:
+                core = core[0].upper() + core[1:].lower()
             out.append(f"{lead}{core}{trail}")
             continue
 
@@ -1275,8 +1305,12 @@ def rebalance_subtitle_segments(
 
             # 2a. Pull proper compound tail backward (e.g. "en clinica" + "gala..." -> "en clínica Gala", or "Gala" + "Unique...")
             if (
-                (last_c in PROPER_HEAD_NOUNS and first_n not in CLAUSE_OR_PREP_STARTERS)
-                or (last_c == 'gala' and first_n == 'unique')
+                (
+                    last_c in PROPER_HEAD_NOUNS
+                    and first_n not in CLAUSE_OR_PREP_STARTERS
+                    and not (first_n == 'gala' and second_n in GALA_UNIQUE_SECOND_WORDS)
+                )
+                or (last_c == 'gala' and first_n in GALA_UNIQUE_SECOND_WORDS)
             ) and len(n_toks) >= 2:
                 cand_len = len(_seg_text(curr)) + 1 + len(n_toks[0]['word'])
                 if len(c_toks) + 1 <= SOFT_MAX_WORDS and cand_len <= SOFT_MAX_CHARS:
