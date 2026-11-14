@@ -129,6 +129,7 @@ class DualStyler:
             self.preset_name = preset_data.get('name', 'Custom')
             self.stickers_cfg = preset_data.get('stickers', {})
             self.keep_punctuation = bool(preset_data.get('keep_punctuation', False) or preset_data.get('preserve_punctuation', False))
+            self.always_highlight_phrases = list(preset_data.get('always_highlight_phrases', []))
         else:
             self.preset_data = None
             self.layout = 'dual'
@@ -154,6 +155,7 @@ class DualStyler:
             self.preset_name = 'Custom'
             self.stickers_cfg = {}
             self.keep_punctuation = False
+            self.always_highlight_phrases = []
 
     @classmethod
     def from_preset(cls, preset_name_or_data: Any) -> 'DualStyler':
@@ -997,6 +999,174 @@ class DualStyler:
 
         return result
 
+    @staticmethod
+    def _normalize_forced_brand_text(text: str, phrases: List[str], all_upper: bool = False) -> str:
+        """Restores canonical casing (e.g. 'Gala Unique') for preset always-highlighted brand phrases."""
+        if not text or not phrases:
+            return text
+        out = text
+        for phrase in phrases:
+            if not phrase:
+                continue
+            target = phrase.upper() if all_upper else phrase
+            out = re.sub(
+                r'(?<!\w)' + re.escape(phrase) + r'(?!\w)',
+                lambda _m, t=target: t,
+                out,
+                flags=re.IGNORECASE,
+            )
+        return out
+
+    @staticmethod
+    def _match_forced_highlight(text: str, phrases: List[str], all_upper: bool = False) -> Optional[str]:
+        """Returns canonical phrase if any forced brand/highlight phrase appears in text."""
+        if not text or not phrases:
+            return None
+        for phrase in phrases:
+            if not phrase:
+                continue
+            if re.search(r'(?<!\w)' + re.escape(phrase) + r'(?!\w)', text, flags=re.IGNORECASE):
+                return phrase.upper() if all_upper else phrase
+        return None
+
+    @staticmethod
+    def _strip_last_word_metadata(words_data: Any) -> Any:
+        if not isinstance(words_data, dict) or 'text' not in words_data:
+            return words_data
+        nw = copy.deepcopy(words_data)
+        txts = list(nw.get('text', []))
+        while txts and not str(txts[-1]).strip():
+            txts.pop()
+            for k in ('start_time', 'end_time'):
+                if isinstance(nw.get(k), list) and nw[k]:
+                    nw[k].pop()
+        if txts:
+            txts.pop()
+            for k in ('start_time', 'end_time'):
+                if isinstance(nw.get(k), list) and nw[k]:
+                    nw[k].pop()
+        while txts and not str(txts[-1]).strip():
+            txts.pop()
+            for k in ('start_time', 'end_time'):
+                if isinstance(nw.get(k), list) and nw[k]:
+                    nw[k].pop()
+        nw['text'] = txts
+        return nw
+
+    @staticmethod
+    def _prepend_word_metadata(words_data: Any, word_str: str, added_ms: int) -> Any:
+        if not isinstance(words_data, dict) or 'text' not in words_data:
+            return words_data
+        nw = copy.deepcopy(words_data)
+        shift_ms = max(50, int(added_ms))
+        nw['text'] = [word_str, ' '] + list(nw.get('text', []))
+        nw['start_time'] = [0, shift_ms] + [int(s) + shift_ms for s in nw.get('start_time', [])]
+        nw['end_time'] = [shift_ms, shift_ms] + [int(e) + shift_ms for e in nw.get('end_time', [])]
+        return nw
+
+    @staticmethod
+    def _merge_words_metadata(curr: Dict[str, Any], nxt: Dict[str, Any]) -> Any:
+        w1 = curr.get('words')
+        w2 = nxt.get('words')
+        if not (isinstance(w1, dict) and isinstance(w2, dict) and 'text' in w1 and 'text' in w2):
+            return w1 or w2
+        merged = copy.deepcopy(w1)
+        offset_ms = max(0, int((nxt['start'] - curr['start']) // 1000))
+        if merged.get('text'):
+            prev_end_ms = int(merged['end_time'][-1]) if merged.get('end_time') else offset_ms
+            merged['text'].append(' ')
+            merged.get('start_time', []).append(prev_end_ms)
+            merged.get('end_time', []).append(max(prev_end_ms, offset_ms))
+        merged['text'].extend(list(w2.get('text', [])))
+        merged.setdefault('start_time', []).extend(int(s) + offset_ms for s in w2.get('start_time', []))
+        merged.setdefault('end_time', []).extend(int(e) + offset_ms for e in w2.get('end_time', []))
+        return merged
+
+    @classmethod
+    def _regroup_forced_phrases_in_items(
+        cls,
+        raw_items: List[Dict[str, Any]],
+        phrases: List[str],
+        all_upper: bool = False
+    ) -> List[Dict[str, Any]]:
+        """
+        Ensures multi-word forced brand phrases (e.g. 'Gala Unique') stay together
+        within a single segment so leading context ('En clínica') remains on top and
+        'Gala Unique' is highlighted together below.
+        """
+        if not raw_items or not phrases:
+            return raw_items
+
+        multi_phrases = [p.split() for p in phrases if len(p.split()) == 2]
+        items = [dict(it) for it in raw_items]
+        for it in items:
+            it['text'] = cls._normalize_forced_brand_text(it.get('text', ''), phrases, all_upper=all_upper)
+
+        if not multi_phrases:
+            return items
+
+        i = 0
+        while i < len(items) - 1:
+            curr = items[i]
+            nxt = items[i + 1]
+            c_toks = curr.get('text', '').split()
+            n_toks = nxt.get('text', '').split()
+            gap_us = nxt['start'] - curr['end']
+            if not c_toks or not n_toks or gap_us > 600000 or curr['text'].rstrip().endswith(('.', '?', '!')):
+                i += 1
+                continue
+
+            c_last_bare = re.sub(r'^[¿¡"\'\(\[\{.,;:?!]+|[¿¡"\'\)\]\},.;:?!]+$', '', c_toks[-1].lower())
+            n_first_bare = re.sub(r'^[¿¡"\'\(\[\{.,;:?!]+|[¿¡"\'\)\]\},.;:?!]+$', '', n_toks[0].lower())
+            matched_pair = any(c_last_bare == pw[0].lower() and n_first_bare == pw[1].lower() for pw in multi_phrases)
+            if not matched_pair:
+                i += 1
+                continue
+
+            rem_toks = c_toks[:-1]
+            rem_first_bare = re.sub(r'^[¿¡"\'\(\[\{.,;:?!]+|[¿¡"\'\)\]\},.;:?!]+$', '', rem_toks[0].lower()) if rem_toks else ''
+            keep_curr_as_prefix = (
+                len(rem_toks) >= 2
+                or (len(rem_toks) == 1 and len(rem_first_bare) >= 4 and rem_first_bare not in PROCLITIC_ORPHAN_WORDS)
+            )
+            if keep_curr_as_prefix and not re.search(r'[.,;:?!]$', c_toks[-1]):
+                moved_word = c_toks[-1]
+                w_start, _ = find_phrase_timing(curr['start'], curr['duration'], curr.get('words'), curr['text'], moved_word)
+                split_us = max(curr['start'] + 150000, min(w_start, curr['end'] - 120000))
+                if split_us < curr['end']:
+                    old_nxt_start = nxt['start']
+                    curr['text'] = " ".join(rem_toks).strip()
+                    curr['end'] = split_us
+                    curr['duration'] = curr['end'] - curr['start']
+                    curr['words'] = cls._strip_last_word_metadata(curr.get('words'))
+
+                    nxt['start'] = min(old_nxt_start, split_us)
+                    nxt['duration'] = nxt['end'] - nxt['start']
+                    nxt['text'] = cls._normalize_forced_brand_text(
+                        f"{moved_word} {nxt['text']}".strip(),
+                        phrases,
+                        all_upper=all_upper,
+                    )
+                    added_ms = int((old_nxt_start - nxt['start']) // 1000)
+                    nxt['words'] = cls._prepend_word_metadata(nxt.get('words'), moved_word, added_ms)
+                    i += 1
+                    continue
+
+            # Otherwise merge curr + nxt so 'Gala Unique' stays intact without leaving an orphan preposition
+            curr['words'] = cls._merge_words_metadata(curr, nxt)
+            curr['text'] = cls._normalize_forced_brand_text(
+                f"{curr['text']} {nxt['text']}".strip(),
+                phrases,
+                all_upper=all_upper,
+            )
+            curr['end'] = nxt['end']
+            curr['duration'] = curr['end'] - curr['start']
+            items.pop(i + 1)
+
+        for idx, it in enumerate(items):
+            it['index'] = idx
+        return items
+
     def auto_dual_process(
         self,
         project: CapCutProject,
@@ -1189,6 +1359,14 @@ class DualStyler:
         if getattr(self, 'keep_punctuation', False):
             heuristic_punctuation_fallback(raw_items)
 
+        forced_phrases = list(getattr(self, 'always_highlight_phrases', []) or [])
+        if forced_phrases:
+            raw_items = self._regroup_forced_phrases_in_items(
+                raw_items,
+                forced_phrases,
+                all_upper=is_all_uppercase,
+            )
+
         full_script = " ".join(item['text'] for item in raw_items)
         phrases_to_highlight = ai_phrases
 
@@ -1250,9 +1428,30 @@ class DualStyler:
             matched_highlight = None
             matched_tone = 'normal'
             is_solo_entry = False
+            is_forced_hl = False
             time_since_last_sec = (curr_start - last_highlight_us) / 1e6
 
-            if time_since_last_sec >= min_pacing_sec:
+            forced_match = (
+                self._match_forced_highlight(curr_text, forced_phrases, all_upper=is_all_uppercase)
+                if forced_phrases else None
+            )
+
+            suppress_leadin_hl = False
+            if not forced_match and forced_phrases and curr_idx + 1 < len(raw_items):
+                nxt_peek = raw_items[curr_idx + 1]
+                nxt_gap_us = nxt_peek['start'] - curr_end
+                if nxt_gap_us <= 600000 and not curr_text.rstrip().endswith(('.', '?', '!')):
+                    if self._match_forced_highlight(nxt_peek.get('text', ''), forced_phrases, all_upper=is_all_uppercase):
+                        low_c = curr_text.lower()
+                        if 'clínica' in low_c or 'clinica' in low_c or len(curr_text.split()) <= 3:
+                            suppress_leadin_hl = True
+
+            if forced_match:
+                matched_highlight = forced_match
+                matched_tone = 'normal'
+                is_solo_entry = False
+                is_forced_hl = True
+            elif not suppress_leadin_hl and time_since_last_sec >= min_pacing_sec:
                 for entry in phrases_to_highlight:
                     if isinstance(entry, dict):
                         p = entry.get('phrase', '')
@@ -1306,7 +1505,7 @@ class DualStyler:
                         matched_tone = 'normal'
                         is_solo_entry = False
 
-            if matched_highlight:
+            if matched_highlight and not is_forced_hl:
                 clean_hl_check = sanitize_highlight_phrase(matched_highlight, max_chars=eff_max_hl_chars)
                 if not clean_hl_check or clean_hl_check.lower() in SPANISH_STOPWORDS or (len(clean_hl_check.strip()) <= 2 and not any(c.isdigit() for c in clean_hl_check)):
                     matched_highlight = None
@@ -1386,6 +1585,8 @@ class DualStyler:
                     }
 
                 bot_text = clean_subtitle_text(matched_highlight, preserve_case=is_all_uppercase, keep_punctuation=getattr(self, 'keep_punctuation', False))
+                if forced_phrases:
+                    bot_text = self._normalize_forced_brand_text(bot_text, forced_phrases, all_upper=is_all_uppercase)
                 if is_all_uppercase:
                     bot_text = bot_text.upper()
                 if suffix:
@@ -1498,10 +1699,19 @@ class DualStyler:
                         else:
                             is_sentence_start = False
 
+                    if is_forced_hl and plan and plan[-1].get('top') and plan[-1]['top'].get('text'):
+                        prev_top_check = plan[-1]['top']
+                        if (
+                            not prev_top_check.get('is_highlight')
+                            and not prev_top_check['text'].rstrip().endswith(('.', '?', '!'))
+                            and (curr_start - prev_top_check['end']) <= 450000
+                        ):
+                            is_sentence_start = False
+
                     if is_sentence_start:
                         # User rule: Solo highlights higher up (TOP track), used sparingly.
                         time_since_last_solo = hl_start - last_solo_us
-                        can_use_solo = (allow_solo and solo_count < max_solo and time_since_last_solo >= min_solo_interval_us)
+                        can_use_solo = (not is_forced_hl) and (allow_solo and solo_count < max_solo and time_since_last_solo >= min_solo_interval_us)
 
                         if can_use_solo:
                             solo_count += 1
@@ -1543,6 +1753,16 @@ class DualStyler:
                             }
                             plan.append({'top': top_entry, 'bot': bot_entry, 'sticker': stk_entry})
                             last_highlight_us = hl_start
+                        elif is_forced_hl:
+                            # Forced brand highlights always render on the highlighted bottom layer without duplicating top text
+                            bot_entry = {
+                                'text': bot_text,
+                                'start': hl_start,
+                                'end': bot_end,
+                                'tone': matched_tone
+                            }
+                            plan.append({'top': None, 'bot': bot_entry, 'sticker': stk_entry})
+                            last_highlight_us = hl_start
                         else:
                             # Full segment is the highlight: create top + bottom dual layer
                             bot_entry = {
@@ -1562,8 +1782,10 @@ class DualStyler:
                         # Mid-sentence continuation from preceding segment (same grammatical phrase).
                         if plan and plan[-1].get('top') and plan[-1]['top'].get('text'):
                             prev_top = plan[-1]['top']
-                            # Guard against excessive top extension: max 2.0s total duration and no audio gap > 150ms
-                            if (bot_end - prev_top['start'] <= 2000000) and (curr_start - prev_top['end'] <= 150000):
+                            max_ext_us = 3500000 if is_forced_hl else 2000000
+                            max_gap_us = 450000 if is_forced_hl else 150000
+                            # Guard against excessive top extension
+                            if (bot_end - prev_top['start'] <= max_ext_us) and (curr_start - prev_top['end'] <= max_gap_us):
                                 prev_top['end'] = max(prev_top['end'], bot_end)
 
 

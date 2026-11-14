@@ -189,7 +189,10 @@
     "margins": {
       "max_chars_per_line": 18,
       "max_words_per_line": 3
-    }
+    },
+    "always_highlight_phrases": [
+      "Gala Unique"
+    ]
   },
   "laura": {
     "name": "Letra Laura Pediatra",

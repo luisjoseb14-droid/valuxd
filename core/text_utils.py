@@ -279,6 +279,18 @@ def clean_spanish_casing(text: str, is_sentence_start: bool = True) -> str:
         if lead and ('¿' in lead or '¡' in lead):
             is_word_sent_start = True
 
+        # Capitalize recognized clinic/brand names ('Gala Unique', 'Clínica Gala', 'Clínica Dentok')
+        prev_bare = re.sub(r'[¿¡?!,.;:\'"\(\)\[\]\{\}]', '', out[-1]).lower() if out else ''
+        next_bare = re.sub(r'[¿¡?!,.;:\'"\(\)\[\]\{\}]', '', words[idx + 1]).lower() if idx + 1 < len(words) else ''
+        if (
+            (prev_bare in ('clínica', 'clinica') and core.lower() in ('gala', 'dentok'))
+            or (core.lower() == 'gala' and next_bare == 'unique')
+            or (prev_bare == 'gala' and core.lower() == 'unique')
+        ):
+            core = core[0].upper() + core[1:].lower()
+            out.append(f"{lead}{core}{trail}")
+            continue
+
         # Check ALL CAPS (length >= 2)
         if core.isupper() and len(core) >= 2:
             if core in SPANISH_ACRONYMS:
@@ -296,16 +308,6 @@ def clean_spanish_casing(text: str, is_sentence_start: bool = True) -> str:
             else:
                 out.append(f"{lead}{core.lower()}{trail}")
             continue
-
-        # Capitalize recognized clinic/brand names immediately following 'clínica'/'gala'
-        if out:
-            prev_bare = re.sub(r'[¿¡?!,.;:\'"\(\)\[\]\{\}]', '', out[-1]).lower()
-            if (prev_bare in ('clínica', 'clinica') and core.lower() in ('gala', 'dentok')) or (
-                prev_bare == 'gala' and core.lower() == 'unique'
-            ):
-                core = core[0].upper() + core[1:].lower()
-                out.append(f"{lead}{core}{trail}")
-                continue
 
         # Check Titlecase words mid-sentence
         if core[0].isupper() and not is_word_sent_start:

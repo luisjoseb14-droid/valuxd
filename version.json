@@ -1,8 +1,8 @@
 {
-  "version": "1.0.24",
-  "version_code": 25,
+  "version": "1.0.25",
+  "version_code": 26,
   "date": "2026-11-13",
-  "description": "Correccion del prompt de gramatica para respetar exactamente marcas y nombres propios como Gala Unique",
+  "description": "Preset Gala: Gala Unique siempre destacada abajo con su click FX, agrupada bajo su contexto general (ej. En clínica arriba) y respetando mayúsculas exactas",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }
