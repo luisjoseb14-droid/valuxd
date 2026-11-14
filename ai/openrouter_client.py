@@ -125,7 +125,7 @@ REGLAS ESTRICTAS:
 3. PROHIBICIONES IMPORTANTES:
    - JAMÁS cambies palabras válidas por sinónimos ni reescribas o parafrasees el guion.
    - JAMÁS fusiones, dividas o elimines segmentos, ni cambies el orden de las palabras.
-   - JAMÁS alteres anglicismos, marcas comerciales o nombres propios válidos ya bien escritos (por ejemplo: "barefoot", "dentok", "Galaunick", "Alharilla", "Abde", "Emilia", "Cuidus", "botox", "lifting", "peeling", "spray", "clip", "reels", "tiktok").
+   - JAMÁS alteres, unas, separes ni reescribas anglicismos, marcas comerciales, nombres de clínicas o nombres propios válidos ya escritos por el editor (por ejemplo: "Gala Unique", "Clínica Gala", "barefoot", "Dentok", "Alharilla", "Abde", "Emilia", "Cuidus", "Visedo", "Enfocavisión", "botox", "lifting", "peeling", "spray", "clip", "reels", "tiktok"). Si una palabra o expresión parece un nombre propio o marca (como "Gala Unique"), respétala exactamente tal como aparece y NO la corrijas salvo una tilde inequívoca en español (ej. "Alvaro" -> "Álvaro").
    - RESPETA EL ESTILO DE MAYÚSCULAS DEL SEGMENTO: Si el segmento de entrada tiene "is_upper": true (TODO EN MAYÚSCULAS), devuelve "corrected_text" también TODO EN MAYÚSCULAS manteniendo las tildes (ejemplo: "ATENCION MEDICA" -> "ATENCIÓN MÉDICA"). Si el texto original está en minúsculas por continuación de frase, mantenlo en minúsculas salvo nombres propios o inicio tras punto/¿/¡.
    - RESPETA los saltos de línea ("\\n") si el texto original tiene dos líneas.
    - {punct_instruction}

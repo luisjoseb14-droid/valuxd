@@ -1,8 +1,8 @@
 {
-  "version": "1.0.23",
-  "version_code": 24,
+  "version": "1.0.24",
+  "version_code": 25,
   "date": "2026-11-13",
-  "description": "Correccion del auto-actualizador para sincronizar tambien la carpeta ai/ (OpenRouterClient.check_grammar) y auto-reparacion al iniciar",
+  "description": "Correccion del prompt de gramatica para respetar exactamente marcas y nombres propios como Gala Unique",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

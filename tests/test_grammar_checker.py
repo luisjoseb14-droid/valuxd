@@ -144,6 +144,8 @@ class TestGrammarChecker(unittest.TestCase):
         self.assertIn("corrections", p_no)
         self.assertIn("NO agregues comas ni puntos nuevos", p_no)
         self.assertIn("Mantén puntos (.) y comas (,)", p_yes)
+        self.assertIn("Gala Unique", p_no)
+        self.assertNotIn("Gala" + "unick", p_no)
 
     def test_normalize_preserves_caps_and_multiline(self):
         # Uppercase segment retains uppercase even if AI returned title/lowercase

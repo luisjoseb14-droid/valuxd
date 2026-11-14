@@ -297,10 +297,12 @@ def clean_spanish_casing(text: str, is_sentence_start: bool = True) -> str:
                 out.append(f"{lead}{core.lower()}{trail}")
             continue
 
-        # Capitalize recognized clinic/brand names immediately following 'clínica'/'clinica'
+        # Capitalize recognized clinic/brand names immediately following 'clínica'/'gala'
         if out:
             prev_bare = re.sub(r'[¿¡?!,.;:\'"\(\)\[\]\{\}]', '', out[-1]).lower()
-            if prev_bare in ('clínica', 'clinica') and core.lower() in ('gala', 'galaunick', 'dentok'):
+            if (prev_bare in ('clínica', 'clinica') and core.lower() in ('gala', 'dentok')) or (
+                prev_bare == 'gala' and core.lower() == 'unique'
+            ):
                 core = core[0].upper() + core[1:].lower()
                 out.append(f"{lead}{core}{trail}")
                 continue
@@ -1188,7 +1190,7 @@ def rebalance_subtitle_segments(
         'comparte', 'guarda', 'agenda', 'visítanos', 'visitanos'
     }
     PROPER_HEAD_NOUNS = {'clínica', 'clinica', 'doctor', 'doctora', 'dr', 'dra', 'hospital', 'centro', 'instituto', 'san', 'santa'}
-    PROPER_KNOWN_NAMES = {'gala', 'galaunick', 'dentok'}
+    PROPER_KNOWN_NAMES = {'gala', 'unique', 'dentok'}
     CTA_STARTERS = {'sígueme', 'sigueme', 'síguenos', 'siguenos', 'escríbeme', 'escribeme', 'comenta', 'comparte', 'guarda', 'agenda', 'visítanos', 'visitanos', 'haz', 'dale'}
     CTA_CONTINUATIONS = {'para', 'en', 'el', 'la', 'los', 'las', 'este', 'esta', 'más', 'mas', 'clic', 'click', 'tu', 'un', 'una', 'si', 'y'}
     DANGLING_END_WORDS = {
@@ -1269,8 +1271,11 @@ def rebalance_subtitle_segments(
 
             moved = False
 
-            # 2a. Pull proper compound tail backward (e.g. "en clinica" + "gala la curamos..." -> "en clínica Gala" + "la curamos...")
-            if last_c in PROPER_HEAD_NOUNS and len(n_toks) >= 2 and first_n not in CLAUSE_OR_PREP_STARTERS:
+            # 2a. Pull proper compound tail backward (e.g. "en clinica" + "gala..." -> "en clínica Gala", or "Gala" + "Unique...")
+            if (
+                (last_c in PROPER_HEAD_NOUNS and first_n not in CLAUSE_OR_PREP_STARTERS)
+                or (last_c == 'gala' and first_n == 'unique')
+            ) and len(n_toks) >= 2:
                 cand_len = len(_seg_text(curr)) + 1 + len(n_toks[0]['word'])
                 if len(c_toks) + 1 <= SOFT_MAX_WORDS and cand_len <= SOFT_MAX_CHARS:
                     moved_tok = n_toks.pop(0)

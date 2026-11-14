@@ -194,14 +194,19 @@ def _reload_ai_modules() -> None:
 
 
 def _disk_openrouter_has_grammar(base_dir: str) -> bool:
-    """Comprueba si ai/openrouter_client.py en disco ya incluye check_grammar."""
+    """Comprueba si ai/openrouter_client.py en disco ya incluye check_grammar actualizado."""
     orc_path = os.path.join(base_dir, 'ai', 'openrouter_client.py')
     if not os.path.isfile(orc_path):
         return False
     try:
         with open(orc_path, 'r', encoding='utf-8') as f:
             src = f.read()
-        return 'def check_grammar(' in src and 'def get_system_prompt_grammar(' in src
+        legacy_typo = 'Gala' + 'unick'
+        return (
+            'def check_grammar(' in src
+            and 'def get_system_prompt_grammar(' in src
+            and legacy_typo not in src
+        )
     except OSError:
         return False
 
