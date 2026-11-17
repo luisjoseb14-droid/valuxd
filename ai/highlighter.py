@@ -5,7 +5,14 @@ import urllib.request
 import urllib.error
 import logging
 from typing import List, Dict, Any, Optional
-from core.text_utils import clean_subtitle_text, sanitize_highlight_phrase, INVALID_TRAILING_HIGHLIGHT_WORDS, INVALID_LEADING_HIGHLIGHT_WORDS, SPANISH_STOPWORDS
+from core.text_utils import (
+    clean_subtitle_text,
+    sanitize_highlight_phrase,
+    INVALID_TRAILING_HIGHLIGHT_WORDS,
+    INVALID_LEADING_HIGHLIGHT_WORDS,
+    SPANISH_STOPWORDS,
+    is_weak_highlight_word,
+)
 from ai.openrouter_client import OpenRouterClient, DEFAULT_MODEL
 
 logger = logging.getLogger('CCSubsPro.AI')
@@ -28,7 +35,9 @@ REGLAS CRÍTICAS:
    - Artículos (el, la, los, las, un, una).
    - Preposiciones solas (de, en, con, por, para, sin).
    - Conectores o conjunciones (porque, pero, cuando, como, que, si, donde, mientras, pues, ya, sino, entonces). JAMÁS destaques "porque".
-   - Verbos auxiliares o muletillas aisladas (decir, hace, estar, ser).
+   - Verbos de opinión, duda, auxiliares o muletillas habladas (creo, pienso, parece, opino, debo, debido, puedo, quiero, tengo, decir, hace, estar, ser, vale, bueno).
+   - Adverbios conversacionales en "-mente" (francamente, realmente, básicamente, simplemente, totalmente, completamente, absolutamente).
+   - Sustantivos genéricos o vagos aislados (caso, cosa, cosas, parte, forma, manera, tipo, vez, poquito, ejemplo).
    - NUNCA repitas la misma palabra destacada múltiples veces.
    - NUNCA unas una palabra destacada con la palabra siguiente si pertenecen a partes distintas de la oración (por ejemplo: JAMÁS un sustantivo o adjetivo junto con el verbo que inicia la siguiente frase, como "lingual forman", "bebé duerme", "niño llora").
    - NUNCA unas palabras con conectores, conjunciones o preposiciones siguientes (como "dolor cuando", "problema que", "cirugía pero", "ojos porque").
@@ -194,51 +203,50 @@ class AIHighlighter:
 
     def suggest_highlights(self, script_text: str, count: int = 25) -> List[str]:
         cleaned_script = clean_subtitle_text(script_text)
-        stopwords = {
-            'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas',
-            'de', 'del', 'a', 'al', 'en', 'con', 'por', 'para', 'sin', 'sobre', 'tras',
-            'y', 'e', 'ni', 'o', 'u', 'que', 'pero', 'aunque', 'si', 'como', 'cuando',
-            'yo', 'tu', 'él', 'ella', 'nosotros', 'vosotros', 'ellos', 'ellas', 'me', 'te', 'se', 'nos', 'os',
-            'mi', 'tu', 'su', 'mis', 'tus', 'sus', 'es', 'son', 'fue', 'era', 'hay', 'muy', 'más',
-            'decir', 'hace', 'hacer', 'tener', 'tienes', 'ser', 'estar', 'está', 'están', 'vamos', 'dice',
-            'pueden', 'sido', 'hecho', 'ahora', 'después', 'entonces', 'aquí', 'allí', 'bueno', 'bien'
-        }
 
-        # Look for 2-word phrases first with strict semantic boundary verification
+        # Look for single strong content words first, then clean 2-word domain phrases
         words = [w for w in re.findall(r'\b[\wáéíóúÁÉÍÓÚñÑüÜ]+\b', cleaned_script)]
+        single_candidates = [
+            w for w in words
+            if not is_weak_highlight_word(w)
+            and (len(w) >= 4 or w.lower() in {'pie', 'ojo', 'voz', 'tos', 'pelo', 'piel'})
+        ]
+
         phrases = []
         for i in range(len(words) - 1):
             w1 = words[i].lower()
-            w2 = words[i+1].lower()
-            if (w1 not in stopwords and w2 not in stopwords and 
-                w1 not in INVALID_LEADING_HIGHLIGHT_WORDS and w2 not in INVALID_TRAILING_HIGHLIGHT_WORDS and
-                len(w1) > 3 and len(w2) > 3):
+            w2 = words[i + 1].lower()
+            if (
+                not is_weak_highlight_word(w1)
+                and not is_weak_highlight_word(w2)
+                and w1 not in INVALID_LEADING_HIGHLIGHT_WORDS
+                and w2 not in INVALID_TRAILING_HIGHLIGHT_WORDS
+                and len(w1) >= 4
+                and len(w2) >= 4
+            ):
                 cand_phrase = f"{words[i]} {words[i+1]}"
                 san = sanitize_highlight_phrase(cand_phrase)
-                if san and len(san.split()) == 2:
+                if san and len(san.split()) == 2 and len(san) <= 16:
                     phrases.append(san)
-
-        # Individual candidates
-        single_candidates = [w for w in words if w.lower() not in stopwords and len(w) > 4]
 
         seen = set()
         chosen = []
 
-        # Interleave phrases and singles
-        for p in phrases:
-            clean_p = clean_subtitle_text(p)
-            if clean_p.lower() not in seen:
-                seen.add(clean_p.lower())
-                chosen.append(clean_p)
+        # Prioritize strong standalone nouns/terms before 2-word compounds
+        for s in single_candidates:
+            clean_s = sanitize_highlight_phrase(s)
+            if clean_s and clean_s.lower() not in seen:
+                seen.add(clean_s.lower())
+                chosen.append(clean_s)
             if len(chosen) >= count:
                 break
 
         if len(chosen) < count:
-            for s in single_candidates:
-                clean_s = clean_subtitle_text(s)
-                if clean_s.lower() not in seen:
-                    seen.add(clean_s.lower())
-                    chosen.append(clean_s)
+            for p in phrases:
+                clean_p = sanitize_highlight_phrase(p)
+                if clean_p and clean_p.lower() not in seen:
+                    seen.add(clean_p.lower())
+                    chosen.append(clean_p)
                 if len(chosen) >= count:
                     break
 
@@ -251,10 +259,16 @@ class AIHighlighter:
             sid = sub['subtitle_id']
             text = clean_subtitle_text(sub['text'])
             words = [w for w in re.findall(r'\b[\wáéíóúÁÉÍÓÚñÑüÜ]+\b', text)]
-            candidates = [w for w in words if w.lower() not in SPANISH_STOPWORDS and len(w) > 3 and w.lower() not in seen_highlights]
+            candidates = [
+                w for w in words
+                if not is_weak_highlight_word(w)
+                and (len(w) > 3 or w.lower() in {'pie', 'ojo', 'voz', 'tos'})
+                and w.lower() not in seen_highlights
+            ]
             if candidates:
-                chosen = [candidates[-1]]
-                seen_highlights.add(candidates[-1].lower())
+                best_w = max(candidates, key=len)
+                chosen = [best_w]
+                seen_highlights.add(best_w.lower())
                 result[sid] = chosen
             else:
                 result[sid] = []

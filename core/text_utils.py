@@ -1,6 +1,256 @@
+import os
 import re
 import difflib
+from functools import lru_cache
 from typing import List, Tuple, Optional, Dict, Any
+from core.platform_paths import resolve_font_path
+
+
+SAFE_MARGIN_VISUAL_MAX_RATIO = 1.085
+_NARROW_VISUAL_CHARS = set("iltfj.,:;!'|¡íìï")
+_WIDE_VISUAL_CHARS = set("mwMWOGQAHNDBRSECKPUVXYZÁÉÍÓÚÑ")
+_NOUN_BRIDGE_MID_WORDS = {'del', 'de', 'la', 'el', 'los', 'las', 'al'}
+_HARD_SPLIT_DANGLING_WORDS = {
+    'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas',
+    'de', 'del', 'al', 'a', 'en', 'con', 'por', 'para', 'sin', 'sobre', 'tras',
+    'mi', 'tu', 'su', 'mis', 'tus', 'sus',
+    'me', 'te', 'se', 'le', 'les', 'lo', 'nos',
+    'este', 'esta', 'estos', 'estas', 'ese', 'esa', 'esos', 'esas',
+    'que', 'y', 'e', 'o', 'u',
+    'ha', 'he', 'has', 'han', 'hemos',
+}
+_MID_SENTENCE_CAPITAL_STARTERS = {
+    'esto', 'eso', 'ahora', 'entonces', 'pero', 'porque', 'cuando', 'aunque', 'mientras', 'además',
+    'notas', 'tienes', 'puedes', 'debes', 'sabes', 'quieres', 'necesitas',
+    'haz', 'entra', 'comenta', 'escríbeme', 'sígueme', 'imagina', 'descubre', 'recuerda',
+}
+
+
+@lru_cache(maxsize=64)
+def _load_pil_font(font_path_or_name: str, size: int = 100):
+    if not font_path_or_name:
+        return None
+    try:
+        from PIL import ImageFont
+        path = font_path_or_name if os.path.isfile(font_path_or_name) else resolve_font_path(font_path_or_name)
+        if path and os.path.isfile(path):
+            return ImageFont.truetype(path, size)
+    except Exception:
+        pass
+    return None
+
+
+def _measure_line_units(line: str, pil_font) -> float:
+    if not line:
+        return 0.0
+    if pil_font is not None:
+        try:
+            return float(pil_font.getlength(line))
+        except Exception:
+            pass
+    total = 0.0
+    for ch in line:
+        if ch in _NARROW_VISUAL_CHARS:
+            total += 0.6
+        elif ch in _WIDE_VISUAL_CHARS:
+            total += 1.25
+        else:
+            total += 1.0
+    return total
+
+
+def measure_visual_width_ratio(
+    text: str,
+    font_path_or_name: str = "",
+    max_chars: int = 18,
+    is_uppercase: bool = False,
+) -> float:
+    """Measure widest line visually relative to average-character safe margin budget."""
+    raw = str(text or '').strip()
+    if not raw:
+        return 0.0
+    eff_max_chars = max(1, int(max_chars or 18))
+    sample = raw.upper() if is_uppercase else raw
+    ref = "DE LAS SEÑALES QUE NO" if is_uppercase else "de las señales que no"
+    pil_font = _load_pil_font(str(font_path_or_name or ""), 100)
+    ref_units = _measure_line_units(ref, pil_font)
+    avg_ch = (ref_units / len(ref)) if ref_units > 0 else 1.0
+    widest = max((_measure_line_units(ln.strip(), pil_font) for ln in sample.splitlines() if ln.strip()), default=0.0)
+    return widest / (avg_ch * eff_max_chars)
+
+
+def segment_exceeds_line_budget(
+    toks_or_words: List[Any],
+    max_chars: int = 18,
+    max_words: int = 3,
+    font_path: str = "",
+    is_uppercase: bool = False,
+    max_ratio: float = SAFE_MARGIN_VISUAL_MAX_RATIO,
+) -> bool:
+    """Return True when a multi-word line exceeds safe margins or comfortable word/length density."""
+    words: List[str] = []
+    for t in toks_or_words:
+        w = (t.get('word', '') if isinstance(t, dict) else str(t)).strip()
+        if w:
+            words.append(w)
+    nw = len(words)
+    if nw < 2:
+        return False
+
+    txt = " ".join(words)
+    nc = len(txt)
+    ratio = measure_visual_width_ratio(txt, font_path_or_name=font_path, max_chars=max_chars, is_uppercase=is_uppercase)
+    if ratio > max_ratio:
+        return True
+
+    eff_mw = max(1, int(max_words or 3))
+    bares = [_strip_edge_punct(w).lower() for w in words]
+    clens = [len(b) for b in bares]
+
+    if nw >= eff_mw + 2:
+        return True
+
+    if nw > eff_mw:
+        # With max_words==3, keep 4-word line only when it is a compact clitic phrase (e.g. 'Esto sí que es')
+        is_compact_4 = (
+            eff_mw == 3
+            and nw == 4
+            and nc <= 15
+            and ratio <= 0.85
+            and max(clens) <= 6
+            and sum(1 for c in clens if c >= 5) <= 1
+        )
+        if not is_compact_4:
+            return True
+
+    if eff_mw <= 3 and nw == 3:
+        mid = bares[1]
+        if mid in _NOUN_BRIDGE_MID_WORDS and ratio <= max_ratio:
+            return False
+        if ratio > 0.98:
+            return True
+        if sum(1 for c in clens if c >= 5) >= 2 and nc >= 17:
+            return True
+        if nc >= 18:
+            return True
+
+    if eff_mw > 3 and nc > max(int(max_chars or 18) + 4, 24):
+        return True
+
+    return False
+
+
+def _split_tokens_for_safe_margins(
+    template: Dict[str, Any],
+    toks: List[Dict[str, Any]],
+    max_chars: int,
+    max_words: int,
+    font_path: str,
+    is_uppercase: bool,
+    max_ratio: float,
+    keep_punctuation: bool,
+) -> List[Dict[str, Any]]:
+    if len(toks) < 2:
+        return [_build_item_from_tokens(template, toks, keep_punctuation=keep_punctuation)]
+
+    if not segment_exceeds_line_budget(toks, max_chars=max_chars, max_words=max_words, font_path=font_path, is_uppercase=is_uppercase, max_ratio=max_ratio):
+        return [_build_item_from_tokens(template, toks, keep_punctuation=keep_punctuation)]
+
+    func_words = (set(ORPHAN_SHORT_WORDS) | set(PROCLITIC_ORPHAN_WORDS)) - {
+        'esto', 'eso', 'hoy', 'aquí', 'aqui', 'ahí', 'ahi', 'allí', 'alli'
+    }
+    best_k = None
+    best_score = float('inf')
+
+    for k in range(1, len(toks)):
+        left_toks = toks[:k]
+        right_toks = toks[k:]
+        left_txt = " ".join(t['word'] for t in left_toks)
+        right_txt = " ".join(t['word'] for t in right_toks)
+
+        r_left = measure_visual_width_ratio(left_txt, font_path, max_chars, is_uppercase)
+        r_right = measure_visual_width_ratio(right_txt, font_path, max_chars, is_uppercase)
+
+        score = abs(r_left - r_right) * 18.0
+        if r_left > max_ratio:
+            score += (r_left - max_ratio) * 200.0
+        if r_right > max_ratio:
+            score += (r_right - max_ratio) * 200.0
+
+        if segment_exceeds_line_budget(left_toks, max_chars=max_chars, max_words=max_words, font_path=font_path, is_uppercase=is_uppercase, max_ratio=max_ratio):
+            score += 120.0
+        if segment_exceeds_line_budget(right_toks, max_chars=max_chars, max_words=max_words, font_path=font_path, is_uppercase=is_uppercase, max_ratio=max_ratio):
+            score += 120.0
+
+        last_left = _strip_edge_punct(left_toks[-1]['word']).lower()
+        first_right = _strip_edge_punct(right_toks[0]['word']).lower()
+        if len(left_toks) == 1 and last_left in func_words:
+            score += 90.0
+        if len(right_toks) == 1 and first_right in func_words:
+            score += 90.0
+        if not left_toks[-1]['word'].endswith((',', '.', '?', '!')):
+            if last_left in _HARD_SPLIT_DANGLING_WORDS:
+                score += 65.0
+            elif last_left in PROCLITIC_ORPHAN_WORDS:
+                score += 25.0
+
+        if len(toks) == 4 and k == 2 and last_left not in _HARD_SPLIT_DANGLING_WORDS:
+            score -= 12.0
+
+        dur_left = left_toks[-1]['end_us'] - left_toks[0]['start_us']
+        dur_right = right_toks[-1]['end_us'] - right_toks[0]['start_us']
+        if dur_left < 280000:
+            score += 30.0
+        if dur_right < 280000:
+            score += 30.0
+        if left_toks[-1]['word'].endswith((',', '.', '?', '!')):
+            score -= 20.0
+
+        if score < best_score:
+            best_score = score
+            best_k = k
+
+    if best_k is None:
+        return [_build_item_from_tokens(template, toks, keep_punctuation=keep_punctuation)]
+
+    left_toks = toks[:best_k]
+    right_toks = toks[best_k:]
+    left_tpl = dict(template)
+    right_tpl = dict(template)
+    right_tpl['item'] = None
+
+    left_parts = _split_tokens_for_safe_margins(left_tpl, left_toks, max_chars, max_words, font_path, is_uppercase, max_ratio, keep_punctuation)
+    right_parts = _split_tokens_for_safe_margins(right_tpl, right_toks, max_chars, max_words, font_path, is_uppercase, max_ratio, keep_punctuation)
+    return left_parts + right_parts
+
+
+def split_wide_segment_for_safe_margins(
+    item: Dict[str, Any],
+    max_chars: int = 18,
+    max_words: int = 3,
+    font_path: str = "",
+    is_uppercase: bool = False,
+    max_ratio: float = SAFE_MARGIN_VISUAL_MAX_RATIO,
+    keep_punctuation: Optional[bool] = None,
+) -> List[Dict[str, Any]]:
+    """Split a wide or overly dense multi-word subtitle segment into word-timed pieces."""
+    raw_text = str(item.get('text', '') or '').strip()
+    if not raw_text or '\n' in raw_text:
+        return [item]
+    toks = _extract_word_tokens(item)
+    if len(toks) < 2:
+        return [item]
+    if not segment_exceeds_line_budget(
+        toks,
+        max_chars=max_chars,
+        max_words=max_words,
+        font_path=font_path,
+        is_uppercase=is_uppercase,
+        max_ratio=max_ratio,
+    ):
+        return [item]
+    kp = True if keep_punctuation is None else bool(keep_punctuation)
+    return _split_tokens_for_safe_margins(item, toks, max_chars, max_words, font_path, is_uppercase, max_ratio, kp)
 
 
 # Basic Spanish number maps
@@ -529,9 +779,20 @@ INVALID_TRAILING_HIGHLIGHT_WORDS = {
     'sigue', 'siguen', 'seguir', 'siguió', 'siguieron', 'siguiendo',
     'pone', 'ponen', 'poner', 'puso', 'pusieron', 'poniendo',
     'sale', 'salen', 'salir', 'salió', 'salieron', 'saliendo',
-    'da', 'dan', 'dar', 'dio', 'dieron', 'dando',
-    'cree', 'creen', 'creer', 'creyó', 'creyeron', 'creyendo',
-    'mira', 'miran', 'mirar', 'miró', 'miraron', 'mirando',
+    'da', 'dan', 'dar', 'dando', 'doy', 'das',
+    'creo', 'crees', 'cree', 'creen', 'creer', 'creyó', 'creyeron', 'creyendo', 'creía', 'creías',
+    'pienso', 'piensas', 'piensa', 'piensan', 'pensar', 'parece', 'parecen', 'parecer', 'parecía',
+    'opino', 'opinas', 'opina', 'opinar', 'supongo', 'supones', 'supone', 'suponer',
+    'debo', 'debes', 'debemos', 'debería', 'deberías', 'debido', 'debía',
+    'quiero', 'quieres', 'quiere', 'queremos', 'quieren', 'querer', 'quisiera',
+    'puedo', 'puedes', 'podemos', 'pueda', 'puedas', 'podría', 'podrías',
+    'doy', 'llevo', 'llevas', 'lleva', 'llevan', 'llevar',
+    'estoy', 'estás', 'estamos', 'estuve', 'soy', 'eres', 'somos',
+    'voy', 'vas', 'vaya', 'vayan', 'he', 'has', 'hemos',
+    'vale', 'valen', 'bueno', 'así', 'eh', 'um',
+    'caso', 'casos', 'cosa', 'cosas', 'forma', 'formas', 'manera', 'maneras',
+    'modo', 'modos', 'tipo', 'tipos', 'parte', 'partes', 'vez', 'veces', 'poquito', 'poco',
+    'mira', 'miras', 'miran', 'mirar', 'miró', 'miraron', 'mirando',
     'escucha', 'escuchan', 'escuchar', 'escuchó', 'escucharon', 'escuchando',
     'habla', 'hablan', 'hablar', 'habló', 'hablaron', 'hablando',
     'explica', 'explican', 'explicar', 'explicó', 'explicaron', 'explicando',
@@ -574,25 +835,77 @@ SPANISH_STOPWORDS = {
     'entonces', 'además', 'también', 'aunque', 'y', 'e', 'ni', 'o', 'u',
     'así', 'asi', 'luego', 'asimismo', 'siquiera', 'acaso', 'quizá', 'quizás', 'tal',
     # Pronouns & Clitics
-    'yo', 'tu', 'él', 'ella', 'ello', 'nosotros', 'nosotras', 'vosotros', 'vosotras', 'ellos', 'ellas',
-    'me', 'te', 'se', 'nos', 'os', 'le', 'les', 'lo',
+    'yo', 'tu', 'tú', 'él', 'ella', 'ello', 'nosotros', 'nosotras', 'vosotros', 'vosotras', 'ellos', 'ellas',
+    'me', 'te', 'se', 'nos', 'os', 'le', 'les', 'lo', 'los', 'las',
     'mi', 'mis', 'tu', 'tus', 'su', 'sus', 'nuestro', 'nuestra', 'nuestros', 'nuestras',
     'este', 'esta', 'estos', 'estas', 'esto', 'ese', 'esa', 'esos', 'esas', 'eso',
     'aquel', 'aquella', 'aquellos', 'aquellas', 'aquello',
     'quien', 'quienes', 'cual', 'cuales', 'cuyo', 'cuya', 'cuyos', 'cuyas',
-    # Auxiliary & Common Verbs
-    'es', 'son', 'fue', 'fueron', 'era', 'eran', 'ser', 'sido', 'siendo', 'sea', 'sean',
-    'está', 'están', 'estar', 'estaba', 'estaban', 'estuvo', 'estuvieron', 'estando', 'esté', 'estén',
-    'ha', 'han', 'haber', 'había', 'habían', 'hay', 'hubo', 'habrá',
-    'va', 'van', 'ir', 'iba', 'iban', 'vamos', 'yendo',
-    'hace', 'hacen', 'hacer', 'hago', 'hacemos', 'hizo', 'hicieron', 'hecho', 'haciendo',
-    'tener', 'tiene', 'tienen', 'tienes', 'tengo', 'tenemos', 'tenía', 'tenían', 'tuvo', 'tuvieron',
-    'decir', 'dice', 'dicen', 'digo', 'dijo', 'dijeron', 'diciendo',
-    'puede', 'pueden', 'poder', 'pudo', 'pudieron',
-    # Adverbs & Fillers
-    'muy', 'tan', 'más', 'mas', 'menos', 'bueno', 'bien', 'mal', 'aquí', 'allí', 'acá', 'allá',
-    'ahora', 'después', 'antes', 'siempre', 'algo', 'todo', 'todos', 'todas', 'cada'
+    # Auxiliary, Epistemic, Modal & Conversational Filler Verbs
+    'es', 'son', 'fue', 'fueron', 'era', 'eran', 'ser', 'sido', 'siendo', 'sea', 'sean', 'soy', 'eres', 'somos',
+    'está', 'están', 'estan', 'estar', 'estaba', 'estaban', 'estuvo', 'estuvieron', 'estando', 'esté', 'estén', 'estoy', 'estás', 'estamos', 'estuve',
+    'ha', 'han', 'he', 'has', 'hemos', 'haber', 'había', 'habían', 'habido', 'habría', 'hay', 'hubo', 'habrá',
+    'va', 'van', 'ir', 'iba', 'iban', 'vamos', 'yendo', 'voy', 'vas', 'vaya', 'vayan',
+    'hace', 'hacen', 'hacer', 'hago', 'haces', 'hacemos', 'hizo', 'hicieron', 'hecho', 'haciendo', 'haga', 'hagas', 'hagan',
+    'tener', 'tiene', 'tienen', 'tienes', 'tengo', 'tenemos', 'tenía', 'tenían', 'tuvo', 'tuve', 'tuviste', 'tuvieron',
+    'decir', 'dice', 'dicen', 'digo', 'dices', 'digas', 'decimos', 'dijo', 'dijeron', 'diciendo',
+    'puede', 'pueden', 'poder', 'pudo', 'pudieron', 'puedo', 'puedes', 'podemos', 'pueda', 'puedas', 'podría', 'podrías',
+    'debe', 'deben', 'deber', 'debo', 'debes', 'debemos', 'debería', 'deberías', 'debido', 'debía',
+    'creo', 'crees', 'cree', 'creen', 'creer', 'creía', 'creías', 'creí', 'creyó', 'creyendo',
+    'pienso', 'piensas', 'piensa', 'piensan', 'pensar', 'pensaba',
+    'parece', 'parecen', 'parecer', 'parecía', 'opino', 'opinas', 'opina', 'opinar',
+    'supongo', 'supones', 'supone', 'suponer',
+    'quiero', 'quieres', 'quiere', 'queremos', 'quieren', 'querer', 'quisiera',
+    'siento', 'sientes', 'siente', 'sentimos', 'sienten',
+    'sabe', 'saben', 'sabes', 'sé', 'sabemos', 'saber', 'sabía', 'supo',
+    'veo', 'ves', 've', 'ven', 'vemos', 'ver', 'visto', 'viendo',
+    'doy', 'das', 'da', 'dan', 'dar', 'dio', 'dieron', 'dado', 'dando',
+    'vengo', 'vienes', 'viene', 'vienen', 'venir', 'vino', 'venga',
+    'llevo', 'llevas', 'lleva', 'llevan', 'llevar',
+    'pongo', 'pones', 'pone', 'ponen', 'poner', 'puso', 'puesto',
+    'quedo', 'quedas', 'queda', 'quedan', 'quedar', 'quedó',
+    'dejo', 'dejas', 'deja', 'dejan', 'dejar',
+    'mira', 'miras', 'miran', 'mirar', 'fíjate', 'fijate',
+    'suele', 'suelen', 'soler', 'tiende', 'tienden', 'trata', 'tratan', 'tratar',
+    'acaba', 'acaban', 'acabar', 'empieza', 'empiezan', 'empezar', 'empezó', 'termina', 'terminan', 'terminar',
+    'consigue', 'consiguen', 'conseguir', 'resulta', 'resultan',
+    'ocurre', 'ocurren', 'ocurrir', 'pasa', 'pasan', 'pasar', 'sucede', 'suceden', 'existe', 'existen',
+    'necesita', 'necesitan', 'necesitas', 'necesito',
+    'usar', 'uso', 'usa', 'usas', 'usan', 'usando', 'usamos',
+    'palabra', 'palabras',
+    # Adverbs, Discourse Fillers & Vague Conversational Nouns
+    'muy', 'tan', 'más', 'mas', 'menos', 'bueno', 'bien', 'mal', 'vale', 'claro', 'cierto',
+    'aquí', 'aqui', 'allí', 'alli', 'acá', 'allá', 'ahí', 'ahi',
+    'ahora', 'después', 'despues', 'antes', 'siempre', 'algo', 'alguien', 'casi', 'incluso', 'aún', 'aun', 'todavía', 'todavia', 'aparte', 'ojalá', 'ojala',
+    'todo', 'toda', 'todos', 'todas', 'cada', 'otro', 'otra', 'otros', 'otras', 'mismo', 'misma', 'mismos', 'mismas',
+    'algún', 'algun', 'alguna', 'alguno', 'algunos', 'algunas', 'ningun', 'cualquier', 'cualquiera', 'cuanto', 'cuanta', 'varios', 'varias',
+    'mucho', 'mucha', 'muchos', 'muchas', 'poco', 'poca', 'pocos', 'pocas', 'poquito', 'poquita', 'bastante', 'demasiado', 'demasiada',
+    'francamente', 'realmente', 'básicamente', 'basicamente', 'simplemente', 'literalmente',
+    'obviamente', 'claramente', 'prácticamente', 'practicamente', 'normalmente', 'generalmente', 'habitualmente',
+    'totalmente', 'completamente', 'absolutamente', 'efectivamente', 'exactamente', 'precisamente',
+    'seguramente', 'posiblemente', 'probablemente', 'lógicamente', 'logicamente', 'evidentemente',
+    'sinceramente', 'honestamente', 'directamente', 'únicamente', 'unicamente', 'solamente',
+    'eh', 'um', 'emm', 'hmm', 'mm', 'ah', 'oh', 'oye', 'oiga',
+    'caso', 'casos', 'cosa', 'cosas', 'forma', 'formas', 'manera', 'maneras',
+    'modo', 'modos', 'tipo', 'tipos', 'parte', 'partes', 'vez', 'veces',
+    'ejemplo', 'supuesto', 'embargo', 'respecto', 'chica', 'chico'
 }
+
+_DISCOURSE_MENTE_EXCEPTIONS = {'mentalmente'}
+
+
+def is_weak_highlight_word(word: str) -> bool:
+    """Return True if word is a conversational filler, stopword, hedge verb, or weak adverb."""
+    bare = _strip_edge_punct(str(word or '')).lower()
+    if not bare:
+        return True
+    if bare in SPANISH_STOPWORDS:
+        return True
+    if len(bare) <= 2 and not any(c.isdigit() for c in bare):
+        return True
+    if bare.endswith('mente') and len(bare) > 6 and bare not in _DISCOURSE_MENTE_EXCEPTIONS:
+        return True
+    return False
 
 # Leading words that should not begin a highlight phrase if multi-word
 INVALID_LEADING_HIGHLIGHT_WORDS = {
@@ -620,14 +933,15 @@ INVALID_LEADING_CONNECTORS = {
     'cada', 'todo', 'toda', 'todos', 'todas', 'otro', 'otra', 'otros', 'otras',
     'cualquier', 'cualquiera',
     # Non-essential verbs / auxiliaries at start
-    'aportan', 'aporta', 'tienen', 'tiene', 'dan', 'da', 'hacen', 'hace', 'son', 'es', 'están', 'está', 'hay'
+    'aportan', 'aporta', 'tienen', 'tiene', 'dan', 'da', 'hacen', 'hace', 'son', 'es', 'están', 'está', 'hay',
+    'creo', 'cree', 'creen', 'pienso', 'parece', 'debo', 'debe', 'puedo', 'puede', 'bueno', 'entonces', 'francamente', 'realmente', 'vale'
 }
 
 def sanitize_highlight_phrase(phrase: str, max_chars: int = 18) -> str:
     """
     Sanitizes a highlight phrase to ensure strict semantic coherence and safe margins:
     1. Removes prohibited punctuation (commas, periods, colons) via clean_subtitle_text.
-    2. Completely rejects phrases that consist only of stopwords/connectors (e.g. 'no', 'porque', 'pero', 'y').
+    2. Completely rejects phrases that consist only of stopwords/connectors/fillers (e.g. 'no', 'creo', 'yo creo').
     3. Rejects single words of 1 or 2 letters unless they contain digits (e.g. 'no', 'el', 'o', 'y', 'un').
     4. Strips invalid leading connectors, quantifiers, and negations (e.g. 'no', 'ningún', 'porque', 'mucho', 'tan').
     5. Preserves natural leading articles in short multi-word noun phrases (e.g. 'un congreso').
@@ -635,7 +949,7 @@ def sanitize_highlight_phrase(phrase: str, max_chars: int = 18) -> str:
        preventing grammatical spillover into subsequent sentences/clauses.
     7. Enforces max_chars constraint: if a multi-word phrase exceeds max_chars,
        extracts the core single keyword to prevent breaking safe screen margins.
-    8. Re-checks the final result against stopwords and minimum meaningful length.
+    8. Re-checks the final result against stopwords, weak fillers, and minimum meaningful length.
     """
     cleaned = clean_subtitle_text(phrase)
     if not cleaned:
@@ -644,44 +958,46 @@ def sanitize_highlight_phrase(phrase: str, max_chars: int = 18) -> str:
     if not words:
         return ""
 
-    # Reject single-word stopwords or short/empty words immediately
+    # Reject single-word stopwords, filler words, or short/empty words immediately
     if len(words) == 1:
-        w_low = words[0].lower()
-        if w_low in SPANISH_STOPWORDS:
+        if is_weak_highlight_word(words[0]):
             return ""
-        if len(w_low) <= 2 and not any(c.isdigit() for c in w_low):
-            return ""
+        w_low = _strip_edge_punct(words[0]).lower()
         if w_low in {'asi', 'así', 'que', 'los', 'las', 'del', 'con', 'por', 'sin', 'mas', 'más', 'tan', 'muy', 'nos', 'les', 'sus', 'mis', 'tus', 'van', 'voy', 'dar', 'ver', 'fue', 'era', 'son', 'ese', 'esa', 'eso'}:
             return ""
 
+    # Reject multi-word phrases consisting purely of weak fillers/stopwords (e.g. 'yo creo', 'en este caso')
+    if all(is_weak_highlight_word(w) for w in words):
+        return ""
+
     # Strip invalid leading connectors / negations / quantifiers (e.g. 'no', 'ningún', 'porque', 'mucho', 'tan')
-    while len(words) > 1 and words[0].lower() in INVALID_LEADING_CONNECTORS:
+    while len(words) > 1 and _strip_edge_punct(words[0]).lower() in INVALID_LEADING_CONNECTORS:
         words.pop(0)
 
     # Strip invalid trailing words if multi-word
-    while len(words) > 1 and words[-1].lower() in INVALID_TRAILING_HIGHLIGHT_WORDS:
+    while len(words) > 1 and _strip_edge_punct(words[-1]).lower() in INVALID_TRAILING_HIGHLIGHT_WORDS:
         words.pop(-1)
 
     # If still multi-word and exceeds max_chars:
     # Extract the core single keyword (the most informative word that fits within max_chars)
     candidate = " ".join(words)
     if len(candidate) > max_chars and len(words) > 1:
-        valid_words = [w for w in words if w.lower() not in SPANISH_STOPWORDS and len(w) <= max_chars and len(w) >= 3]
+        valid_words = [w for w in words if not is_weak_highlight_word(w) and len(w) <= max_chars and len(w) >= 3]
         if valid_words:
             candidate = max(valid_words, key=len)
         else:
             return ""
 
-    # Check if final candidate is a stopword or too short
+    # Check if final candidate is a stopword, filler, or too short
     cand_words = candidate.split()
     if len(cand_words) == 1:
-        w_low = cand_words[0].lower()
-        if w_low in SPANISH_STOPWORDS:
+        if is_weak_highlight_word(cand_words[0]):
             return ""
-        if len(w_low) <= 2 and not any(c.isdigit() for c in w_low):
-            return ""
+        w_low = _strip_edge_punct(cand_words[0]).lower()
         if w_low in {'asi', 'así', 'que', 'los', 'las', 'del', 'con', 'por', 'sin', 'mas', 'más', 'tan', 'muy', 'nos', 'les', 'sus', 'mis', 'tus', 'van', 'voy', 'dar', 'ver', 'fue', 'era', 'son', 'ese', 'esa', 'eso'}:
             return ""
+    elif not cand_words or all(is_weak_highlight_word(w) for w in cand_words):
+        return ""
 
     return candidate
 
@@ -1232,8 +1548,9 @@ def rebalance_subtitle_segments(
         'no', 'se', 'me', 'te', 'le', 'les', 'nos', 'lo', 'mi', 'tu', 'su', 'mis', 'tus', 'sus',
         'este', 'esta', 'estos', 'estas', 'ese', 'esa', 'esos', 'esas'
     }
-    SOFT_MAX_WORDS = max(int(max_words), 4)
-    SOFT_MAX_CHARS = max(int(max_chars) + 6, 26)
+    SOFT_MAX_WORDS = max(1, int(max_words or 3))
+    SOFT_MAX_CHARS = max(int(max_chars) + 2, 20)
+    ORPHAN_MERGE_MAX_CHARS = max(int(max_chars), 16)
     MAX_FLOW_GAP_US = 600000
 
     def _seg_text(s_entry: Dict[str, Any]) -> str:
@@ -1246,17 +1563,26 @@ def rebalance_subtitle_segments(
     # Pass 1: Split overcrowded multi-clause segments before rebalancing
     def _split_multi_clause_entry(s_entry: Dict[str, Any]) -> List[Dict[str, Any]]:
         toks = s_entry['tokens']
-        if len(toks) < 4:
+        if len(toks) < 2:
             return [s_entry]
+        raw_src = str(s_entry['template'].get('raw_asr_text') or s_entry['template'].get('orig_text') or '')
+        raw_words = raw_src.split()
+        has_aligned_raw = len(raw_words) == len(toks)
+        cap_source = raw_words if has_aligned_raw else [t['word'] for t in toks]
+        all_cap_tokens = not preserve_all_caps and all(
+            (not any(c.islower() for c in w)) for w in cap_source if any(c.isalpha() for c in w)
+        )
         split_idx = None
+        split_at_cap_starter = False
         for k in range(1, len(toks)):
             bare_k = _strip_edge_punct(toks[k]['word']).lower()
-            if bare_k in CTA_STARTERS and k + 1 < len(toks):
+            prev_bare = _strip_edge_punct(toks[k - 1]['word']).lower()
+            if len(toks) >= 4 and bare_k in CTA_STARTERS and k + 1 < len(toks):
                 nxt_bare = _strip_edge_punct(toks[k + 1]['word']).lower()
                 if nxt_bare in CTA_CONTINUATIONS:
                     split_idx = k
                     break
-            if bare_k == 'en' and k + 1 < len(toks):
+            if len(toks) >= 4 and bare_k == 'en' and k + 1 < len(toks):
                 nxt_bare = _strip_edge_punct(toks[k + 1]['word']).lower()
                 if nxt_bare in PROPER_HEAD_NOUNS:
                     split_idx = k
@@ -1264,13 +1590,35 @@ def rebalance_subtitle_segments(
             if k >= 2 and toks[k - 1]['word'].endswith(('?', '!', '.')):
                 split_idx = k
                 break
+            src_w = cap_source[k]
+            prev_src_w = cap_source[k - 1]
+            if (
+                not preserve_all_caps
+                and not all_cap_tokens
+                and bare_k in _MID_SENTENCE_CAPITAL_STARTERS
+                and any(c.isupper() for c in src_w[:2])
+                and any(c.islower() for c in prev_src_w)
+                and prev_bare not in {'que', 'y', 'o', 'e', 'u', 'pero', 'como', 'si', 'cuando', 'porque', 'aunque', 'de', 'del', 'a', 'al', 'en', 'con', 'por', 'para', 'sin', 'sobre', 'lo'}
+            ):
+                split_idx = k
+                split_at_cap_starter = True
+                break
         if not split_idx:
             return [s_entry]
         t_a = toks[:split_idx]
         t_b = toks[split_idx:]
+        if split_at_cap_starter and t_b:
+            m_cap = re.search(r'[A-Za-zÁÉÍÓÚÑÜáéíóúñü]', t_b[0]['word'])
+            if m_cap:
+                w0 = t_b[0]['word']
+                t_b[0]['word'] = w0[:m_cap.start()] + w0[m_cap.start()].upper() + w0[m_cap.start() + 1:]
+        tpl_a = dict(s_entry['template'])
         tpl_b = dict(s_entry['template'])
         tpl_b['item'] = None
-        left = {'template': s_entry['template'], 'tokens': t_a, 'absorbed': list(s_entry['absorbed'])}
+        if has_aligned_raw:
+            tpl_a['raw_asr_text'] = " ".join(raw_words[:split_idx])
+            tpl_b['raw_asr_text'] = " ".join(raw_words[split_idx:])
+        left = {'template': tpl_a, 'tokens': t_a, 'absorbed': list(s_entry['absorbed'])}
         right = {'template': tpl_b, 'tokens': t_b, 'absorbed': []}
         return _split_multi_clause_entry(left) + _split_multi_clause_entry(right)
 
@@ -1383,11 +1731,16 @@ def rebalance_subtitle_segments(
             if len(toks) == 1:
                 w = toks[0]['word']
                 w_bare = _strip_edge_punct(w).lower()
-                is_tiny = (w_bare in ORPHAN_SHORT_WORDS) or (len(w_bare) <= 1)
+                is_tiny = (not w_bare.isdigit()) and ((w_bare in ORPHAN_SHORT_WORDS) or (len(w_bare) <= 1))
 
                 if is_tiny and len(segs) > 1:
+                    is_cap_sentence_starter = (
+                        not preserve_all_caps
+                        and bool(w[:1].isupper())
+                        and w_bare in _MID_SENTENCE_CAPITAL_STARTERS
+                    )
                     prefer_forward = (
-                        (w_bare in PROCLITIC_ORPHAN_WORDS or w.startswith(('¿', '¡')))
+                        (w_bare in PROCLITIC_ORPHAN_WORDS or w.startswith(('¿', '¡')) or is_cap_sentence_starter)
                         and not w.endswith(('?', '!', '.'))
                     )
                     if i == len(segs) - 1:
@@ -1403,7 +1756,11 @@ def rebalance_subtitle_segments(
                             gap_us = nxt['tokens'][0]['start_us'] - toks[-1]['end_us']
                             comb_words = len(nxt['tokens']) + 1
                             comb_chars = len(w) + 1 + len(_seg_text(nxt))
-                            if not w.endswith(('?', '!', '.')) and gap_us <= 650000 and comb_words <= (SOFT_MAX_WORDS + 1) and comb_chars <= SOFT_MAX_CHARS:
+                            within_budget = (
+                                (comb_words <= SOFT_MAX_WORDS and comb_chars <= ORPHAN_MERGE_MAX_CHARS)
+                                or (SOFT_MAX_WORDS == 3 and comb_words == 4 and comb_chars <= 14)
+                            )
+                            if not w.endswith(('?', '!', '.')) and gap_us <= 650000 and within_budget:
                                 nxt['tokens'].insert(0, toks[0])
                                 nxt['absorbed'].append(curr['template'].get('index'))
                                 nxt['absorbed'].extend(curr['absorbed'])
@@ -1416,7 +1773,11 @@ def rebalance_subtitle_segments(
                             gap_us = toks[0]['start_us'] - prev['tokens'][-1]['end_us']
                             comb_words = len(prev['tokens']) + 1
                             comb_chars = len(_seg_text(prev)) + 1 + len(w)
-                            if not w.startswith(('¿', '¡')) and not _ends_sentence(prev) and gap_us <= 650000 and comb_words <= (SOFT_MAX_WORDS + 1) and comb_chars <= SOFT_MAX_CHARS:
+                            within_budget = (
+                                (comb_words <= SOFT_MAX_WORDS and comb_chars <= ORPHAN_MERGE_MAX_CHARS)
+                                or (SOFT_MAX_WORDS == 3 and comb_words == 4 and comb_chars <= 14)
+                            )
+                            if not w.startswith(('¿', '¡')) and not is_cap_sentence_starter and not _ends_sentence(prev) and gap_us <= 650000 and within_budget:
                                 prev['tokens'].append(toks[0])
                                 prev['absorbed'].append(curr['template'].get('index'))
                                 prev['absorbed'].extend(curr['absorbed'])

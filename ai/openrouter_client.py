@@ -44,11 +44,14 @@ Tu tarea es recibir la lista cronológica de segmentos de subtítulos de un vide
       - No conviertas artículos indefinidos comunes como "un paciente" o "una persona" a números con dígitos.
 
 2. SELECCIÓN DE PALABRAS DESTACADAS (Highlights):
-   a) Selecciona palabras o frases breves (de 1 a 2 palabras máximo, NUNCA más de 12 caracteres) de alto impacto visual o emocional.
-   b) CADENCIA RÍTMICA Y FRECUENTE (MUY IMPORTANTE):
-      - Debe aparecer una palabra o frase destacada CADA ~3 A 4 SEGUNDOS (aproximadamente cada 2 a 3 subtítulos).
-      - En un video o reel de 60 segundos DEBEN HABER entre 15 a 18 palabras destacadas bien distribuidas a lo largo de todo el video. No dejes huecos largos sin palabras destacadas.
-      - Resalta con dinamismo: conceptos clave, números importantes, términos anatómicos o médicos, verbos de impacto o palabras de advertencia/dolor.
+   a) Selecciona ÚNICAMENTE palabras clave de alto impacto y verdadero peso visual/temático (1 palabra clave preferida o máximo 2 palabras breves formando unidad, NUNCA más de 12 caracteres), igual que haría un editor profesional de reels médicos y educativos.
+   b) CADENCIA RÍTMICA CON CRITERIO DE CALIDAD (MUY IMPORTANTE):
+      - Coloca una palabra destacada aproximadamente cada 3.5 a 5 segundos cuando aparezca un término con fuerza real.
+      - En un video o reel de 60 segundos selecciona entre 10 y 16 palabras verdaderamente potentes bien repartidas. Es PREFERIBLE omitir 1 o 2 subtítulos de relleno conversacional ("bueno", "en este caso", "francamente", "yo creo que") y esperar al siguiente término clave ("lifting", "piel", "destrozado", "anatomía", "lagrimeo", "perforación", "médico", "desastre", "clave") antes que destacar una palabra floja o sin peso visual.
+      - PRIORIZA SIEMPRE:
+        1. Términos médicos, anatómicos, tratamientos o sustancias (ej. "lifting", "blefaroplastia", "córnea", "anatomía", "injerto", "retinol", "piel", "ojo").
+        2. Palabras de riesgo, dolor, problema, daño o impacto emocional (ej. "destrozado", "desastre", "fracaso", "complicación", "riesgo", "agresivo", "dolor").
+        3. Conceptos centrales, cifras clave o llamados a la acción concretos (ej. "diagnóstico", "valoración", "consulta", "clave", "guía", "50%").
    c) NO REPETIR EN EXCESO: Varía las palabras destacadas a lo largo del video. Busca conceptos variados, verbos de acción, números o ideas fuerza.
    d) CADA FRASE DESTACADA DEBE COINCIDIR EXACTAMENTE con palabras pronunciadas en ese segmento para poder sincronizarlas al microsegundo con la voz.
    e) CLASIFICACIÓN DE TONO (OBLIGATORIA): Si la palabra destaca un dolor, molestia, problema, enfermedad, falla o síntoma negativo (como "error", "dolor", "aprieta", "enrojecimiento"), clasifícala con "tone": "negative". En caso contrario, "tone": "normal".
@@ -59,14 +62,15 @@ Tu tarea es recibir la lista cronológica de segmentos de subtítulos de un vide
       - NUNCA unas una palabra destacada con conectores, preposiciones o conjunciones siguientes (por ejemplo: JAMÁS "dolor cuando", JAMÁS "ojos porque", JAMÁS "problema que", JAMÁS "pie para", JAMÁS "cirugía si").
       - Las frases destacadas de 2 palabras SÓLO se permiten si forman un concepto unitario inseparable de longitud corta (ejemplos válidos: "suelo pélvico", "alta demanda", "primeros meses").
       - Si la palabra clave va seguida de un verbo o conector, destaca ÚNICAMENTE la palabra clave aislada (ejemplo: destaca sólo "lingual", NO "lingual forman"; destaca sólo "dolor", NO "dolor cuando").
-   h) PROHIBICIÓN ESTRICTA DE CONECTORES Y CONJUNCIONES:
-      - JAMÁS destaques conectores ni conjunciones solas o al inicio de una frase (por ejemplo: JAMÁS destaques "porque", "pero", "cuando", "como", "que", "si", "donde", "mientras", "pues", "ya", "sino").
-      - Una palabra como "porque" NUNCA debe ser una palabra destacada bajo ninguna circunstancia.
+   h) PROHIBICIÓN ESTRICTA DE MULETILLAS, VERBOS DE OPINIÓN Y CONECTORES:
+      - JAMÁS destaques conectores ni conjunciones solas o al inicio de una frase ("porque", "pero", "cuando", "como", "que", "si", "donde", "mientras", "pues", "ya", "sino", "entonces", "además").
+      - JAMÁS destaques verbos de opinión, duda, auxiliares o muletillas habladas ("creo", "pienso", "parece", "opino", "supongo", "digo", "vale", "bueno", "debo", "debido", "puedo", "puedes", "quiero", "tengo", "tienes", "sabes", "mira", "fíjate", "hace", "hacer", "ser", "estar", "sido").
+      - JAMÁS destaques adverbios conversacionales terminados en "-mente" ("francamente", "realmente", "básicamente", "simplemente", "literalmente", "totalmente", "completamente", "absolutamente", "obviamente", "claramente", "prácticamente").
+      - JAMÁS destaques sustantivos genéricos o cuantificadores vagos solos ("caso", "cosa", "cosas", "parte", "forma", "manera", "tipo", "vez", "algo", "poquito", "poco", "mucho", "todo", "otro", "chica").
    i) PROHIBICIÓN TOTAL DE "NO", ARTÍCULOS O PALABRAS CORTAS VACÍAS:
-      - JAMÁS destaques la palabra "no". La palabra "no" NUNCA es un highlight (aunque exprese negación o advertencia). Si una frase dice "no improvisas", destaca ÚNICAMENTE "improvisas", JAMÁS "no".
-      - JAMÁS destaques palabras de 1 o 2 letras ("no", "el", "la", "o", "y", "un", "de", "en", "se", "al", "es", "ya", "ni", "si").
+      - JAMÁS destaques la palabra "no" ni palabras de 1 o 2 letras ("no", "el", "la", "o", "y", "un", "de", "en", "se", "al", "es", "ya", "ni", "si").
       - JAMÁS destaques palabras vacías como "así", "asi", "bien", "muy", "tan", "más", "cada".
-      - Destaca ÚNICAMENTE palabras de verdadero peso semántico y valor informativo (conceptos clave, términos médicos, sustantivos o verbos de impacto).
+      - Destaca ÚNICAMENTE palabras de verdadero peso semántico y valor informativo.
    j) LONGITUD MÁXIMA Y MARGEN SEGURO (ESTRICTA Y OBLIGATORIA):
       - Cada palabra destacada DEBE ser concisa: 1 palabra (preferido) o máximo 2 palabras muy breves, y NUNCA superar los 12 caracteres en total (por ejemplo: "beneficio", "lactancia", "suelo pélvico").
       - NUNCA selecciones frases largas que rompan los márgenes laterales del video (por ejemplo: JAMÁS destaques "ningún beneficio", JAMÁS "diagnósticos prenatales", JAMÁS "no aportan ningún beneficio").
@@ -166,7 +170,7 @@ REGLAS ESTRICTAS DE CONTEXTO:
 
 3. DURACIÓN EXACTA DE CADA NÚMERO ("start_index" y "end_index"):
    - "number": número entero lógico del paso (ej. 1, 2, 3).
-   - "start_index": índice del segmento exacto donde comienza a nombrarse o introducirse ese paso (donde entra el número con animación). Si el paso empieza con "Necesitas primero..." o "Y lo tercero...", usa el índice donde empieza ese giro ("Necesitas" / "Y lo tercero"). Si el paso dice "Señal / número dos", empieza en "Señal" o "número dos" según donde inicia el enunciado del paso.
+   - "start_index": índice del segmento EXACTO donde se pronuncia el número u ordinal del paso (donde entra el número con animación, p. ej. donde dice "1", "2", "dos", "3", "4", "y 5", "Primero..."). NO adelantes el inicio a una línea previa solo porque diga "señales", "pasos", "consejos", etc. (ej. si dice ["cuáles son", "de las señales", "1", "notas que..."], "start_index" DEBE ser el de "1", NUNCA el de "de las señales"). Si el paso empieza con "Necesitas primero..." o "Y lo tercero..." sin dígito separado, usa ese índice. Si dice "número dos", usa el índice donde se pronuncia el número.
    - "end_index": índice del ÚLTIMO segmento donde el orador sigue explicando ese paso concreto:
      * Si los pasos van seguidos uno tras otro, cada paso termina justo en el segmento anterior al inicio del siguiente paso (start_index_siguiente - 1).
      * Para el ÚLTIMO paso (o si cambia de tema antes del siguiente paso), termina en el último segmento de la explicación de ese paso, ANTES de cualquier cierre/CTA final ("sígueme para más", "guarda este vídeo", "comenta", etc.).

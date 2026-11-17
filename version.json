@@ -1,8 +1,8 @@
 {
-  "version": "1.0.28",
-  "version_code": 29,
-  "date": "2026-11-14",
-  "description": "Deteccion contextual con OpenRouter de pasos/numeros ordenados (1, 2, 3...) colocados en esquina superior izquierda con la letra destacada del doctor, animacion Mini zoom y sonido Enter / Click sincronizado",
+  "version": "1.0.29",
+  "version_code": 30,
+  "date": "2026-11-17",
+  "description": "Correccion de numeros de paso con retraso exacto de texto, division natural de lineas largas (max 3 palabras / 2 si son largas), ajuste Y de destacados huerfanos y bloqueo de muletillas como creo en destacados",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

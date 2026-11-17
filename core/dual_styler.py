@@ -28,6 +28,13 @@ from core.text_utils import (
     PROCLITIC_ORPHAN_WORDS,
     GALA_UNIQUE_SECOND_WORDS,
     normalize_gala_brand_text,
+    _extract_word_tokens,
+    _build_item_from_tokens,
+    _strip_edge_punct,
+    SAFE_MARGIN_VISUAL_MAX_RATIO,
+    measure_visual_width_ratio,
+    split_wide_segment_for_safe_margins,
+    is_weak_highlight_word,
 )
 from ai.openrouter_client import OpenRouterClient, DEFAULT_MODEL
 
@@ -49,6 +56,128 @@ NEGATIVE_KEYWORDS = {
     'rigidez', 'desgaste', 'irritación', 'molesta', 'duele', 'doliendo',
     'roto', 'rotura', 'pronación', 'pronas', 'supinación'
 }
+
+_STEP_CARDINAL_WORDS = {
+    'uno': 1, 'dos': 2, 'tres': 3, 'cuatro': 4, 'cinco': 5,
+    'seis': 6, 'siete': 7, 'ocho': 8, 'nueve': 9, 'diez': 10,
+    'once': 11, 'doce': 12, 'trece': 13, 'catorce': 14, 'quince': 15,
+    'dieciséis': 16, 'dieciseis': 16, 'diecisiete': 17, 'dieciocho': 18,
+    'diecinueve': 19, 'veinte': 20,
+}
+
+_STEP_ORDINAL_WORDS = {
+    'primero': 1, 'primer': 1, 'primera': 1,
+    'segundo': 2, 'segunda': 2,
+    'tercero': 3, 'tercer': 3, 'tercera': 3,
+    'cuarto': 4, 'cuarta': 4,
+    'quinto': 5, 'quinta': 5,
+    'sexto': 6, 'sexta': 6,
+    'séptimo': 7, 'septimo': 7, 'séptima': 7, 'septima': 7,
+    'octavo': 8, 'octava': 8,
+    'noveno': 9, 'novena': 9,
+    'décimo': 10, 'decimo': 10, 'décima': 10, 'decima': 10,
+}
+
+_STEP_LABEL_PREV_WORDS = {
+    'número', 'numero', 'paso', 'punto', 'señal', 'regla', 'consejo',
+    'hábito', 'habito', 'error', 'clave', 'nivel', 'fase', 'tipo',
+    'forma', 'manera', 'día', 'dia', 'días', 'dias', 'año', 'años',
+    'mes', 'meses', 'semana', 'semanas', 'vez', 'veces', 'top',
+    'del', 'al', 'el', 'la', 'los', 'las', 'unos', 'unas',
+    'cada', 'entre', 'son', 'hay', 'de', 'a', 'en', 'con', 'por',
+    'o', 'u',
+}
+
+_STEP_QUANTITY_NEXT_WORDS = {
+    'veces', 'vez', 'años', 'año', 'meses', 'mes', 'días', 'día',
+    'dias', 'dia', 'horas', 'hora', 'minutos', 'minuto', 'segundos',
+    'segundo', 'semanas', 'semana', 'pasos', 'consejos', 'señales',
+    'errores', 'tips', 'razones', 'formas', 'maneras', 'cosas',
+    'puntos', 'hábitos', 'habitos', 'o', 'u', 'por', 'ciento',
+    'mil', 'kilos', 'gramos', 'ml', 'mg', 'cm', 'mm',
+}
+
+_PROCLITIC_NO_CAP_WORDS = set(PROCLITIC_ORPHAN_WORDS) | {'e', 'o', 'u', 'ni', 'pero', 'aunque', 'porque'}
+
+
+def _capitalize_leading_alpha(text: str) -> str:
+    if not text:
+        return text
+    m = re.search(r'[A-Za-zÁÉÍÓÚÑÜáéíóúñü]', text)
+    if not m:
+        return text
+    return text[:m.start()] + m.group(0).upper() + text[m.end():]
+
+
+def _capitalize_item_first_word(item: Dict[str, Any]) -> None:
+    if not item or not item.get('text'):
+        return
+    item['text'] = _capitalize_leading_alpha(item['text'])
+    words = item.get('words')
+    if isinstance(words, dict) and isinstance(words.get('text'), list):
+        for i, tok in enumerate(words['text']):
+            if tok and tok.strip():
+                words['text'][i] = _capitalize_leading_alpha(tok)
+                break
+
+
+def _find_step_token_in_tokens(toks: List[Dict[str, Any]], target_num: int) -> Tuple[Optional[int], bool]:
+    """Return (token_index, is_strippable_cardinal) matching target_num inside tokens."""
+    if not toks:
+        return None, False
+
+    guarded_cardinal_idx = None
+    for k, tok in enumerate(toks):
+        bare = _strip_edge_punct(tok['word']).lower()
+        if not bare:
+            continue
+        is_card = (bare.isdigit() and int(bare) == target_num) or (_STEP_CARDINAL_WORDS.get(bare) == target_num)
+        if not is_card:
+            continue
+        prev_bare = _strip_edge_punct(toks[k - 1]['word']).lower() if k > 0 else ""
+        next_bare = _strip_edge_punct(toks[k + 1]['word']).lower() if (k + 1) < len(toks) else ""
+        if prev_bare in _STEP_LABEL_PREV_WORDS or next_bare in _STEP_QUANTITY_NEXT_WORDS:
+            if guarded_cardinal_idx is None:
+                guarded_cardinal_idx = k
+        else:
+            return k, True
+
+    if guarded_cardinal_idx is not None:
+        return guarded_cardinal_idx, False
+
+    for k, tok in enumerate(toks):
+        bare = _strip_edge_punct(tok['word']).lower()
+        if _STEP_ORDINAL_WORDS.get(bare) == target_num:
+            return k, False
+
+    return None, False
+
+
+def _resolve_step_start_in_items(
+    raw_items: List[Dict[str, Any]],
+    s_pos: int,
+    e_pos: int,
+    target_num: int,
+) -> Tuple[int, Optional[int], bool, int]:
+    """Refine step start item index and token-level onset timestamp (us)."""
+    toks_s = _extract_word_tokens(raw_items[s_pos])
+    tok_idx, can_strip = _find_step_token_in_tokens(toks_s, target_num)
+
+    if tok_idx is None and s_pos + 1 <= e_pos:
+        toks_nxt = _extract_word_tokens(raw_items[s_pos + 1])
+        nxt_idx, nxt_strip = _find_step_token_in_tokens(toks_nxt, target_num)
+        if nxt_idx is not None and (nxt_idx == 0 or (len(toks_nxt) <= 2 and nxt_idx == 1)):
+            s_pos = s_pos + 1
+            toks_s = toks_nxt
+            tok_idx = nxt_idx
+            can_strip = nxt_strip
+
+    start_us = int(raw_items[s_pos]['start'])
+    if tok_idx is not None and can_strip:
+        start_us = int(toks_s[tok_idx]['start_us'])
+
+    return s_pos, tok_idx, can_strip, start_us
+
 
 STEP_BADGE_TRACK_NAME = "Pasos"
 STEP_AUDIO_TRACK_NAME = "Pasos Audio"
@@ -662,15 +791,29 @@ class DualStyler:
                         extra_refs = []
 
                     top_scale = copy.deepcopy(self.top_scale)
-                    if is_top_hl:
-                        dyn_top_font = self.highlight_style.get('dynamic_font_size') or self.default_style.get('dynamic_font_size')
-                        if not (dyn_top_font and dyn_top_font.get('enabled', True)):
-                            char_count = len(top_text.strip())
-                            if char_count > 11:
-                                shrink_factor = max(0.75, 11.0 / char_count)
-                                if isinstance(top_scale, dict) and 'x' in top_scale and 'y' in top_scale:
-                                    top_scale['x'] = float(top_scale['x']) * shrink_factor
-                                    top_scale['y'] = float(top_scale['y']) * shrink_factor
+                    dyn_top_font = self.highlight_style.get('dynamic_font_size') or self.default_style.get('dynamic_font_size')
+                    eff_max_chars = int((self.preset_data or {}).get('margins', {}).get('max_chars_per_line', 18) or 18)
+                    top_font_cfg = (self.highlight_style if is_top_hl else self.default_style).get('font_path', '')
+                    is_top_upper = bool(
+                        (self.highlight_style if is_top_hl else self.default_style).get('uppercase', False)
+                        or (self.preset_data or {}).get('uppercase', False)
+                    )
+                    top_vis_ratio = measure_visual_width_ratio(
+                        top_text,
+                        font_path_or_name=top_font_cfg,
+                        max_chars=eff_max_chars,
+                        is_uppercase=is_top_upper,
+                    )
+                    shrink_factor = 1.0
+                    if is_top_hl and not (dyn_top_font and dyn_top_font.get('enabled', True)):
+                        char_count = len(top_text.strip())
+                        if char_count > 11:
+                            shrink_factor = min(shrink_factor, max(0.75, 11.0 / char_count))
+                    if top_vis_ratio > SAFE_MARGIN_VISUAL_MAX_RATIO and not (is_top_hl and dyn_top_font and dyn_top_font.get('enabled', True)):
+                        shrink_factor = min(shrink_factor, max(0.72, 1.02 / top_vis_ratio))
+                    if shrink_factor < 0.999 and isinstance(top_scale, dict) and 'x' in top_scale and 'y' in top_scale:
+                        top_scale['x'] = float(top_scale['x']) * shrink_factor
+                        top_scale['y'] = float(top_scale['y']) * shrink_factor
 
                     top_seg = {
                         "id": str(uuid.uuid4()).upper(),
@@ -817,6 +960,14 @@ class DualStyler:
         # Accompaniment Fail-Safe Guarantee: 100% of Bot segments must be accompanied by Top
         top_segs = top_track.get('segments', [])
         bot_segs = bot_track.get('segments', [])
+        _mat_text_map: Dict[str, str] = {}
+        for _tm in data.get('materials', {}).get('texts', []):
+            _mid = _tm.get('id')
+            if _mid:
+                try:
+                    _mat_text_map[_mid] = json.loads(_tm.get('content') or '{}').get('text', '')
+                except Exception:
+                    _mat_text_map[_mid] = ''
         for b_seg in bot_segs:
             b_tr = b_seg.get('target_timerange', {})
             b_st = b_tr.get('start', 0)
@@ -832,6 +983,8 @@ class DualStyler:
                 preceding = [
                     t for t in top_segs
                     if t.get('target_timerange', {}).get('start', 0) <= b_st + 50000
+                    and (b_st - (t.get('target_timerange', {}).get('start', 0) + t.get('target_timerange', {}).get('duration', 0))) <= 250000
+                    and _strip_edge_punct(_mat_text_map.get(t.get('material_id', ''), '')).lower() not in {'y', 'e', 'o', 'u'}
                     and not t.get('extra_material_refs')
                 ]
                 if preceding:
@@ -855,6 +1008,26 @@ class DualStyler:
                 next_st = trk_segs[i + 1]['target_timerange']['start']
                 if cur_st + cur_dur > next_st:
                     trk_segs[i]['target_timerange']['duration'] = max(0, next_st - cur_st)
+
+        # Orphan bottom highlight vertical alignment: if no Top text overlaps a Bot highlight,
+        # promote its Y position up to self.y_top so it doesn't float low over empty space.
+        dyn_y_cfg = self.highlight_style.get('dynamic_y', {})
+        if not (isinstance(dyn_y_cfg, dict) and dyn_y_cfg.get('enabled')):
+            final_top_segs = top_track.get('segments', [])
+            for b_seg in bot_track.get('segments', []):
+                b_tr = b_seg.get('target_timerange', {})
+                b_st = b_tr.get('start', 0)
+                b_dur = b_tr.get('duration', 0)
+                b_et = b_st + b_dur
+                if b_dur <= 0:
+                    continue
+                has_top_overlap = any(
+                    min(b_et, t.get('target_timerange', {}).get('start', 0) + t.get('target_timerange', {}).get('duration', 0))
+                    - max(b_st, t.get('target_timerange', {}).get('start', 0)) > 50000
+                    for t in final_top_segs
+                )
+                if not has_top_overlap:
+                    b_seg.setdefault('clip', {}).setdefault('transform', {})['y'] = self.y_top
 
         if getattr(self, 'sound_fx', {}).get('enabled', True) and bot_starts:
             vol = float(self.sound_fx.get('volume', 0.65))
@@ -1394,7 +1567,7 @@ class DualStyler:
     ) -> List[Dict[str, Any]]:
         """
         Convierte las detecciones contextuales de OpenRouter en segmentos con tiempo exacto:
-        - Empiezan en el segmento donde se introduce el paso.
+        - Empiezan en el segmento/palabra donde se pronuncia el número de paso.
         - Duran hasta que empieza el siguiente número (si el discurso continúa en la secuencia)
           o hasta que el hablante deja de hablar de ese paso.
         """
@@ -1402,11 +1575,11 @@ class DualStyler:
             return []
 
         idx_to_pos = {item.get('index', pos): pos for pos, item in enumerate(raw_items)}
-        step_plan: List[Dict[str, Any]] = []
         n_items = len(raw_items)
         max_bridge_gap_us = 2500000  # 2.5s puente continuo entre un paso y el siguiente
 
-        for i, det in enumerate(step_detections):
+        resolved: List[Dict[str, Any]] = []
+        for det in step_detections:
             s_pos = det.get('start_pos')
             if s_pos is None or not (0 <= s_pos < n_items):
                 s_pos = idx_to_pos.get(det.get('start_index'))
@@ -1416,16 +1589,28 @@ class DualStyler:
             if s_pos is None or e_pos is None or not (0 <= s_pos <= e_pos < n_items):
                 continue
 
-            start_us = int(raw_items[s_pos]['start'])
-            end_us = int(raw_items[e_pos]['end'])
+            try:
+                num_val = int(det['number'])
+            except (TypeError, ValueError):
+                continue
 
-            if i + 1 < len(step_detections):
-                nxt = step_detections[i + 1]
-                nxt_pos = nxt.get('start_pos')
-                if nxt_pos is None or not (0 <= nxt_pos < n_items):
-                    nxt_pos = idx_to_pos.get(nxt.get('start_index'))
-                if nxt_pos is not None and nxt_pos > s_pos:
-                    next_start_us = int(raw_items[nxt_pos]['start'])
+            s_pos, _, _, start_us = _resolve_step_start_in_items(raw_items, s_pos, e_pos, num_val)
+            end_us = int(raw_items[e_pos]['end'])
+            resolved.append({
+                'number': str(det['number']),
+                's_pos': s_pos,
+                'start': start_us,
+                'end': end_us,
+            })
+
+        step_plan: List[Dict[str, Any]] = []
+        for i, entry in enumerate(resolved):
+            start_us = entry['start']
+            end_us = entry['end']
+            if i + 1 < len(resolved):
+                nxt = resolved[i + 1]
+                if nxt['s_pos'] > entry['s_pos'] or nxt['start'] > start_us:
+                    next_start_us = nxt['start']
                     if (next_start_us - end_us) <= max_bridge_gap_us and next_start_us > start_us:
                         end_us = next_start_us
                     end_us = min(end_us, next_start_us)
@@ -1434,13 +1619,318 @@ class DualStyler:
                 continue
 
             step_plan.append({
-                'number': str(det['number']),
+                'number': entry['number'],
                 'start': start_us,
                 'end': end_us,
                 'duration': end_us - start_us,
             })
 
         return step_plan
+
+    @staticmethod
+    def _prepare_step_numbers_and_clean_items(
+        raw_items: List[Dict[str, Any]],
+        step_detections: Optional[List[Dict[str, Any]]],
+        keep_punctuation: bool = False,
+        is_all_uppercase: bool = False,
+    ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], set]:
+        """Build step badge plan and strip spoken bare cardinal step digits from subtitle text/timing."""
+        if not raw_items or not step_detections:
+            return raw_items, [], set()
+
+        step_plan = DualStyler._build_step_badge_plan(raw_items, step_detections)
+        idx_to_pos = {item.get('index', pos): pos for pos, item in enumerate(raw_items)}
+        n_items = len(raw_items)
+
+        cleaned = []
+        for it in raw_items:
+            it_copy = dict(it)
+            if isinstance(it.get('words'), dict):
+                it_copy['words'] = copy.deepcopy(it['words'])
+            cleaned.append(it_copy)
+
+        removed_positions = set()
+        capitalize_after = set()
+        split_replacements: Dict[int, List[Dict[str, Any]]] = {}
+        stripped_tokens_lower = set()
+
+        for det in step_detections:
+            s_pos = det.get('start_pos')
+            if s_pos is None or not (0 <= s_pos < n_items):
+                s_pos = idx_to_pos.get(det.get('start_index'))
+            e_pos = det.get('end_pos')
+            if e_pos is None or not (0 <= e_pos < n_items):
+                e_pos = idx_to_pos.get(det.get('end_index'), s_pos)
+            if s_pos is None or e_pos is None or not (0 <= s_pos <= e_pos < n_items):
+                continue
+
+            try:
+                num_val = int(det['number'])
+            except (TypeError, ValueError):
+                continue
+
+            s_pos, _, _, _ = _resolve_step_start_in_items(cleaned, s_pos, e_pos, num_val)
+            if s_pos in removed_positions or s_pos in split_replacements:
+                continue
+
+            toks = _extract_word_tokens(cleaned[s_pos])
+            tok_idx, can_strip = _find_step_token_in_tokens(toks, num_val)
+            if tok_idx is None or not can_strip:
+                continue
+
+            num_tok = toks[tok_idx]
+            stripped_tokens_lower.add(_strip_edge_punct(num_tok['word']).lower())
+            stripped_tokens_lower.add(str(num_val))
+
+            left_toks = toks[:tok_idx]
+            right_toks = toks[tok_idx + 1:]
+
+            # Preserve opening ¿ / ¡ if attached to a stripped leading numeral
+            if right_toks:
+                num_w = num_tok['word']
+                if num_w.startswith(('¿', '¡')) and not right_toks[0]['word'].startswith(('¿', '¡')):
+                    right_toks[0]['word'] = num_w[0] + right_toks[0]['word']
+
+            orig_start = int(cleaned[s_pos]['start'])
+            orig_end = int(cleaned[s_pos]['end'])
+            num_start = int(num_tok['start_us'])
+
+            if not left_toks and not right_toks:
+                removed_positions.add(s_pos)
+                capitalize_after.add(s_pos)
+            elif not left_toks and right_toks:
+                if not is_all_uppercase:
+                    right_toks[0]['word'] = _capitalize_leading_alpha(right_toks[0]['word'])
+                new_it = _build_item_from_tokens(cleaned[s_pos], right_toks, keep_punctuation=keep_punctuation)
+                delayed_start = int(new_it['start'])
+                if (orig_end - orig_start) >= 220000 and (orig_end - delayed_start) < 220000:
+                    safe_start = max(orig_start, orig_end - 220000)
+                    delta_ms = max(0, (delayed_start - safe_start) // 1000)
+                    new_it['start'] = safe_start
+                    words_d = new_it.get('words')
+                    if isinstance(words_d, dict):
+                        words_d['start_time'] = [int(x) + delta_ms for x in words_d.get('start_time', [])]
+                        words_d['end_time'] = [int(x) + delta_ms for x in words_d.get('end_time', [])]
+                if (orig_end - int(new_it['end'])) < 100000:
+                    new_it['end'] = max(int(new_it['start']) + 150000, orig_end)
+                new_it['duration'] = max(0, int(new_it['end']) - int(new_it['start']))
+                cleaned[s_pos] = new_it
+            elif left_toks and not right_toks:
+                new_it = _build_item_from_tokens(cleaned[s_pos], left_toks, keep_punctuation=keep_punctuation)
+                if num_start - orig_start >= 220000:
+                    trimmed_end = min(orig_end, num_start)
+                else:
+                    trimmed_end = min(orig_end, max(orig_start + 220000, num_start))
+                new_it['end'] = max(int(new_it['start']) + 150000, trimmed_end)
+                new_it['duration'] = max(0, int(new_it['end']) - int(new_it['start']))
+                last_left_bare = _strip_edge_punct(left_toks[-1]['word']).lower()
+                if last_left_bare not in _PROCLITIC_NO_CAP_WORDS:
+                    capitalize_after.add(s_pos)
+                cleaned[s_pos] = new_it
+            else:
+                left_it = _build_item_from_tokens(cleaned[s_pos], left_toks, keep_punctuation=keep_punctuation)
+                if num_start - orig_start >= 220000:
+                    left_end = min(int(right_toks[0]['start_us']), num_start)
+                    left_it['end'] = max(int(left_it['start']) + 150000, left_end)
+                    left_it['duration'] = max(0, int(left_it['end']) - int(left_it['start']))
+
+                last_left_bare = _strip_edge_punct(left_toks[-1]['word']).lower()
+                if not is_all_uppercase and last_left_bare not in _PROCLITIC_NO_CAP_WORDS:
+                    right_toks[0]['word'] = _capitalize_leading_alpha(right_toks[0]['word'])
+                right_tpl = dict(cleaned[s_pos])
+                right_tpl['item'] = None
+                right_it = _build_item_from_tokens(right_tpl, right_toks, keep_punctuation=keep_punctuation)
+                if (orig_end - int(right_it['end'])) < 100000:
+                    right_it['end'] = max(int(right_it['start']) + 150000, orig_end)
+                right_it['duration'] = max(0, int(right_it['end']) - int(right_it['start']))
+                split_replacements[s_pos] = [left_it, right_it]
+
+        final_items: List[Dict[str, Any]] = []
+        pending_cap = False
+        for pos, it in enumerate(cleaned):
+            if pos in removed_positions:
+                if pos in capitalize_after:
+                    pending_cap = True
+                continue
+            if pos in split_replacements:
+                final_items.extend(split_replacements[pos])
+                pending_cap = pos in capitalize_after
+                continue
+            if pending_cap and not is_all_uppercase:
+                _capitalize_item_first_word(it)
+                pending_cap = False
+            final_items.append(it)
+            pending_cap = pos in capitalize_after
+
+        for idx, it in enumerate(final_items):
+            it['index'] = idx
+
+        return final_items, step_plan, stripped_tokens_lower
+
+    def _run_step_number_preparation(
+        self,
+        raw_items: List[Dict[str, Any]],
+        openrouter_key: Optional[str] = None,
+        highlighter: Optional[Any] = None,
+        model: Optional[str] = None,
+        ai_phrases: Optional[List[Any]] = None,
+        is_all_uppercase: bool = False,
+    ) -> Tuple[List[Dict[str, Any]], Optional[List[Dict[str, Any]]], Optional[List[Any]]]:
+        """Detect step numbers with OpenRouter before subtitle styling and strip bare step digits."""
+        client = self._resolve_openrouter_client(highlighter=highlighter, openrouter_key=openrouter_key, model=model)
+        if not client:
+            return raw_items, None, ai_phrases
+        try:
+            detections = client.detect_step_numbers(raw_items)
+        except Exception as e:
+            logger.warning(f"Step number detection failed: {e}")
+            return raw_items, [], ai_phrases
+
+        if detections is None:
+            return raw_items, [], ai_phrases
+
+        cleaned_items, step_plan, stripped_nums = self._prepare_step_numbers_and_clean_items(
+            raw_items,
+            detections,
+            keep_punctuation=getattr(self, 'keep_punctuation', False),
+            is_all_uppercase=is_all_uppercase,
+        )
+
+        filtered_phrases = ai_phrases
+        if ai_phrases and stripped_nums:
+            filtered_phrases = []
+            for entry in ai_phrases:
+                raw_p = entry.get('phrase', '') if isinstance(entry, dict) else str(entry)
+                p_bare = _strip_edge_punct(str(raw_p)).lower()
+                if p_bare and p_bare in stripped_nums:
+                    continue
+                filtered_phrases.append(entry)
+
+        return cleaned_items, step_plan, filtered_phrases
+
+    def _build_top_plan_entries_for_safe_margins(
+        self,
+        item_template: Optional[Dict[str, Any]],
+        text: str,
+        start_us: int,
+        end_us: int,
+        max_chars: int,
+        max_words: int = 3,
+        is_all_uppercase: bool = False,
+        keep_punctuation: bool = False,
+    ) -> List[Dict[str, Any]]:
+        """Split wide or overly dense top text at word boundaries so lines stay balanced within margins."""
+        cleaned = clean_subtitle_text(text, preserve_case=is_all_uppercase, keep_punctuation=keep_punctuation)
+        if not cleaned:
+            return []
+
+        cand_item: Dict[str, Any] = {
+            'text': cleaned,
+            'start': int(start_us),
+            'end': int(end_us),
+            'duration': max(0, int(end_us) - int(start_us)),
+        }
+
+        if isinstance(item_template, dict) and item_template.get('words'):
+            orig_toks = _extract_word_tokens(item_template)
+            seg_words = cleaned.split()
+            if len(orig_toks) == len(seg_words):
+                cand_item['words'] = copy.deepcopy(item_template['words'])
+            elif orig_toks and 0 < len(seg_words) < len(orig_toks):
+                seg_bares = [_strip_edge_punct(w).lower() for w in seg_words]
+                orig_bares = [_strip_edge_punct(t['word']).lower() for t in orig_toks]
+                matched_toks = None
+                if orig_bares[:len(seg_bares)] == seg_bares:
+                    matched_toks = orig_toks[:len(seg_bares)]
+                elif orig_bares[-len(seg_bares):] == seg_bares and orig_toks[-len(seg_bares)]['start_us'] >= int(start_us) - 100000:
+                    matched_toks = orig_toks[-len(seg_bares):]
+                else:
+                    for off in range(len(orig_bares) - len(seg_bares) + 1):
+                        if orig_bares[off:off + len(seg_bares)] == seg_bares:
+                            matched_toks = orig_toks[off:off + len(seg_bares)]
+                            break
+                if matched_toks:
+                    w_text: List[str] = []
+                    w_start: List[int] = []
+                    w_end: List[int] = []
+                    base_us = int(start_us)
+                    for idx_t, tok in enumerate(matched_toks):
+                        if idx_t > 0:
+                            w_text.append(' ')
+                            w_start.append(max(0, (matched_toks[idx_t - 1]['end_us'] - base_us) // 1000))
+                            w_end.append(max(0, (tok['start_us'] - base_us) // 1000))
+                        w_text.append(tok['word'])
+                        w_start.append(max(0, (tok['start_us'] - base_us) // 1000))
+                        w_end.append(max(0, (tok['end_us'] - base_us) // 1000))
+                    cand_item['words'] = {'text': w_text, 'start_time': w_start, 'end_time': w_end}
+
+        font_cfg = self.default_style.get('font_path', '')
+        pieces = split_wide_segment_for_safe_margins(
+            cand_item,
+            max_chars=max_chars,
+            max_words=max_words,
+            font_path=font_cfg,
+            is_uppercase=is_all_uppercase,
+            keep_punctuation=keep_punctuation,
+        )
+
+        out: List[Dict[str, Any]] = []
+        for p in pieces:
+            p_txt = clean_subtitle_text(p.get('text', ''), preserve_case=is_all_uppercase, keep_punctuation=keep_punctuation)
+            if not p_txt:
+                continue
+            out.append({
+                'top': {
+                    'text': p_txt,
+                    'start': int(p['start']),
+                    'end': int(p['end']),
+                },
+                'bot': None,
+                'sticker': None,
+            })
+        return out
+
+    @staticmethod
+    def _sync_inline_track0_segments(
+        project: CapCutProject,
+        subs: List[SubtitleItem],
+        first_text_idx: Optional[int],
+        raw_items: List[Dict[str, Any]],
+    ) -> None:
+        """Synchronize Track 0 inline segments with modified, merged, removed, or split items."""
+        surviving_seg_ids = set()
+        for item in raw_items:
+            it_obj = item.get('item')
+            if it_obj and getattr(it_obj, 'segment', None):
+                tr = it_obj.segment.setdefault('target_timerange', {})
+                tr['start'] = item['start']
+                tr['duration'] = item['duration']
+                if item.get('words') and getattr(it_obj, 'text_material', None) is not None:
+                    it_obj.text_material['words'] = item['words']
+                if 'id' in it_obj.segment:
+                    surviving_seg_ids.add(it_obj.segment['id'])
+            elif first_text_idx is not None and subs:
+                tpl_sub = subs[0]
+                new_mat_id = str(uuid.uuid4()).upper()
+                new_mat = copy.deepcopy(tpl_sub.text_material)
+                new_mat['id'] = new_mat_id
+                if item.get('words'):
+                    new_mat['words'] = item['words']
+                project.data.setdefault('materials', {}).setdefault('texts', []).append(new_mat)
+                new_seg = copy.deepcopy(tpl_sub.segment)
+                new_seg_id = str(uuid.uuid4()).upper()
+                new_seg['id'] = new_seg_id
+                new_seg['material_id'] = new_mat_id
+                new_seg['target_timerange'] = {'start': item['start'], 'duration': item['duration']}
+                project.data['tracks'][first_text_idx].setdefault('segments', []).append(new_seg)
+                new_sub = SubtitleItem(first_text_idx, new_seg, new_mat)
+                item['item'] = new_sub
+                surviving_seg_ids.add(new_seg_id)
+
+        if first_text_idx is not None:
+            trk = project.data['tracks'][first_text_idx]
+            trk['segments'] = [seg for seg in trk.get('segments', []) if seg.get('id') in surviving_seg_ids]
+            trk['segments'].sort(key=lambda seg: seg.get('target_timerange', {}).get('start', 0))
 
     def _apply_step_badges_to_project(
         self,
@@ -1537,21 +2027,26 @@ class DualStyler:
         highlighter: Optional[Any] = None,
         model: Optional[str] = None,
         log_fn=None,
+        precomputed_step_plan: Optional[List[Dict[str, Any]]] = None,
     ) -> int:
         """Analiza el contexto del guion con OpenRouter antes de insertar números de paso."""
-        client = self._resolve_openrouter_client(highlighter=highlighter, openrouter_key=openrouter_key, model=model)
-        if not client:
-            return 0
-        try:
-            detections = client.detect_step_numbers(raw_items)
-        except Exception as e:
-            logger.warning(f"Step number detection failed: {e}")
-            return 0
+        if precomputed_step_plan is not None:
+            step_plan = precomputed_step_plan
+        else:
+            client = self._resolve_openrouter_client(highlighter=highlighter, openrouter_key=openrouter_key, model=model)
+            if not client:
+                return 0
+            try:
+                detections = client.detect_step_numbers(raw_items)
+            except Exception as e:
+                logger.warning(f"Step number detection failed: {e}")
+                return 0
 
-        if detections is None:
-            return 0
+            if detections is None:
+                return 0
 
-        step_plan = self._build_step_badge_plan(raw_items, detections)
+            step_plan = self._build_step_badge_plan(raw_items, detections)
+
         if not step_plan:
             if log_fn:
                 log_fn("[-] OpenRouter analizó el contexto: sin secuencia de pasos numerados (se omiten números sueltos).")
@@ -1709,6 +2204,7 @@ class DualStyler:
                     'item': s,
                     'text': txt,
                     'orig_text': s.text,
+                    'raw_asr_text': s.text,
                     'start': s.start_us,
                     'end': s.start_us + s.duration_us,
                     'duration': s.duration_us,
@@ -1725,9 +2221,9 @@ class DualStyler:
                     raw_items[k]['duration'] = raw_items[k]['end'] - raw_items[k]['start']
 
         # Consolidate split numbers and convert words to digits
-        eff_max_chars = self.margins.get('max_chars_per_line', max_chars_per_line)
-        eff_max_words = self.margins.get('max_words_per_line', max_words_per_line)
-        eff_max_hl_chars = int(self.margins.get('max_highlight_chars', self.margins.get('max_chars_per_line', 18)))
+        eff_max_chars = int(self.margins.get('max_chars_per_line') or max_chars_per_line or 18)
+        eff_max_words = int(self.margins.get('max_words_per_line') or max_words_per_line or 3)
+        eff_max_hl_chars = int(self.margins.get('max_highlight_chars') or eff_max_chars)
         raw_items = self._consolidate_number_segments(raw_items, max_chars=eff_max_chars, max_words=eff_max_words)
         forced_phrases = list(getattr(self, 'always_highlight_phrases', []) or [])
         if forced_phrases:
@@ -1794,6 +2290,15 @@ class DualStyler:
         if getattr(self, 'keep_punctuation', False):
             heuristic_punctuation_fallback(raw_items)
 
+        raw_items, precomputed_step_plan, ai_phrases = self._run_step_number_preparation(
+            raw_items,
+            openrouter_key=openrouter_key,
+            highlighter=highlighter,
+            model=model,
+            ai_phrases=ai_phrases,
+            is_all_uppercase=is_all_uppercase,
+        )
+
         forced_phrases = list(getattr(self, 'always_highlight_phrases', []) or [])
         if forced_phrases:
             raw_items = self._regroup_forced_phrases_in_items(
@@ -1843,6 +2348,7 @@ class DualStyler:
 
         plan = []
         last_highlight_us = -int(min_pacing_sec * 1e6)
+        recent_fallback_words = set()
         solo_count = 0
         last_solo_us = -int(8.0 * 1e6)
         allow_solo = self.preset_data.get('allow_solo_highlights', True) if self.preset_data else True
@@ -1865,6 +2371,7 @@ class DualStyler:
             is_solo_entry = False
             is_forced_hl = False
             time_since_last_sec = (curr_start - last_highlight_us) / 1e6
+            time_since_last_fallback_sec = (curr_start - max(0, last_highlight_us)) / 1e6
 
             forced_match = (
                 self._match_forced_highlight(curr_text, forced_phrases, all_upper=is_all_uppercase)
@@ -1921,28 +2428,47 @@ class DualStyler:
                             is_solo_entry = entry_solo
                             break
                     # 2. Or curr_text is within p_clean (for multi-word AI suggestions spanning short segments)
-                    elif curr_text.strip().lower() in p_clean.lower() and len(curr_text.strip()) >= 3 and len(curr_text.strip()) <= eff_max_hl_chars:
+                    elif (
+                        len(curr_text.strip()) >= 3
+                        and len(curr_text.strip()) <= eff_max_hl_chars
+                        and re.search(r'(?<!\w)' + re.escape(curr_text.strip().lower()) + r'(?!\w)', p_clean.lower())
+                    ):
                         cand_text = sanitize_highlight_phrase(curr_text.strip(), max_chars=eff_max_hl_chars)
-                        if cand_text and cand_text.lower() not in SPANISH_STOPWORDS:
+                        if cand_text and not all(is_weak_highlight_word(w) for w in cand_text.split()):
                             matched_highlight = cand_text
                             matched_tone = tone
                             is_solo_entry = entry_solo
                             break
 
-                # 3. Pacing fallback guarantee: if time exceeded max_pacing_sec, ensure constant visual rhythm
-                if not matched_highlight and time_since_last_sec >= max_pacing_sec:
+                # 3. Pacing fallback guarantee: only after real dry spells >= max_pacing_sec, never on weak filler words
+                if not matched_highlight and time_since_last_fallback_sec >= max_pacing_sec:
                     cand_words = [
                         w for w in re.findall(r'\b[\wáéíóúÁÉÍÓÚñÑüÜ]+\b', curr_text)
-                        if w.lower() not in SPANISH_STOPWORDS and len(w) <= eff_max_hl_chars and (len(w) >= 4 or w.lower() in {'pie', 'ojo', 'voz', 'tos'})
+                        if not is_weak_highlight_word(w)
+                        and len(w) <= eff_max_hl_chars
+                        and (len(w) >= 4 or w.lower() in {'pie', 'ojo', 'voz', 'tos', 'pis', 'sal', 'sol', 'luz'})
                     ]
                     if cand_words:
-                        matched_highlight = max(cand_words, key=len)
+                        matched_highlight = max(
+                            cand_words,
+                            key=lambda cw: (
+                                100 if self._is_negative_term(cw) else 0,
+                                50 if cw.lower() not in recent_fallback_words else 0,
+                                min(len(cw), 12) * 3,
+                            ),
+                        )
+                        recent_fallback_words.add(matched_highlight.lower())
                         matched_tone = 'normal'
                         is_solo_entry = False
 
             if matched_highlight and not is_forced_hl:
                 clean_hl_check = sanitize_highlight_phrase(matched_highlight, max_chars=eff_max_hl_chars)
-                if not clean_hl_check or clean_hl_check.lower() in SPANISH_STOPWORDS or (len(clean_hl_check.strip()) <= 2 and not any(c.isdigit() for c in clean_hl_check)):
+                hl_words = clean_hl_check.split() if clean_hl_check else []
+                if (
+                    not clean_hl_check
+                    or all(is_weak_highlight_word(w) for w in hl_words)
+                    or (len(clean_hl_check.strip()) <= 2 and not any(c.isdigit() for c in clean_hl_check))
+                ):
                     matched_highlight = None
                 else:
                     matched_highlight = clean_hl_check
@@ -2074,30 +2600,50 @@ class DualStyler:
                 if stk_entry:
                     stk_entry['duration'] = bot_end - hl_start
 
+                keep_punc = getattr(self, 'keep_punctuation', False)
                 if prefix:
                     # Standard Dual-Layer: Top general text stays visible across prefix and highlight duration
-                    top_entry = {
-                        'text': clean_subtitle_text(prefix, keep_punctuation=getattr(self, 'keep_punctuation', False)),
-                        'start': curr_start,
-                        'end': bot_end
-                    }
+                    prefix_end_us = max(curr_start + 150000, min(hl_start, bot_end))
+                    prefix_entries = self._build_top_plan_entries_for_safe_margins(
+                        curr,
+                        prefix,
+                        curr_start,
+                        prefix_end_us,
+                        eff_max_chars,
+                        eff_max_words,
+                        is_all_uppercase,
+                        keep_punc,
+                    )
                     bot_entry = {
                         'text': bot_text,
                         'start': hl_start,
                         'end': bot_end,
                         'tone': matched_tone
                     }
-                    plan.append({'top': top_entry, 'bot': bot_entry, 'sticker': stk_entry})
+                    if len(prefix_entries) > 1:
+                        plan.extend(prefix_entries[:-1])
+                        last_prefix_top = prefix_entries[-1]['top']
+                    elif prefix_entries:
+                        last_prefix_top = prefix_entries[0]['top']
+                    else:
+                        last_prefix_top = {
+                            'text': clean_subtitle_text(prefix, keep_punctuation=keep_punc),
+                            'start': curr_start,
+                            'end': bot_end
+                        }
+                    last_prefix_top['end'] = max(last_prefix_top['end'], bot_end)
+                    plan.append({'top': last_prefix_top, 'bot': bot_entry, 'sticker': stk_entry})
                     if suffix:
-                        plan.append({
-                            'top': {
-                                'text': clean_subtitle_text(suffix, keep_punctuation=getattr(self, 'keep_punctuation', False)),
-                                'start': bot_end,
-                                'end': curr_end
-                            },
-                            'bot': None,
-                            'sticker': None
-                        })
+                        plan.extend(self._build_top_plan_entries_for_safe_margins(
+                            curr,
+                            suffix,
+                            bot_end,
+                            curr_end,
+                            eff_max_chars,
+                            eff_max_words,
+                            is_all_uppercase,
+                            keep_punc,
+                        ))
                     last_highlight_us = hl_start
                 else:
                     # Highlight is at the START of this segment (no prefix).
@@ -2164,15 +2710,16 @@ class DualStyler:
                                 'sticker': stk_entry
                             })
                             if suffix:
-                                plan.append({
-                                    'top': {
-                                        'text': clean_subtitle_text(suffix, keep_punctuation=getattr(self, 'keep_punctuation', False)),
-                                        'start': bot_end,
-                                        'end': curr_end
-                                    },
-                                    'bot': None,
-                                    'sticker': None
-                                })
+                                plan.extend(self._build_top_plan_entries_for_safe_margins(
+                                    curr,
+                                    suffix,
+                                    bot_end,
+                                    curr_end,
+                                    eff_max_chars,
+                                    eff_max_words,
+                                    is_all_uppercase,
+                                    keep_punc,
+                                ))
                         elif suffix:
                             # Render dual layer: top general suffix + bottom highlight
                             bot_entry = {
@@ -2181,12 +2728,26 @@ class DualStyler:
                                 'end': bot_end,
                                 'tone': matched_tone
                             }
-                            top_entry = {
-                                'text': clean_subtitle_text(suffix, keep_punctuation=getattr(self, 'keep_punctuation', False)),
-                                'start': bot_end,
-                                'end': curr_end
-                            }
-                            plan.append({'top': top_entry, 'bot': bot_entry, 'sticker': stk_entry})
+                            suf_entries = self._build_top_plan_entries_for_safe_margins(
+                                curr,
+                                suffix,
+                                bot_end,
+                                curr_end,
+                                eff_max_chars,
+                                eff_max_words,
+                                is_all_uppercase,
+                                keep_punc,
+                            )
+                            if suf_entries:
+                                plan.append({'top': suf_entries[0]['top'], 'bot': bot_entry, 'sticker': stk_entry})
+                                plan.extend(suf_entries[1:])
+                            else:
+                                top_entry = {
+                                    'text': clean_subtitle_text(suffix, keep_punctuation=keep_punc),
+                                    'start': bot_end,
+                                    'end': curr_end
+                                }
+                                plan.append({'top': top_entry, 'bot': bot_entry, 'sticker': stk_entry})
                             last_highlight_us = hl_start
                         elif is_forced_hl:
                             # Forced brand highlights always render on the highlighted bottom layer without duplicating top text
@@ -2217,10 +2778,15 @@ class DualStyler:
                         # Mid-sentence continuation from preceding segment (same grammatical phrase).
                         if plan and plan[-1].get('top') and plan[-1]['top'].get('text'):
                             prev_top = plan[-1]['top']
+                            prev_bare = _strip_edge_punct(prev_top['text']).lower()
                             max_ext_us = 3500000 if is_forced_hl else 2000000
                             max_gap_us = 450000 if is_forced_hl else 150000
-                            # Guard against excessive top extension
-                            if (bot_end - prev_top['start'] <= max_ext_us) and (curr_start - prev_top['end'] <= max_gap_us):
+                            # Guard against excessive top extension or stretching bare conjunctions like 'y'
+                            if (
+                                (is_forced_hl or prev_bare not in {'y', 'e', 'o', 'u'})
+                                and (bot_end - prev_top['start'] <= max_ext_us)
+                                and (curr_start - prev_top['end'] <= max_gap_us)
+                            ):
                                 prev_top['end'] = max(prev_top['end'], bot_end)
 
 
@@ -2232,26 +2798,28 @@ class DualStyler:
                         }
                         plan.append({'top': None, 'bot': bot_entry, 'sticker': stk_entry})
                         if suffix:
-                            plan.append({
-                                'top': {
-                                    'text': clean_subtitle_text(suffix, keep_punctuation=getattr(self, 'keep_punctuation', False)),
-                                    'start': bot_end,
-                                    'end': curr_end
-                                },
-                                'bot': None,
-                                'sticker': None
-                            })
+                            plan.extend(self._build_top_plan_entries_for_safe_margins(
+                                curr,
+                                suffix,
+                                bot_end,
+                                curr_end,
+                                eff_max_chars,
+                                eff_max_words,
+                                is_all_uppercase,
+                                keep_punc,
+                            ))
                         last_highlight_us = hl_start
             else:
-                plan.append({
-                    'top': {
-                        'text': clean_subtitle_text(curr_text, keep_punctuation=getattr(self, 'keep_punctuation', False)),
-                        'start': curr_start,
-                        'end': curr_end
-                    },
-                    'bot': None,
-                    'sticker': None
-                })
+                plan.extend(self._build_top_plan_entries_for_safe_margins(
+                    curr,
+                    curr_text,
+                    curr_start,
+                    curr_end,
+                    eff_max_chars,
+                    eff_max_words,
+                    is_all_uppercase,
+                    getattr(self, 'keep_punctuation', False),
+                ))
 
 
 
@@ -2263,6 +2831,7 @@ class DualStyler:
             highlighter=highlighter,
             model=model,
             log_fn=log_fn,
+            precomputed_step_plan=precomputed_step_plan,
         )
         project._parse_subtitles()
         return res
@@ -2959,42 +3528,12 @@ class DualStyler:
         )
 
         # For inline styling: synchronize Track 0 segments with rebalanced items (merged, resized, or split)
-        surviving_seg_ids = set()
-        for item in raw_items:
-            it_obj = item.get('item')
-            if it_obj and getattr(it_obj, 'segment', None):
-                tr = it_obj.segment.setdefault('target_timerange', {})
-                tr['start'] = item['start']
-                tr['duration'] = item['duration']
-                if item.get('words') and getattr(it_obj, 'text_material', None) is not None:
-                    it_obj.text_material['words'] = item['words']
-                if 'id' in it_obj.segment:
-                    surviving_seg_ids.add(it_obj.segment['id'])
-            elif text_track_indices and subs:
-                # Split segment created by rebalancer: clone a segment + text material on Track 0
-                tpl_sub = subs[0]
-                new_mat_id = str(uuid.uuid4()).upper()
-                new_mat = copy.deepcopy(tpl_sub.text_material)
-                new_mat['id'] = new_mat_id
-                if item.get('words'):
-                    new_mat['words'] = item['words']
-                project.data.setdefault('materials', {}).setdefault('texts', []).append(new_mat)
-                new_seg = copy.deepcopy(tpl_sub.segment)
-                new_seg_id = str(uuid.uuid4()).upper()
-                new_seg['id'] = new_seg_id
-                new_seg['material_id'] = new_mat_id
-                new_seg['target_timerange'] = {'start': item['start'], 'duration': item['duration']}
-                project.data['tracks'][first_text_idx].setdefault('segments', []).append(new_seg)
-                new_sub = SubtitleItem(first_text_idx, new_seg, new_mat)
-                item['item'] = new_sub
-                surviving_seg_ids.add(new_seg_id)
-
-        orig_sub_ids = {s.segment['id'] for s in subs if getattr(s, 'segment', None) and 'id' in s.segment}
-        removed_ids = orig_sub_ids - surviving_seg_ids
-        if text_track_indices:
-            trk = project.data['tracks'][first_text_idx]
-            trk['segments'] = [seg for seg in trk.get('segments', []) if seg.get('id') not in removed_ids]
-            trk['segments'].sort(key=lambda seg: seg.get('target_timerange', {}).get('start', 0))
+        self._sync_inline_track0_segments(
+            project,
+            subs,
+            first_text_idx if text_track_indices else None,
+            raw_items,
+        )
 
         # 2. AI Processing with OpenRouter
         ai_phrases = []
@@ -3045,6 +3584,21 @@ class DualStyler:
 
         if getattr(self, 'keep_punctuation', False):
             heuristic_punctuation_fallback(raw_items)
+
+        raw_items, precomputed_step_plan, ai_phrases = self._run_step_number_preparation(
+            raw_items,
+            openrouter_key=openrouter_key,
+            highlighter=highlighter,
+            model=model,
+            ai_phrases=ai_phrases,
+        )
+        if precomputed_step_plan:
+            self._sync_inline_track0_segments(
+                project,
+                subs,
+                first_text_idx if text_track_indices else None,
+                raw_items,
+            )
 
         full_script = " ".join(item['text'] for item in raw_items)
         phrases_to_highlight = ai_phrases
@@ -3122,8 +3676,12 @@ class DualStyler:
                             p = str(entry)
                             tone = 'normal'
                         p_clean = clean_subtitle_text(p)
-                        if p_clean and len(p_clean) <= effective_max_chars:
-                            if p_clean.lower() in lower_text:
+                        if (
+                            p_clean
+                            and len(p_clean) <= effective_max_chars
+                            and not all(is_weak_highlight_word(w) for w in p_clean.split())
+                        ):
+                            if re.search(r'(?<!\w)' + re.escape(p_clean.lower()) + r'(?!\w)', lower_text):
                                 matched_phrase = p_clean
                                 matched_tone = tone
                                 if self._is_negative_term(matched_phrase):
@@ -3247,6 +3805,7 @@ class DualStyler:
             highlighter=highlighter,
             model=model,
             log_fn=log_fn,
+            precomputed_step_plan=precomputed_step_plan,
         )
         project.clean_all_subtitles()
         project._parse_subtitles()
@@ -3543,6 +4102,14 @@ class DualStyler:
         if getattr(self, 'keep_punctuation', False):
             heuristic_punctuation_fallback(raw_items)
 
+        raw_items, precomputed_step_plan, ai_phrases = self._run_step_number_preparation(
+            raw_items,
+            openrouter_key=openrouter_key,
+            highlighter=highlighter,
+            model=model,
+            ai_phrases=ai_phrases,
+        )
+
         full_script = " ".join(item['text'] for item in raw_items)
         phrases_to_highlight = ai_phrases
 
@@ -3726,7 +4293,7 @@ class DualStyler:
                 for cand in phrases_to_highlight:
                     cand_str = cand.get('phrase', '') if isinstance(cand, dict) else str(cand)
                     cand_clean = clean_subtitle_text(cand_str)
-                    if not cand_clean:
+                    if not cand_clean or all(is_weak_highlight_word(w) for w in cand_clean.split()):
                         continue
 
                     cand_words = cand_clean.split()
@@ -4102,6 +4669,7 @@ class DualStyler:
             highlighter=highlighter,
             model=model,
             log_fn=log_fn,
+            precomputed_step_plan=precomputed_step_plan,
         )
         project._parse_subtitles()
         return len(raw_items), highlight_count
@@ -4477,6 +5045,14 @@ class DualStyler:
             except Exception as e:
                 logger.warning(f"OpenRouter highlight check skipped: {e}")
 
+        raw_items, precomputed_step_plan, ai_phrases = self._run_step_number_preparation(
+            raw_items,
+            openrouter_key=openrouter_key,
+            highlighter=highlighter,
+            model=model,
+            ai_phrases=ai_phrases,
+        )
+
         for it in raw_items[1:]:
             if len(escalera_indices) >= max_hl:
                 break
@@ -4763,6 +5339,7 @@ class DualStyler:
             highlighter=highlighter,
             model=model,
             log_fn=log_fn,
+            precomputed_step_plan=precomputed_step_plan,
         )
         project._parse_subtitles()
         if log_fn:
