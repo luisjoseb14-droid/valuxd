@@ -59,7 +59,7 @@ class CCSubsProGUI(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("CC Subs Pro - Estilizador de Subtítulos CapCut")
-        self.geometry("900x760")
+        self.geometry("900x790")
         self.minsize(860, 600)
 
         # Dark theme palette
@@ -439,6 +439,14 @@ class CCSubsProGUI(tk.Tk):
             command=self._on_preset_change
         )
         r_paco.grid(row=13, column=0, columnspan=2, sticky=tk.W, pady=2)
+        r_ana_linares = ttk.Radiobutton(
+            presets_frame,
+            text="🩺 Dra. Ana Linares  (Playfair Display Bold blanco 14 | Montserrat Medium #ACB1EC 25 + Mini zoom + Click fx)",
+            variable=self.doctor_preset,
+            value="ana_linares",
+            command=self._on_preset_change
+        )
+        r_ana_linares.grid(row=14, column=0, columnspan=2, sticky=tk.W, pady=2)
 
         # Dynamic detail line for the selected doctor
         self.lbl_preset_detail = tk.Label(
@@ -527,7 +535,7 @@ class CCSubsProGUI(tk.Tk):
 
     def _on_preset_change(self):
         p = self.doctor_preset.get()
-        if p in ["gerardo", "alharilla", "jose", "deditos", "laura", "emilia", "alvaro", "pequenos", "cuidus", "laura burgos", "laura_burgos", "enfocavision", "nuria", "ana_visedo", "jairo", "maria_manuel", "abde"]:
+        if p in ["gerardo", "alharilla", "jose", "deditos", "laura", "emilia", "alvaro", "pequenos", "cuidus", "laura burgos", "laura_burgos", "enfocavision", "nuria", "ana_visedo", "ana_linares", "ana linares", "dra ana linares", "dra. ana linares", "linares", "jairo", "maria_manuel", "abde"]:
             self.chk_anim.config(state=tk.NORMAL)
             self.enable_anim_var.set(True)
         else:
@@ -572,7 +580,12 @@ class CCSubsProGUI(tk.Tk):
             "letra abde": "🩺 Abde: Akzidenz Grotesk Black blanco arriba (9.0, y=0.0) | Akzidenz azul cielo (#6D94FF) abajo (11.0, y=-0.079) + Descenso + Clicks chinos variados + Puntos y comas",
             "paco": "🩺 Paco: Gotham Light blanco arriba (10.0, y=-0.113) | Anton blanco (#FFFFFF) abajo (20.0, y=-0.222) + Click fx",
             "letra paco": "🩺 Paco: Gotham Light blanco arriba (10.0, y=-0.113) | Anton blanco (#FFFFFF) abajo (20.0, y=-0.222) + Click fx",
-            "dr paco": "🩺 Paco: Gotham Light blanco arriba (10.0, y=-0.113) | Anton blanco (#FFFFFF) abajo (20.0, y=-0.222) + Click fx"
+            "dr paco": "🩺 Paco: Gotham Light blanco arriba (10.0, y=-0.113) | Anton blanco (#FFFFFF) abajo (20.0, y=-0.222) + Click fx",
+            "ana_linares": "🩺 Dra. Ana Linares: Playfair Display Bold blanco arriba (14.0 fijo, y=-0.149) | Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo (25.0 cortas / 21.0 medias / 17.5 largas, y=-0.239) + Mini zoom + Click fx",
+            "ana linares": "🩺 Dra. Ana Linares: Playfair Display Bold blanco arriba (14.0 fijo, y=-0.149) | Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo (25.0 cortas / 21.0 medias / 17.5 largas, y=-0.239) + Mini zoom + Click fx",
+            "dra ana linares": "🩺 Dra. Ana Linares: Playfair Display Bold blanco arriba (14.0 fijo, y=-0.149) | Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo (25.0 cortas / 21.0 medias / 17.5 largas, y=-0.239) + Mini zoom + Click fx",
+            "dra. ana linares": "🩺 Dra. Ana Linares: Playfair Display Bold blanco arriba (14.0 fijo, y=-0.149) | Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo (25.0 cortas / 21.0 medias / 17.5 largas, y=-0.239) + Mini zoom + Click fx",
+            "linares": "🩺 Dra. Ana Linares: Playfair Display Bold blanco arriba (14.0 fijo, y=-0.149) | Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo (25.0 cortas / 21.0 medias / 17.5 largas, y=-0.239) + Mini zoom + Click fx"
         }
         if hasattr(self, 'lbl_preset_detail'):
             self.lbl_preset_detail.config(text=details.get(p, ""))

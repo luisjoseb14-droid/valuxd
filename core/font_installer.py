@@ -57,6 +57,8 @@ FONT_REGISTRY_MAP = {
     'MuktaMahee-Regular.ttf': 'Mukta Mahee Regular (TrueType)',
     'Marydale Regular.ttf': 'Marydale Regular (TrueType)',
     'Akzidenz-grotesk-black.ttf': 'Akzidenz Grotesk Black (TrueType)',
+    'PlayfairDisplay-Bold.ttf': 'Playfair Display Bold (TrueType)',
+    'Montserrat-Medium.ttf': 'Montserrat Medium (TrueType)',
 }
 
 def install_all_assets() -> Dict[str, Any]:

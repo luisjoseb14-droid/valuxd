@@ -338,6 +338,8 @@ class DualStyler:
                 candidates.insert(0, 'juan')
             if 'angel' in norm or 'ángel' in norm:
                 candidates.insert(0, 'angel_cadenas')
+            if 'linares' in norm:
+                candidates.insert(0, 'ana_linares')
 
             for cand in candidates:
                 cand_clean = cand.replace(" ", "_").strip()
@@ -809,7 +811,11 @@ class DualStyler:
                         char_count = len(top_text.strip())
                         if char_count > 11:
                             shrink_factor = min(shrink_factor, max(0.75, 11.0 / char_count))
-                    if top_vis_ratio > SAFE_MARGIN_VISUAL_MAX_RATIO and not (is_top_hl and dyn_top_font and dyn_top_font.get('enabled', True)):
+                    if (
+                        top_vis_ratio > SAFE_MARGIN_VISUAL_MAX_RATIO
+                        and not (is_top_hl and dyn_top_font and dyn_top_font.get('enabled', True))
+                        and not (not is_top_hl and self.default_style.get('fixed_scale', False))
+                    ):
                         shrink_factor = min(shrink_factor, max(0.72, 1.02 / top_vis_ratio))
                     if shrink_factor < 0.999 and isinstance(top_scale, dict) and 'x' in top_scale and 'y' in top_scale:
                         top_scale['x'] = float(top_scale['x']) * shrink_factor

@@ -37,6 +37,10 @@ PRESET_PATTERNS: List[Tuple[str, List[str]]] = [
     ("ana_visedo", [
         r'\b(ana\s*visedo|visedo|ana\s*vis)\b',
     ]),
+    # 6b. Dra. Ana Linares (evaluarse antes de 'ana' general)
+    ("ana_linares", [
+        r'\b(ana\s*l[oó]pez[\s_-]*linares|ana\s*linares|l[oó]pez[\s_-]*linares|linares)\b',
+    ]),
     # 7. Dra. Ana Otorrino
     ("ana", [
         r'\b(ana|otorrino|otorrinolaringolog[ií]a)\b',

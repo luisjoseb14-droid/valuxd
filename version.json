@@ -1,8 +1,8 @@
 {
-  "version": "1.0.29",
-  "version_code": 30,
-  "date": "2026-11-17",
-  "description": "Correccion de numeros de paso con retraso exacto de texto, division natural de lineas largas (max 3 palabras / 2 si son largas), ajuste Y de destacados huerfanos y bloqueo de muletillas como creo en destacados",
+  "version": "1.0.30",
+  "version_code": 31,
+  "date": "2026-11-18",
+  "description": "Nuevo preset Dra. Ana Linares (Playfair Display Bold blanco 14 fijo arriba + Montserrat Medium #ACB1EC con tamano dinamico en destacadas abajo, sombras, Mini zoom y Click FX)",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

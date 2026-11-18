@@ -19188,5 +19188,1245 @@
       "max_chars_per_line": 22,
       "max_words_per_line": 4
     }
+  },
+  "ana_linares": {
+    "name": "Letra Ana Linares",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Dra. Ana Linares: Playfair Display Bold blanco arriba (tamaño fijo 14.0, y=-0.149) y Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo con tamaño dinámico (25.0 cortas, 21.0 medias, 17.5 largas, y=-0.239), sombra suave (#000000, alpha 0.50, distancia 3.0), animación Mini zoom y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "allow_solo_highlights": false,
+    "top": {
+      "font_name": "Playfair Display Bold",
+      "font_title": "Playfair Display Bold",
+      "font_path": "PlayfairDisplay-Bold.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "fixed_scale": true,
+      "x": 0.0,
+      "y": -0.148921282798834,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#ACB1EC",
+      "rgb_color": [
+        0.674509823322296,
+        0.6941176652908325,
+        0.9254902005195618
+      ],
+      "font_size": 25.0,
+      "font_size_short": 25.0,
+      "font_size_medium": 21.0,
+      "font_size_long": 17.5,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 25.0,
+        "medium": 21.0,
+        "long": 17.5,
+        "short_max_chars": 6,
+        "medium_max_chars": 9
+      },
+      "x": 0.0,
+      "y": -0.2393002915451896,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": true
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 1.0
+    },
+    "pacing": {
+      "min_seconds": 0.7,
+      "max_seconds": 3.0
+    },
+    "margins": {
+      "max_chars_per_line": 16,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "ana linares": {
+    "name": "Letra Ana Linares",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Dra. Ana Linares: Playfair Display Bold blanco arriba (tamaño fijo 14.0, y=-0.149) y Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo con tamaño dinámico (25.0 cortas, 21.0 medias, 17.5 largas, y=-0.239), sombra suave (#000000, alpha 0.50, distancia 3.0), animación Mini zoom y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "allow_solo_highlights": false,
+    "top": {
+      "font_name": "Playfair Display Bold",
+      "font_title": "Playfair Display Bold",
+      "font_path": "PlayfairDisplay-Bold.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "fixed_scale": true,
+      "x": 0.0,
+      "y": -0.148921282798834,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#ACB1EC",
+      "rgb_color": [
+        0.674509823322296,
+        0.6941176652908325,
+        0.9254902005195618
+      ],
+      "font_size": 25.0,
+      "font_size_short": 25.0,
+      "font_size_medium": 21.0,
+      "font_size_long": 17.5,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 25.0,
+        "medium": 21.0,
+        "long": 17.5,
+        "short_max_chars": 6,
+        "medium_max_chars": 9
+      },
+      "x": 0.0,
+      "y": -0.2393002915451896,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": true
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 1.0
+    },
+    "pacing": {
+      "min_seconds": 0.7,
+      "max_seconds": 3.0
+    },
+    "margins": {
+      "max_chars_per_line": 16,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "dra ana linares": {
+    "name": "Letra Ana Linares",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Dra. Ana Linares: Playfair Display Bold blanco arriba (tamaño fijo 14.0, y=-0.149) y Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo con tamaño dinámico (25.0 cortas, 21.0 medias, 17.5 largas, y=-0.239), sombra suave (#000000, alpha 0.50, distancia 3.0), animación Mini zoom y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "allow_solo_highlights": false,
+    "top": {
+      "font_name": "Playfair Display Bold",
+      "font_title": "Playfair Display Bold",
+      "font_path": "PlayfairDisplay-Bold.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "fixed_scale": true,
+      "x": 0.0,
+      "y": -0.148921282798834,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#ACB1EC",
+      "rgb_color": [
+        0.674509823322296,
+        0.6941176652908325,
+        0.9254902005195618
+      ],
+      "font_size": 25.0,
+      "font_size_short": 25.0,
+      "font_size_medium": 21.0,
+      "font_size_long": 17.5,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 25.0,
+        "medium": 21.0,
+        "long": 17.5,
+        "short_max_chars": 6,
+        "medium_max_chars": 9
+      },
+      "x": 0.0,
+      "y": -0.2393002915451896,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": true
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 1.0
+    },
+    "pacing": {
+      "min_seconds": 0.7,
+      "max_seconds": 3.0
+    },
+    "margins": {
+      "max_chars_per_line": 16,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "dra. ana linares": {
+    "name": "Letra Ana Linares",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Dra. Ana Linares: Playfair Display Bold blanco arriba (tamaño fijo 14.0, y=-0.149) y Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo con tamaño dinámico (25.0 cortas, 21.0 medias, 17.5 largas, y=-0.239), sombra suave (#000000, alpha 0.50, distancia 3.0), animación Mini zoom y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "allow_solo_highlights": false,
+    "top": {
+      "font_name": "Playfair Display Bold",
+      "font_title": "Playfair Display Bold",
+      "font_path": "PlayfairDisplay-Bold.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "fixed_scale": true,
+      "x": 0.0,
+      "y": -0.148921282798834,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#ACB1EC",
+      "rgb_color": [
+        0.674509823322296,
+        0.6941176652908325,
+        0.9254902005195618
+      ],
+      "font_size": 25.0,
+      "font_size_short": 25.0,
+      "font_size_medium": 21.0,
+      "font_size_long": 17.5,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 25.0,
+        "medium": 21.0,
+        "long": 17.5,
+        "short_max_chars": 6,
+        "medium_max_chars": 9
+      },
+      "x": 0.0,
+      "y": -0.2393002915451896,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": true
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 1.0
+    },
+    "pacing": {
+      "min_seconds": 0.7,
+      "max_seconds": 3.0
+    },
+    "margins": {
+      "max_chars_per_line": 16,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "linares": {
+    "name": "Letra Ana Linares",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Dra. Ana Linares: Playfair Display Bold blanco arriba (tamaño fijo 14.0, y=-0.149) y Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo con tamaño dinámico (25.0 cortas, 21.0 medias, 17.5 largas, y=-0.239), sombra suave (#000000, alpha 0.50, distancia 3.0), animación Mini zoom y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "allow_solo_highlights": false,
+    "top": {
+      "font_name": "Playfair Display Bold",
+      "font_title": "Playfair Display Bold",
+      "font_path": "PlayfairDisplay-Bold.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "fixed_scale": true,
+      "x": 0.0,
+      "y": -0.148921282798834,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#ACB1EC",
+      "rgb_color": [
+        0.674509823322296,
+        0.6941176652908325,
+        0.9254902005195618
+      ],
+      "font_size": 25.0,
+      "font_size_short": 25.0,
+      "font_size_medium": 21.0,
+      "font_size_long": 17.5,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 25.0,
+        "medium": 21.0,
+        "long": 17.5,
+        "short_max_chars": 6,
+        "medium_max_chars": 9
+      },
+      "x": 0.0,
+      "y": -0.2393002915451896,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": true
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 1.0
+    },
+    "pacing": {
+      "min_seconds": 0.7,
+      "max_seconds": 3.0
+    },
+    "margins": {
+      "max_chars_per_line": 16,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "letra ana linares": {
+    "name": "Letra Ana Linares",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Dra. Ana Linares: Playfair Display Bold blanco arriba (tamaño fijo 14.0, y=-0.149) y Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo con tamaño dinámico (25.0 cortas, 21.0 medias, 17.5 largas, y=-0.239), sombra suave (#000000, alpha 0.50, distancia 3.0), animación Mini zoom y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "allow_solo_highlights": false,
+    "top": {
+      "font_name": "Playfair Display Bold",
+      "font_title": "Playfair Display Bold",
+      "font_path": "PlayfairDisplay-Bold.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "fixed_scale": true,
+      "x": 0.0,
+      "y": -0.148921282798834,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#ACB1EC",
+      "rgb_color": [
+        0.674509823322296,
+        0.6941176652908325,
+        0.9254902005195618
+      ],
+      "font_size": 25.0,
+      "font_size_short": 25.0,
+      "font_size_medium": 21.0,
+      "font_size_long": 17.5,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 25.0,
+        "medium": 21.0,
+        "long": 17.5,
+        "short_max_chars": 6,
+        "medium_max_chars": 9
+      },
+      "x": 0.0,
+      "y": -0.2393002915451896,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": true
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 1.0
+    },
+    "pacing": {
+      "min_seconds": 0.7,
+      "max_seconds": 3.0
+    },
+    "margins": {
+      "max_chars_per_line": 16,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "letra_ana_linares": {
+    "name": "Letra Ana Linares",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Dra. Ana Linares: Playfair Display Bold blanco arriba (tamaño fijo 14.0, y=-0.149) y Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo con tamaño dinámico (25.0 cortas, 21.0 medias, 17.5 largas, y=-0.239), sombra suave (#000000, alpha 0.50, distancia 3.0), animación Mini zoom y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "allow_solo_highlights": false,
+    "top": {
+      "font_name": "Playfair Display Bold",
+      "font_title": "Playfair Display Bold",
+      "font_path": "PlayfairDisplay-Bold.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "fixed_scale": true,
+      "x": 0.0,
+      "y": -0.148921282798834,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#ACB1EC",
+      "rgb_color": [
+        0.674509823322296,
+        0.6941176652908325,
+        0.9254902005195618
+      ],
+      "font_size": 25.0,
+      "font_size_short": 25.0,
+      "font_size_medium": 21.0,
+      "font_size_long": 17.5,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 25.0,
+        "medium": 21.0,
+        "long": 17.5,
+        "short_max_chars": 6,
+        "medium_max_chars": 9
+      },
+      "x": 0.0,
+      "y": -0.2393002915451896,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": true
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 1.0
+    },
+    "pacing": {
+      "min_seconds": 0.7,
+      "max_seconds": 3.0
+    },
+    "margins": {
+      "max_chars_per_line": 16,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "ana lopez linares": {
+    "name": "Letra Ana Linares",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Dra. Ana Linares: Playfair Display Bold blanco arriba (tamaño fijo 14.0, y=-0.149) y Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo con tamaño dinámico (25.0 cortas, 21.0 medias, 17.5 largas, y=-0.239), sombra suave (#000000, alpha 0.50, distancia 3.0), animación Mini zoom y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "allow_solo_highlights": false,
+    "top": {
+      "font_name": "Playfair Display Bold",
+      "font_title": "Playfair Display Bold",
+      "font_path": "PlayfairDisplay-Bold.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "fixed_scale": true,
+      "x": 0.0,
+      "y": -0.148921282798834,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#ACB1EC",
+      "rgb_color": [
+        0.674509823322296,
+        0.6941176652908325,
+        0.9254902005195618
+      ],
+      "font_size": 25.0,
+      "font_size_short": 25.0,
+      "font_size_medium": 21.0,
+      "font_size_long": 17.5,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 25.0,
+        "medium": 21.0,
+        "long": 17.5,
+        "short_max_chars": 6,
+        "medium_max_chars": 9
+      },
+      "x": 0.0,
+      "y": -0.2393002915451896,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": true
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 1.0
+    },
+    "pacing": {
+      "min_seconds": 0.7,
+      "max_seconds": 3.0
+    },
+    "margins": {
+      "max_chars_per_line": 16,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "ana lópez linares": {
+    "name": "Letra Ana Linares",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Dra. Ana Linares: Playfair Display Bold blanco arriba (tamaño fijo 14.0, y=-0.149) y Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo con tamaño dinámico (25.0 cortas, 21.0 medias, 17.5 largas, y=-0.239), sombra suave (#000000, alpha 0.50, distancia 3.0), animación Mini zoom y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "allow_solo_highlights": false,
+    "top": {
+      "font_name": "Playfair Display Bold",
+      "font_title": "Playfair Display Bold",
+      "font_path": "PlayfairDisplay-Bold.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "fixed_scale": true,
+      "x": 0.0,
+      "y": -0.148921282798834,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#ACB1EC",
+      "rgb_color": [
+        0.674509823322296,
+        0.6941176652908325,
+        0.9254902005195618
+      ],
+      "font_size": 25.0,
+      "font_size_short": 25.0,
+      "font_size_medium": 21.0,
+      "font_size_long": 17.5,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 25.0,
+        "medium": 21.0,
+        "long": 17.5,
+        "short_max_chars": 6,
+        "medium_max_chars": 9
+      },
+      "x": 0.0,
+      "y": -0.2393002915451896,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": true
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 1.0
+    },
+    "pacing": {
+      "min_seconds": 0.7,
+      "max_seconds": 3.0
+    },
+    "margins": {
+      "max_chars_per_line": 16,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
+  },
+  "dra ana lopez linares": {
+    "name": "Letra Ana Linares",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Dra. Ana Linares: Playfair Display Bold blanco arriba (tamaño fijo 14.0, y=-0.149) y Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo con tamaño dinámico (25.0 cortas, 21.0 medias, 17.5 largas, y=-0.239), sombra suave (#000000, alpha 0.50, distancia 3.0), animación Mini zoom y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "allow_solo_highlights": false,
+    "top": {
+      "font_name": "Playfair Display Bold",
+      "font_title": "Playfair Display Bold",
+      "font_path": "PlayfairDisplay-Bold.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 14.0,
+      "fixed_scale": true,
+      "x": 0.0,
+      "y": -0.148921282798834,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#ACB1EC",
+      "rgb_color": [
+        0.674509823322296,
+        0.6941176652908325,
+        0.9254902005195618
+      ],
+      "font_size": 25.0,
+      "font_size_short": 25.0,
+      "font_size_medium": 21.0,
+      "font_size_long": 17.5,
+      "dynamic_font_size": {
+        "enabled": true,
+        "short": 25.0,
+        "medium": 21.0,
+        "long": 17.5,
+        "short_max_chars": 6,
+        "medium_max_chars": 9
+      },
+      "x": 0.0,
+      "y": -0.2393002915451896,
+      "scale": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "6763469998330483213",
+        "name": "Mini zoom",
+        "path": "",
+        "duration": 500000,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.5,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": true
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 1.0
+    },
+    "pacing": {
+      "min_seconds": 0.7,
+      "max_seconds": 3.0
+    },
+    "margins": {
+      "max_chars_per_line": 16,
+      "max_words_per_line": 3,
+      "max_highlight_chars": 16
+    }
   }
 }
