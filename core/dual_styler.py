@@ -340,6 +340,8 @@ class DualStyler:
                 candidates.insert(0, 'angel_cadenas')
             if 'linares' in norm:
                 candidates.insert(0, 'ana_linares')
+            if 'costa' in norm or 'calida' in norm or 'cálida' in norm:
+                candidates.insert(0, 'costa_calida')
 
             for cand in candidates:
                 cand_clean = cand.replace(" ", "_").strip()

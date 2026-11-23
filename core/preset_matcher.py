@@ -106,6 +106,10 @@ PRESET_PATTERNS: List[Tuple[str, List[str]]] = [
     ("paco", [
         r'\bpaco\b',
     ]),
+    # 22. Costa Cálida
+    ("costa_calida", [
+        r'\b(costa\s*c[aá]lida|costa_calida)\b',
+    ]),
 ]
 
 

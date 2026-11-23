@@ -10,6 +10,7 @@ import json
 import shutil
 import tempfile
 import threading
+import unicodedata
 from typing import List, Optional, Dict, Any, Tuple
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
@@ -55,12 +56,82 @@ from core.updater import (
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE = os.path.join(SCRIPT_DIR, '.cc_subs_pro_config.json')
 
+
+def _normalize_search_text(text: str) -> str:
+    """Normaliza texto eliminando tildes y pasando a minúsculas para búsquedas tolerantes."""
+    if not text:
+        return ""
+    decomposed = unicodedata.normalize("NFKD", str(text))
+    stripped = "".join(ch for ch in decomposed if not unicodedata.combining(ch))
+    return stripped.lower().strip()
+
+
+PRESET_OPTIONS: List[Dict[str, str]] = [
+    {"value": "gerardo", "label": "🩺 Dr. Gerardo  (Aloevera | Behind The Nineties)", "keywords": "gerardo dr gerardo aloevera behind the nineties turquesa"},
+    {"value": "gala", "label": "🩺 Dra. Gala  (Helvetica | Things blanco)", "keywords": "gala dra gala helvetica things blanco"},
+    {"value": "laura", "label": "🩺 Dra. Laura Pediatra  (Josefin Sans celeste)", "keywords": "laura pediatra dra laura josefin sans celeste"},
+    {"value": "alharilla", "label": "🩺 Dra. Alharilla  (Raleway | Bebas Neue verde)", "keywords": "alharilla dra alharilla raleway bebas neue verde menta"},
+    {"value": "jose", "label": "🩺 Dr. Jose Podólogo  (Aglatia | Bluemun oro)", "keywords": "jose podologo dr jose aglatia bluemun oro"},
+    {"value": "deditos", "label": "🦶 Deditos Barefoot  (Lilita One naranja)", "keywords": "deditos barefoot lilita one naranja"},
+    {"value": "emilia", "label": "✨ Emilia  (Neue Helvena | Karelle + Stickers)", "keywords": "emilia neue helvena karelle amarillo stickers"},
+    {"value": "alvaro", "label": "🩺 Dr. Álvaro  (GC GRIND | Coral + Corte láser)", "keywords": "alvaro dr alvaro gc grind coral laser"},
+    {"value": "pequenos", "label": "👶 Pequeños Cuidados  (Parafina | Chewy amarillo + Mini zoom)", "keywords": "pequenos cuidados parafina chewy amarillo mini zoom"},
+    {"value": "ana", "label": "👂 Dra. Ana Otorrino  (Liliana Bold | Liliana Black + Flotación)", "keywords": "ana otorrino dra ana liliana bold black amarillo flotacion"},
+    {"value": "cuidus", "label": "🌸 CUIDUS  (Gentium Plus Italic | Gentium Plus Bold rosa)", "keywords": "cuidus gentium plus italic bold rosa"},
+    {"value": "laura burgos", "label": "🩺 Dra. Laura Burgos  (Indivisible | Indivisible Bold + Aparición progresiva)", "keywords": "laura burgos dra laura burgos indivisible verde azulado"},
+    {"value": "enfocavision", "label": "👁️ Doctores Enfocavisión  (ITC Avant Garde Demi | Bold menta + Mini zoom)", "keywords": "enfocavision doctores itc avant garde demi bold menta"},
+    {"value": "juan", "label": "🌿 Juan  (Gotham Bold blanco | Anton morado #7F1CCC)", "keywords": "juan gotham bold anton morado"},
+    {"value": "carrillo", "label": "🩺 Dr. Carrillo  (Gotham Book blanco | Gotham Bold arena #CCC3B1)", "keywords": "carrillo carillo dr carrillo gotham book bold arena"},
+    {"value": "dentok", "label": "🦷 Dentok  (Helvetica Regular | Playfair Display + Escalera)", "keywords": "dentok helvetica regular playfair display escalera"},
+    {"value": "angel_cadenas", "label": "⚡ Ángel Cárdenas  (Dream Believer Bold blanco 9 | Ligerid #FCFE60 12)", "keywords": "angel cardenas cadenas dream believer ligerid amarillo"},
+    {"value": "nuria", "label": "🌸 Dra. Nuria  (Recline | Bold Italic rosa + Zoom blur)", "keywords": "nuria ginecologa dra nuria recline bold italic rosa zoom blur"},
+    {"value": "ana_visedo", "label": "✨ Dra. Ana Visedo  (Poppins Bold blanco 10 | Wonder Nature Sans rosa 12 + Mini zoom + Stickers)", "keywords": "ana visedo dra ana visedo poppins bold wonder nature sans rosa stickers"},
+    {"value": "jairo", "label": "🩺 Dr. Jairo  (Montserrat Bold blanco 10 | Antro Vectra menta #26FFA0 17 + Aparición progresiva + Click fx)", "keywords": "jairo dr jairo montserrat bold antro vectra menta"},
+    {"value": "maria_manuel", "label": "👥 María y Manuel  (Mukta Mahee blanco 11 | Marydale blanco 22 + Mini zoom + Stickers + Click fx)", "keywords": "maria manuel maria y manuel mukta mahee marydale blanco stickers"},
+    {"value": "abde", "label": "🩺 Abde  (Akzidenz Grotesk Black blanco 9 | azul cielo #6D94FF 11 + Descenso + Clicks chinos + Puntuación)", "keywords": "abde adbe akzidenz grotesk black azul cielo puntuacion"},
+    {"value": "paco", "label": "🩺 Paco  (Gotham Light blanco 10 | Anton blanco grande 20 + Click fx)", "keywords": "paco dr paco gotham light anton blanco"},
+    {"value": "ana_linares", "label": "🩺 Dra. Ana Linares  (Playfair Display Bold blanco 14 | Montserrat Medium #ACB1EC 25 + Mini zoom + Click fx)", "keywords": "ana linares lopez linares dra ana linares playfair display bold montserrat medium lila"},
+    {"value": "costa_calida", "label": "🛋️ Costa Cálida  (Montserrat Medium blanco 10 | PT Serif amarillo #F5D90E 14 + Aparición progresiva + Click fx)", "keywords": "costa calida cálida montserrat medium pt serif amarillo aparicion progresiva"},
+]
+
+PRESET_ALIAS_TO_VALUE: Dict[str, str] = {
+    "laura_burgos": "laura burgos",
+    "dra laura burgos": "laura burgos",
+    "dra. laura burgos": "laura burgos",
+    "ana otorrino": "ana",
+    "ana_otorrino": "ana",
+    "ana visedo": "ana_visedo",
+    "visedo": "ana_visedo",
+    "ana linares": "ana_linares",
+    "dra ana linares": "ana_linares",
+    "dra. ana linares": "ana_linares",
+    "linares": "ana_linares",
+    "ana lopez linares": "ana_linares",
+    "ana lópez linares": "ana_linares",
+    "dr dentok": "dentok",
+    "sep dentok": "dentok",
+    "angel": "angel_cadenas",
+    "dra nuria": "nuria",
+    "dr jairo": "jairo",
+    "maria y manuel": "maria_manuel",
+    "manuel": "maria_manuel",
+    "maria": "maria_manuel",
+    "letra abde": "abde",
+    "letra paco": "paco",
+    "dr paco": "paco",
+    "costa calida": "costa_calida",
+    "costa cálida": "costa_calida",
+    "letra costa calida": "costa_calida",
+    "letra_costa_calida": "costa_calida",
+}
+
+
 class CCSubsProGUI(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("CC Subs Pro - Estilizador de Subtítulos CapCut")
-        self.geometry("900x790")
-        self.minsize(860, 600)
+        self.geometry("900x700")
+        self.minsize(860, 620)
 
         # Dark theme palette
         self.bg_color = "#181825"
@@ -78,6 +149,13 @@ class CCSubsProGUI(tk.Tk):
         self.projects = []
         self.selected_project_path = tk.StringVar()
         self.doctor_preset = tk.StringVar(value="gerardo")
+        self._preset_display_var = tk.StringVar(value="")
+        self.preset_search_var = tk.StringVar(value="")
+        self._preset_popup = None
+        self._preset_listbox = None
+        self._preset_search_entry = None
+        self._preset_count_lbl = None
+        self._preset_filtered_options = list(PRESET_OPTIONS)
         self.highlight_method = tk.StringVar(value="openrouter")
         self.manual_words = tk.StringVar()
         self.openrouter_key_var = tk.StringVar()
@@ -228,225 +306,53 @@ class CCSubsProGUI(tk.Tk):
         preset_card = ttk.Frame(main_container, style="Card.TFrame", padding=10)
         preset_card.pack(fill=tk.X, pady=(0, 6))
 
-        ttk.Label(preset_card, text="2. Selecciona el Estilo de Doctor / Doctora", style="Section.TLabel").pack(anchor=tk.W, pady=(0, 4))
+        ttk.Label(preset_card, text="2. Selecciona el Estilo de Doctor / Doctora", style="Section.TLabel").pack(anchor=tk.W, pady=(0, 6))
 
-        presets_frame = tk.Frame(preset_card, bg=self.card_bg)
-        presets_frame.pack(fill=tk.X)
-        presets_frame.columnconfigure(0, weight=1)
-        presets_frame.columnconfigure(1, weight=1)
+        # Compact searchable dropdown trigger (replaces 24+ radiobuttons so action buttons and log always remain visible)
+        self.preset_dropdown_frame = tk.Frame(
+            preset_card,
+            bg="#11111b",
+            highlightbackground="#45475a",
+            highlightcolor=self.accent_color,
+            highlightthickness=1,
+            cursor="hand2"
+        )
+        self.preset_dropdown_frame.pack(fill=tk.X, pady=(0, 4))
 
-        # Grid of doctor presets (2 columns to ensure all buttons fit comfortably)
-        r_gerardo = ttk.Radiobutton(
-            presets_frame,
-            text="🩺 Dr. Gerardo  (Aloevera | Behind The Nineties)",
-            variable=self.doctor_preset,
-            value="gerardo",
-            command=self._on_preset_change
+        self.lbl_preset_value = tk.Label(
+            self.preset_dropdown_frame,
+            textvariable=self._preset_display_var,
+            font=("Segoe UI", 10, "bold"),
+            fg=self.fg_color,
+            bg="#11111b",
+            anchor="w",
+            padx=10,
+            pady=7,
+            cursor="hand2"
         )
-        r_gerardo.grid(row=0, column=0, sticky=tk.W, pady=2, padx=(0, 10))
+        self.lbl_preset_value.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
-        r_gala = ttk.Radiobutton(
-            presets_frame,
-            text="🩺 Dra. Gala  (Helvetica | Things blanco)",
-            variable=self.doctor_preset,
-            value="gala",
-            command=self._on_preset_change
+        self.lbl_preset_hint_badge = tk.Label(
+            self.preset_dropdown_frame,
+            text=f"🔍 Buscar ({len(PRESET_OPTIONS)})  ▼",
+            font=("Segoe UI", 9),
+            fg="#a6adc8",
+            bg="#11111b",
+            padx=10,
+            pady=7,
+            cursor="hand2"
         )
-        r_gala.grid(row=1, column=0, sticky=tk.W, pady=2, padx=(0, 10))
+        self.lbl_preset_hint_badge.pack(side=tk.RIGHT)
 
-        r_laura = ttk.Radiobutton(
-            presets_frame,
-            text="🩺 Dra. Laura Pediatra  (Josefin Sans celeste)",
-            variable=self.doctor_preset,
-            value="laura",
-            command=self._on_preset_change
-        )
-        r_laura.grid(row=2, column=0, sticky=tk.W, pady=2, padx=(0, 10))
+        for w in (self.preset_dropdown_frame, self.lbl_preset_value, self.lbl_preset_hint_badge):
+            w.bind("<Button-1>", self._toggle_preset_dropdown)
+            w.bind("<Enter>", lambda _e: self.preset_dropdown_frame.config(highlightbackground=self.accent_color))
+            w.bind("<Leave>", lambda _e: self.preset_dropdown_frame.config(
+                highlightbackground=self.accent_color if self._preset_popup is not None else "#45475a"
+            ))
 
-        r_alharilla = ttk.Radiobutton(
-            presets_frame,
-            text="🩺 Dra. Alharilla  (Raleway | Bebas Neue verde)",
-            variable=self.doctor_preset,
-            value="alharilla",
-            command=self._on_preset_change
-        )
-        r_alharilla.grid(row=3, column=0, sticky=tk.W, pady=2, padx=(0, 10))
-
-        r_jose = ttk.Radiobutton(
-            presets_frame,
-            text="🩺 Dr. Jose Podólogo  (Aglatia | Bluemun oro)",
-            variable=self.doctor_preset,
-            value="jose",
-            command=self._on_preset_change
-        )
-        r_jose.grid(row=0, column=1, sticky=tk.W, pady=2)
-
-        r_deditos = ttk.Radiobutton(
-            presets_frame,
-            text="🦶 Deditos Barefoot  (Lilita One naranja)",
-            variable=self.doctor_preset,
-            value="deditos",
-            command=self._on_preset_change
-        )
-        r_deditos.grid(row=1, column=1, sticky=tk.W, pady=2)
-
-        r_emilia = ttk.Radiobutton(
-            presets_frame,
-            text="✨ Emilia  (Neue Helvena | Karelle + Stickers)",
-            variable=self.doctor_preset,
-            value="emilia",
-            command=self._on_preset_change
-        )
-        r_emilia.grid(row=2, column=1, sticky=tk.W, pady=2)
-
-        r_alvaro = ttk.Radiobutton(
-            presets_frame,
-            text="🩺 Dr. Álvaro  (GC GRIND | Coral + Corte láser)",
-            variable=self.doctor_preset,
-            value="alvaro",
-            command=self._on_preset_change
-        )
-        r_alvaro.grid(row=3, column=1, sticky=tk.W, pady=2)
-
-        r_pequenos = ttk.Radiobutton(
-            presets_frame,
-            text="👶 Pequeños Cuidados  (Parafina | Chewy amarillo + Mini zoom)",
-            variable=self.doctor_preset,
-            value="pequenos",
-            command=self._on_preset_change
-        )
-        r_pequenos.grid(row=4, column=0, sticky=tk.W, pady=2, padx=(0, 10))
-
-        r_ana = ttk.Radiobutton(
-            presets_frame,
-            text="👂 Dra. Ana Otorrino  (Liliana Bold | Liliana Black + Flotación)",
-            variable=self.doctor_preset,
-            value="ana",
-            command=self._on_preset_change
-        )
-        r_ana.grid(row=4, column=1, sticky=tk.W, pady=2)
-
-        r_cuidus = ttk.Radiobutton(
-            presets_frame,
-            text="🌸 CUIDUS  (Gentium Plus Italic | Gentium Plus Bold rosa)",
-            variable=self.doctor_preset,
-            value="cuidus",
-            command=self._on_preset_change
-        )
-        r_cuidus.grid(row=5, column=0, sticky=tk.W, pady=2, padx=(0, 10))
-
-        r_laura_burgos = ttk.Radiobutton(
-            presets_frame,
-            text="🩺 Dra. Laura Burgos  (Indivisible | Indivisible Bold + Aparición progresiva)",
-            variable=self.doctor_preset,
-            value="laura burgos",
-            command=self._on_preset_change
-        )
-        r_laura_burgos.grid(row=5, column=1, sticky=tk.W, pady=2)
-
-        r_enfocavision = ttk.Radiobutton(
-            presets_frame,
-            text="👁️ Doctores Enfocavisión  (ITC Avant Garde Demi | Bold menta + Mini zoom)",
-            variable=self.doctor_preset,
-            value="enfocavision",
-            command=self._on_preset_change
-        )
-        r_enfocavision.grid(row=6, column=0, sticky=tk.W, pady=2, padx=(0, 10))
-
-        r_juan = ttk.Radiobutton(
-            presets_frame,
-            text="🌿 Juan  (Gotham Bold blanco | Anton morado #7F1CCC)",
-            variable=self.doctor_preset,
-            value="juan",
-            command=self._on_preset_change
-        )
-        r_juan.grid(row=6, column=1, sticky=tk.W, pady=2)
-
-        r_carrillo = ttk.Radiobutton(
-            presets_frame,
-            text="🩺 Dr. Carrillo  (Gotham Book blanco | Gotham Bold arena #CCC3B1)",
-            variable=self.doctor_preset,
-            value="carrillo",
-            command=self._on_preset_change
-        )
-        r_carrillo.grid(row=7, column=0, sticky=tk.W, pady=2, padx=(0, 10))
-
-        r_dentok = ttk.Radiobutton(
-            presets_frame,
-            text="🦷 Dentok  (Helvetica Regular | Playfair Display + Escalera)",
-            variable=self.doctor_preset,
-            value="dentok",
-            command=self._on_preset_change
-        )
-        r_dentok.grid(row=7, column=1, sticky=tk.W, pady=2)
-
-        r_angel = ttk.Radiobutton(
-            presets_frame,
-            text="⚡ Ángel Cárdenas  (Dream Believer Bold blanco 9 | Ligerid #FCFE60 12)",
-            variable=self.doctor_preset,
-            value="angel_cadenas",
-            command=self._on_preset_change
-        )
-        r_angel.grid(row=8, column=0, sticky=tk.W, pady=2, padx=(0, 10))
-
-        r_nuria = ttk.Radiobutton(
-            presets_frame,
-            text="🌸 Dra. Nuria  (Recline | Bold Italic rosa + Zoom blur)",
-            variable=self.doctor_preset,
-            value="nuria",
-            command=self._on_preset_change
-        )
-        r_nuria.grid(row=8, column=1, sticky=tk.W, pady=2)
-
-        r_ana_visedo = ttk.Radiobutton(
-            presets_frame,
-            text="✨ Dra. Ana Visedo  (Poppins Bold blanco 10 | Wonder Nature Sans rosa 12 + Mini zoom + Stickers)",
-            variable=self.doctor_preset,
-            value="ana_visedo",
-            command=self._on_preset_change
-        )
-        r_ana_visedo.grid(row=9, column=0, columnspan=2, sticky=tk.W, pady=2)
-
-        r_jairo = ttk.Radiobutton(
-            presets_frame,
-            text="🩺 Dr. Jairo  (Montserrat Bold blanco 10 | Antro Vectra menta #26FFA0 17 + Aparición progresiva + Click fx)",
-            variable=self.doctor_preset,
-            value="jairo",
-            command=self._on_preset_change
-        )
-        r_jairo.grid(row=10, column=0, columnspan=2, sticky=tk.W, pady=2)
-        r_maria_manuel = ttk.Radiobutton(
-            presets_frame,
-            text="👥 María y Manuel  (Mukta Mahee blanco 11 | Marydale blanco 22 + Mini zoom + Stickers + Click fx)",
-            variable=self.doctor_preset,
-            value="maria_manuel",
-            command=self._on_preset_change
-        )
-        r_maria_manuel.grid(row=11, column=0, columnspan=2, sticky=tk.W, pady=2)
-        r_abde = ttk.Radiobutton(
-            presets_frame,
-            text="🩺 Abde  (Akzidenz Grotesk Black blanco 9 | azul cielo #6D94FF 11 + Descenso + Clicks chinos + Puntuación)",
-            variable=self.doctor_preset,
-            value="abde",
-            command=self._on_preset_change
-        )
-        r_abde.grid(row=12, column=0, columnspan=2, sticky=tk.W, pady=2)
-        r_paco = ttk.Radiobutton(
-            presets_frame,
-            text="🩺 Paco  (Gotham Light blanco 10 | Anton blanco grande 20 + Click fx)",
-            variable=self.doctor_preset,
-            value="paco",
-            command=self._on_preset_change
-        )
-        r_paco.grid(row=13, column=0, columnspan=2, sticky=tk.W, pady=2)
-        r_ana_linares = ttk.Radiobutton(
-            presets_frame,
-            text="🩺 Dra. Ana Linares  (Playfair Display Bold blanco 14 | Montserrat Medium #ACB1EC 25 + Mini zoom + Click fx)",
-            variable=self.doctor_preset,
-            value="ana_linares",
-            command=self._on_preset_change
-        )
-        r_ana_linares.grid(row=14, column=0, columnspan=2, sticky=tk.W, pady=2)
+        self.bind("<Button-1>", self._on_root_click, add="+")
+        self.bind("<Configure>", self._on_root_configure, add="+")
 
         # Dynamic detail line for the selected doctor
         self.lbl_preset_detail = tk.Label(
@@ -455,9 +361,11 @@ class CCSubsProGUI(tk.Tk):
             font=("Segoe UI", 8),
             fg="#a6adc8",
             bg=self.card_bg,
-            anchor="w"
+            anchor="w",
+            justify=tk.LEFT,
+            wraplength=840
         )
-        self.lbl_preset_detail.pack(fill=tk.X, pady=(3, 2))
+        self.lbl_preset_detail.pack(fill=tk.X, pady=(2, 2))
 
         # Checkbox for animation toggle
         anim_row = tk.Frame(preset_card, bg=self.card_bg)
@@ -533,9 +441,292 @@ class CCSubsProGUI(tk.Tk):
         self.txt_log.insert(tk.END, text + "\n")
         self.txt_log.see(tk.END)
 
+    def _get_preset_option_by_value(self, value: str) -> Dict[str, str]:
+        raw = (value or "gerardo").strip()
+        canonical = PRESET_ALIAS_TO_VALUE.get(raw.lower(), raw)
+        for opt in PRESET_OPTIONS:
+            if opt["value"].lower() == canonical.lower():
+                return opt
+        return {"value": raw, "label": f"🩺 {raw}", "keywords": raw}
+
+    def _filter_preset_options(self, query: str) -> List[Dict[str, str]]:
+        norm_q = _normalize_search_text(query)
+        if not norm_q:
+            return list(PRESET_OPTIONS)
+        tokens = [t for t in norm_q.split() if t]
+        matches = []
+        for opt in PRESET_OPTIONS:
+            haystack = _normalize_search_text(
+                f"{opt['label']} {opt['value']} {opt.get('keywords', '')}"
+            )
+            if all(tok in haystack for tok in tokens):
+                matches.append(opt)
+        return matches
+
+    def _toggle_preset_dropdown(self, event=None):
+        if self._preset_popup is not None:
+            self._close_preset_dropdown()
+        else:
+            self._open_preset_dropdown()
+        return "break"
+
+    def _open_preset_dropdown(self):
+        if self._preset_popup is not None:
+            return
+        self.update_idletasks()
+
+        popup = tk.Frame(self, bg=self.accent_color, bd=0, highlightthickness=0)
+        self._preset_popup = popup
+
+        btn = self.preset_dropdown_frame
+        win_w = max(self.winfo_width(), 900)
+        win_h = max(self.winfo_height(), 620)
+        width = max(btn.winfo_width(), 420)
+        width = min(width, win_w - 20)
+        rel_x = btn.winfo_rootx() - self.winfo_rootx()
+        rel_y_below = btn.winfo_rooty() - self.winfo_rooty() + btn.winfo_height() + 2
+        popup_h = min(330, max(200, win_h - rel_y_below - 12))
+        if rel_y_below + 180 > win_h:
+            rel_y = max(10, (btn.winfo_rooty() - self.winfo_rooty()) - popup_h - 2)
+        else:
+            rel_y = rel_y_below
+
+        self.preset_dropdown_frame.config(highlightbackground=self.accent_color)
+        self.lbl_preset_hint_badge.config(text=f"🔍 Buscar ({len(PRESET_OPTIONS)})  ▲")
+
+        inner = tk.Frame(popup, bg="#181825", padx=6, pady=6)
+        inner.pack(fill=tk.BOTH, expand=True, padx=1, pady=1)
+
+        # Search bar row inside the dropdown
+        search_bar = tk.Frame(inner, bg="#11111b", highlightbackground="#45475a", highlightthickness=1)
+        search_bar.pack(fill=tk.X, pady=(0, 6))
+
+        tk.Label(
+            search_bar,
+            text="🔍",
+            font=("Segoe UI", 10),
+            fg="#a6adc8",
+            bg="#11111b",
+            padx=6
+        ).pack(side=tk.LEFT)
+
+        self.preset_search_var.set("")
+        search_entry = tk.Entry(
+            search_bar,
+            textvariable=self.preset_search_var,
+            font=("Segoe UI", 10),
+            bg="#11111b",
+            fg=self.fg_color,
+            insertbackground=self.accent_color,
+            relief="flat",
+            bd=4
+        )
+        search_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self._preset_search_entry = search_entry
+
+        btn_clear = tk.Label(
+            search_bar,
+            text="✕",
+            font=("Segoe UI", 9, "bold"),
+            fg="#a6adc8",
+            bg="#11111b",
+            padx=8,
+            cursor="hand2"
+        )
+        btn_clear.pack(side=tk.RIGHT)
+        btn_clear.bind("<Button-1>", lambda _e: (self.preset_search_var.set(""), search_entry.focus_set()))
+
+        # Match counter / hint bar
+        meta_row = tk.Frame(inner, bg="#181825")
+        meta_row.pack(fill=tk.X, pady=(0, 4))
+        self._preset_count_lbl = tk.Label(
+            meta_row,
+            text="",
+            font=("Segoe UI", 8),
+            fg="#a6adc8",
+            bg="#181825",
+            anchor="w"
+        )
+        self._preset_count_lbl.pack(side=tk.LEFT)
+        tk.Label(
+            meta_row,
+            text="Escribe nombre o fuente • ↑↓ y Enter",
+            font=("Segoe UI", 8),
+            fg="#6c7086",
+            bg="#181825",
+            anchor="e"
+        ).pack(side=tk.RIGHT)
+
+        # Scrollable list of presets
+        list_frame = tk.Frame(inner, bg="#11111b")
+        list_frame.pack(fill=tk.BOTH, expand=True)
+
+        scrollbar = ttk.Scrollbar(list_frame, orient=tk.VERTICAL)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        listbox = tk.Listbox(
+            list_frame,
+            yscrollcommand=scrollbar.set,
+            bg="#11111b",
+            fg=self.fg_color,
+            selectbackground=self.accent_color,
+            selectforeground="#11111b",
+            activestyle="none",
+            font=("Segoe UI", 10),
+            relief="flat",
+            highlightthickness=0,
+            bd=0,
+            exportselection=False
+        )
+        listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.config(command=listbox.yview)
+        self._preset_listbox = listbox
+
+        # Bindings for seamless keyboard + mouse selection
+        self._preset_search_trace_id = self.preset_search_var.trace_add("write", self._refresh_preset_listbox)
+        search_entry.bind("<KeyPress>", self._on_preset_search_key)
+        listbox.bind("<KeyPress>", self._on_preset_search_key)
+        listbox.bind("<ButtonRelease-1>", self._on_preset_listbox_click)
+        listbox.bind("<Motion>", self._on_preset_listbox_hover)
+        popup.bind("<Escape>", self._close_preset_dropdown)
+
+        self._refresh_preset_listbox()
+        popup.place(x=rel_x, y=rel_y, width=width, height=popup_h)
+        popup.lift()
+        self.after(10, lambda: search_entry.winfo_exists() and search_entry.focus_set())
+
+    def _close_preset_dropdown(self, event=None):
+        popup = self._preset_popup
+        if popup is None:
+            return
+        self._preset_popup = None
+        self._preset_listbox = None
+        self._preset_search_entry = None
+        self._preset_count_lbl = None
+        trace_id = getattr(self, "_preset_search_trace_id", None)
+        if trace_id:
+            try:
+                self.preset_search_var.trace_remove("write", trace_id)
+            except Exception:
+                pass
+            self._preset_search_trace_id = None
+        try:
+            popup.destroy()
+        except Exception:
+            pass
+        if hasattr(self, "preset_dropdown_frame"):
+            self.preset_dropdown_frame.config(highlightbackground="#45475a")
+        if hasattr(self, "lbl_preset_hint_badge"):
+            self.lbl_preset_hint_badge.config(text=f"🔍 Buscar ({len(PRESET_OPTIONS)})  ▼")
+
+    def _on_root_click(self, event):
+        if self._preset_popup is None:
+            return
+        widget = event.widget
+        # Keep open if click is inside the popup or the dropdown trigger itself
+        curr = widget
+        while curr is not None:
+            if curr == self._preset_popup or curr == self.preset_dropdown_frame:
+                return
+            curr = getattr(curr, "master", None)
+        self._close_preset_dropdown()
+
+    def _on_root_configure(self, event):
+        if event.widget == self and self._preset_popup is not None:
+            self._close_preset_dropdown()
+
+    def _refresh_preset_listbox(self, *_args):
+        if self._preset_listbox is None:
+            return
+        query = self.preset_search_var.get()
+        filtered = self._filter_preset_options(query)
+        self._preset_filtered_options = filtered
+
+        lb = self._preset_listbox
+        lb.delete(0, tk.END)
+        if not filtered:
+            lb.insert(tk.END, "  Sin coincidencias para esa búsqueda")
+            if self._preset_count_lbl is not None:
+                self._preset_count_lbl.config(text="0 coincidencias", fg=self.accent_yellow)
+            return
+
+        active_opt = self._get_preset_option_by_value(self.doctor_preset.get())
+        selected_idx = 0
+        for idx, opt in enumerate(filtered):
+            prefix = "✓ " if opt["value"] == active_opt["value"] else "   "
+            lb.insert(tk.END, f"{prefix}{opt['label']}")
+            if opt["value"] == active_opt["value"]:
+                selected_idx = idx
+
+        lb.selection_clear(0, tk.END)
+        lb.selection_set(selected_idx)
+        lb.activate(selected_idx)
+        lb.see(selected_idx)
+
+        if self._preset_count_lbl is not None:
+            if query.strip():
+                noun = "coincidencia" if len(filtered) == 1 else "coincidencias"
+                self._preset_count_lbl.config(text=f"{len(filtered)} {noun}", fg=self.accent_green)
+            else:
+                self._preset_count_lbl.config(text=f"{len(filtered)} letras disponibles", fg="#a6adc8")
+
+    def _on_preset_listbox_hover(self, event):
+        if self._preset_listbox is None or not self._preset_filtered_options:
+            return
+        idx = self._preset_listbox.nearest(event.y)
+        if 0 <= idx < len(self._preset_filtered_options):
+            self._preset_listbox.selection_clear(0, tk.END)
+            self._preset_listbox.selection_set(idx)
+            self._preset_listbox.activate(idx)
+
+    def _on_preset_listbox_click(self, event=None):
+        if self._preset_listbox is None or not self._preset_filtered_options:
+            return
+        if event is not None:
+            idx = self._preset_listbox.nearest(event.y)
+        else:
+            sel = self._preset_listbox.curselection()
+            idx = sel[0] if sel else 0
+        if 0 <= idx < len(self._preset_filtered_options):
+            self._select_preset_value(self._preset_filtered_options[idx]["value"])
+
+    def _on_preset_search_key(self, event):
+        if self._preset_listbox is None:
+            return
+        key = event.keysym
+        if key == "Escape":
+            self._close_preset_dropdown()
+            return "break"
+        if key == "Return":
+            if self._preset_filtered_options:
+                sel = self._preset_listbox.curselection()
+                idx = sel[0] if sel else 0
+                if 0 <= idx < len(self._preset_filtered_options):
+                    self._select_preset_value(self._preset_filtered_options[idx]["value"])
+            return "break"
+        if key in ("Down", "Up"):
+            if not self._preset_filtered_options:
+                return "break"
+            sel = self._preset_listbox.curselection()
+            cur = sel[0] if sel else 0
+            nxt = min(len(self._preset_filtered_options) - 1, cur + 1) if key == "Down" else max(0, cur - 1)
+            self._preset_listbox.selection_clear(0, tk.END)
+            self._preset_listbox.selection_set(nxt)
+            self._preset_listbox.activate(nxt)
+            self._preset_listbox.see(nxt)
+            return "break"
+
+    def _select_preset_value(self, value: str):
+        self.doctor_preset.set(value)
+        self._close_preset_dropdown()
+        self._on_preset_change()
+
     def _on_preset_change(self):
         p = self.doctor_preset.get()
-        if p in ["gerardo", "alharilla", "jose", "deditos", "laura", "emilia", "alvaro", "pequenos", "cuidus", "laura burgos", "laura_burgos", "enfocavision", "nuria", "ana_visedo", "ana_linares", "ana linares", "dra ana linares", "dra. ana linares", "linares", "jairo", "maria_manuel", "abde"]:
+        active_opt = self._get_preset_option_by_value(p)
+        if hasattr(self, '_preset_display_var'):
+            self._preset_display_var.set(active_opt["label"])
+        if p in ["gerardo", "alharilla", "jose", "deditos", "laura", "emilia", "alvaro", "pequenos", "cuidus", "laura burgos", "laura_burgos", "enfocavision", "nuria", "ana_visedo", "ana_linares", "ana linares", "dra ana linares", "dra. ana linares", "linares", "costa_calida", "costa calida", "costa cálida", "jairo", "maria_manuel", "abde"]:
             self.chk_anim.config(state=tk.NORMAL)
             self.enable_anim_var.set(True)
         else:
@@ -585,7 +776,10 @@ class CCSubsProGUI(tk.Tk):
             "ana linares": "🩺 Dra. Ana Linares: Playfair Display Bold blanco arriba (14.0 fijo, y=-0.149) | Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo (25.0 cortas / 21.0 medias / 17.5 largas, y=-0.239) + Mini zoom + Click fx",
             "dra ana linares": "🩺 Dra. Ana Linares: Playfair Display Bold blanco arriba (14.0 fijo, y=-0.149) | Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo (25.0 cortas / 21.0 medias / 17.5 largas, y=-0.239) + Mini zoom + Click fx",
             "dra. ana linares": "🩺 Dra. Ana Linares: Playfair Display Bold blanco arriba (14.0 fijo, y=-0.149) | Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo (25.0 cortas / 21.0 medias / 17.5 largas, y=-0.239) + Mini zoom + Click fx",
-            "linares": "🩺 Dra. Ana Linares: Playfair Display Bold blanco arriba (14.0 fijo, y=-0.149) | Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo (25.0 cortas / 21.0 medias / 17.5 largas, y=-0.239) + Mini zoom + Click fx"
+            "linares": "🩺 Dra. Ana Linares: Playfair Display Bold blanco arriba (14.0 fijo, y=-0.149) | Montserrat Medium lila (#ACB1EC) en MAYÚSCULAS abajo (25.0 cortas / 21.0 medias / 17.5 largas, y=-0.239) + Mini zoom + Click fx",
+            "costa_calida": "🛋️ Costa Cálida: Montserrat Medium blanco arriba (10.0, y=-0.110) | PT Serif Regular amarillo (#F5D90E) abajo (14.0, y=-0.177) + Aparición progresiva + Click fx",
+            "costa calida": "🛋️ Costa Cálida: Montserrat Medium blanco arriba (10.0, y=-0.110) | PT Serif Regular amarillo (#F5D90E) abajo (14.0, y=-0.177) + Aparición progresiva + Click fx",
+            "costa cálida": "🛋️ Costa Cálida: Montserrat Medium blanco arriba (10.0, y=-0.110) | PT Serif Regular amarillo (#F5D90E) abajo (14.0, y=-0.177) + Aparición progresiva + Click fx"
         }
         if hasattr(self, 'lbl_preset_detail'):
             self.lbl_preset_detail.config(text=details.get(p, ""))

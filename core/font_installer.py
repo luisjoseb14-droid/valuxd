@@ -59,6 +59,7 @@ FONT_REGISTRY_MAP = {
     'Akzidenz-grotesk-black.ttf': 'Akzidenz Grotesk Black (TrueType)',
     'PlayfairDisplay-Bold.ttf': 'Playfair Display Bold (TrueType)',
     'Montserrat-Medium.ttf': 'Montserrat Medium (TrueType)',
+    'PT Serif Regular.ttf': 'PT Serif (TrueType)',
 }
 
 def install_all_assets() -> Dict[str, Any]:

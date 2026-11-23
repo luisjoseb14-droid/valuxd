@@ -1,8 +1,8 @@
 {
-  "version": "1.0.30",
-  "version_code": 31,
-  "date": "2026-11-18",
-  "description": "Nuevo preset Dra. Ana Linares (Playfair Display Bold blanco 14 fijo arriba + Montserrat Medium #ACB1EC con tamano dinamico en destacadas abajo, sombras, Mini zoom y Click FX)",
+  "version": "1.0.31",
+  "version_code": 32,
+  "date": "2026-11-23",
+  "description": "Nuevo menu desplegable con buscador para presets de doctores + nuevo preset Costa Calida (Montserrat Medium blanco 10 + PT Serif amarillo #F5D90E 14 con Aparicion progresiva y Click FX)",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

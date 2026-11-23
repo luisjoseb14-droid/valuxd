@@ -20428,5 +20428,600 @@
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
+  },
+  "costa_calida": {
+    "name": "Letra Costa Cálida",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Costa Cálida: Montserrat Medium blanco arriba (tamaño 10.0, y=-0.110) y PT Serif Regular amarillo (#F5D90E) abajo (tamaño 14.0, y=-0.177) con escala 1.355, sombra suave (#000000, alpha 0.50, distancia 3.0), animación Aparición progresiva (333ms) y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 10.0,
+      "x": 0.0,
+      "y": -0.10956492293459096,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.4952380955219269,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "PT Serif",
+      "font_title": "PT Serif",
+      "font_path": "PT Serif Regular.ttf",
+      "color": "#f5d90e",
+      "rgb_color": [
+        0.9607843160629272,
+        0.8509804010391235,
+        0.054901961237192154
+      ],
+      "font_size": 14.0,
+      "font_size_short": 14.0,
+      "font_size_medium": 14.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": false,
+        "short": 14.0,
+        "medium": 14.0,
+        "long": 14.0
+      },
+      "x": 0.0,
+      "y": -0.1771712328005064,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.4952380955219269,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "costa calida": {
+    "name": "Letra Costa Cálida",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Costa Cálida: Montserrat Medium blanco arriba (tamaño 10.0, y=-0.110) y PT Serif Regular amarillo (#F5D90E) abajo (tamaño 14.0, y=-0.177) con escala 1.355, sombra suave (#000000, alpha 0.50, distancia 3.0), animación Aparición progresiva (333ms) y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 10.0,
+      "x": 0.0,
+      "y": -0.10956492293459096,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.4952380955219269,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "PT Serif",
+      "font_title": "PT Serif",
+      "font_path": "PT Serif Regular.ttf",
+      "color": "#f5d90e",
+      "rgb_color": [
+        0.9607843160629272,
+        0.8509804010391235,
+        0.054901961237192154
+      ],
+      "font_size": 14.0,
+      "font_size_short": 14.0,
+      "font_size_medium": 14.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": false,
+        "short": 14.0,
+        "medium": 14.0,
+        "long": 14.0
+      },
+      "x": 0.0,
+      "y": -0.1771712328005064,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.4952380955219269,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "costa cálida": {
+    "name": "Letra Costa Cálida",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Costa Cálida: Montserrat Medium blanco arriba (tamaño 10.0, y=-0.110) y PT Serif Regular amarillo (#F5D90E) abajo (tamaño 14.0, y=-0.177) con escala 1.355, sombra suave (#000000, alpha 0.50, distancia 3.0), animación Aparición progresiva (333ms) y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 10.0,
+      "x": 0.0,
+      "y": -0.10956492293459096,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.4952380955219269,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "PT Serif",
+      "font_title": "PT Serif",
+      "font_path": "PT Serif Regular.ttf",
+      "color": "#f5d90e",
+      "rgb_color": [
+        0.9607843160629272,
+        0.8509804010391235,
+        0.054901961237192154
+      ],
+      "font_size": 14.0,
+      "font_size_short": 14.0,
+      "font_size_medium": 14.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": false,
+        "short": 14.0,
+        "medium": 14.0,
+        "long": 14.0
+      },
+      "x": 0.0,
+      "y": -0.1771712328005064,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.4952380955219269,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "letra costa calida": {
+    "name": "Letra Costa Cálida",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Costa Cálida: Montserrat Medium blanco arriba (tamaño 10.0, y=-0.110) y PT Serif Regular amarillo (#F5D90E) abajo (tamaño 14.0, y=-0.177) con escala 1.355, sombra suave (#000000, alpha 0.50, distancia 3.0), animación Aparición progresiva (333ms) y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 10.0,
+      "x": 0.0,
+      "y": -0.10956492293459096,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.4952380955219269,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "PT Serif",
+      "font_title": "PT Serif",
+      "font_path": "PT Serif Regular.ttf",
+      "color": "#f5d90e",
+      "rgb_color": [
+        0.9607843160629272,
+        0.8509804010391235,
+        0.054901961237192154
+      ],
+      "font_size": 14.0,
+      "font_size_short": 14.0,
+      "font_size_medium": 14.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": false,
+        "short": 14.0,
+        "medium": 14.0,
+        "long": 14.0
+      },
+      "x": 0.0,
+      "y": -0.1771712328005064,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.4952380955219269,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
+  },
+  "letra_costa_calida": {
+    "name": "Letra Costa Cálida",
+    "version": "1.0.0",
+    "description": "Estilo de 2 capas de Costa Cálida: Montserrat Medium blanco arriba (tamaño 10.0, y=-0.110) y PT Serif Regular amarillo (#F5D90E) abajo (tamaño 14.0, y=-0.177) con escala 1.355, sombra suave (#000000, alpha 0.50, distancia 3.0), animación Aparición progresiva (333ms) y sonido de click Click_Mouse_Click_02.",
+    "layout": "dual",
+    "uppercase": false,
+    "top": {
+      "font_name": "Montserrat Medium",
+      "font_title": "Montserrat Medium",
+      "font_path": "Montserrat-Medium.ttf",
+      "color": "#FFFFFF",
+      "rgb_color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "font_size": 10.0,
+      "x": 0.0,
+      "y": -0.10956492293459096,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.4952380955219269,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "uppercase": false
+    },
+    "bottom": {
+      "font_name": "PT Serif",
+      "font_title": "PT Serif",
+      "font_path": "PT Serif Regular.ttf",
+      "color": "#f5d90e",
+      "rgb_color": [
+        0.9607843160629272,
+        0.8509804010391235,
+        0.054901961237192154
+      ],
+      "font_size": 14.0,
+      "font_size_short": 14.0,
+      "font_size_medium": 14.0,
+      "font_size_long": 14.0,
+      "dynamic_font_size": {
+        "enabled": false,
+        "short": 14.0,
+        "medium": 14.0,
+        "long": 14.0
+      },
+      "x": 0.0,
+      "y": -0.1771712328005064,
+      "scale": {
+        "x": 1.3550004042363974,
+        "y": 1.3550004042363974
+      },
+      "animation": {
+        "enabled": true,
+        "resource_id": "7646371244257955092",
+        "name": "Aparición progresiva",
+        "path": "",
+        "duration": 333333,
+        "type": "in"
+      },
+      "shadow": {
+        "color": "#000000",
+        "alpha": 0.4952380955219269,
+        "angle": -45.0,
+        "diffuse": 0.02500000037252903,
+        "distance": 2.9999992847442627,
+        "content": {
+          "render_type": "solid",
+          "solid": {
+            "color": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "thickness_projection_angle": -45.0,
+        "thickness_projection_distance": 0.0,
+        "thickness_projection_enable": false
+      },
+      "useLetterColor": true,
+      "uppercase": false
+    },
+    "sound_fx": {
+      "enabled": true,
+      "name": "Click_Mouse_Click_02(864360)",
+      "filename": "click_mouse_02.mp3",
+      "path": "",
+      "duration": 866666,
+      "volume": 0.65
+    },
+    "pacing": {
+      "min_seconds": 2.0,
+      "max_seconds": 4.0
+    },
+    "margins": {
+      "max_chars_per_line": 18,
+      "max_words_per_line": 3
+    }
   }
 }
