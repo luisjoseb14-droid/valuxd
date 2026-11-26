@@ -1,8 +1,8 @@
 {
-  "version": "1.0.32",
-  "version_code": 33,
+  "version": "1.0.33",
+  "version_code": 34,
   "date": "2026-11-26",
-  "description": "Limite maximo estricto de 13 caracteres por linea (letras, espacios y signos) con division equilibrada a la mitad en todos los presets, respetando palabras unicas largas",
+  "description": "Blindaje para no dejar palabras cortas sueltas (y, el, lo, al, es, hay, etc.) en una sola linea al dividir frases largas",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

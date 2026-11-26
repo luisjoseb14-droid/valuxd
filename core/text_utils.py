@@ -103,6 +103,12 @@ def segment_exceeds_line_budget(
     txt = " ".join(words)
     nc = len(txt)
     eff_mc = max(1, int(max_chars or HARD_MAX_LINE_CHARS))
+    bares = [_strip_edge_punct(w).lower() for w in words]
+    tiny_lone = (set(ORPHAN_SHORT_WORDS) | set(PROCLITIC_ORPHAN_WORDS) | {'hay'}) - {
+        'esto', 'eso', 'hoy', 'aquí', 'aqui', 'ahí', 'ahi', 'allí', 'alli', 'sí', 'si'
+    }
+    if nw == 2 and (bares[0] in tiny_lone or bares[1] in tiny_lone):
+        return False
     if nc > eff_mc:
         return True
 
@@ -112,7 +118,6 @@ def segment_exceeds_line_budget(
         return True
 
     eff_mw = max(1, int(max_words or 3))
-    bares = [_strip_edge_punct(w).lower() for w in words]
     clens = [len(b) for b in bares]
 
     if nw >= eff_mw + 2:
@@ -164,8 +169,8 @@ def _split_tokens_for_safe_margins(
     if not segment_exceeds_line_budget(toks, max_chars=max_chars, max_words=max_words, font_path=font_path, is_uppercase=is_uppercase, max_ratio=max_ratio):
         return [_build_item_from_tokens(template, toks, keep_punctuation=keep_punctuation)]
 
-    func_words = (set(ORPHAN_SHORT_WORDS) | set(PROCLITIC_ORPHAN_WORDS)) - {
-        'esto', 'eso', 'hoy', 'aquí', 'aqui', 'ahí', 'ahi', 'allí', 'alli'
+    func_words = (set(ORPHAN_SHORT_WORDS) | set(PROCLITIC_ORPHAN_WORDS) | {'hay'}) - {
+        'esto', 'eso', 'hoy', 'aquí', 'aqui', 'ahí', 'ahi', 'allí', 'alli', 'sí', 'si'
     }
     best_k = None
     best_score = float('inf')
@@ -196,10 +201,11 @@ def _split_tokens_for_safe_margins(
 
         last_left = _strip_edge_punct(left_toks[-1]['word']).lower()
         first_right = _strip_edge_punct(right_toks[0]['word']).lower()
-        if len(left_toks) == 1 and last_left in func_words:
-            score += 90.0
-        if len(right_toks) == 1 and first_right in func_words:
-            score += 90.0
+        if (
+            (len(left_toks) == 1 and last_left in func_words)
+            or (len(right_toks) == 1 and first_right in func_words)
+        ):
+            score += 1000.0
         if not left_toks[-1]['word'].endswith((',', '.', '?', '!')):
             if last_left in _HARD_SPLIT_DANGLING_WORDS:
                 score += 65.0
@@ -222,7 +228,7 @@ def _split_tokens_for_safe_margins(
             best_score = score
             best_k = k
 
-    if best_k is None:
+    if best_k is None or best_score >= 1000.0:
         return [_build_item_from_tokens(template, toks, keep_punctuation=keep_punctuation)]
 
     left_toks = toks[:best_k]
@@ -1711,7 +1717,11 @@ def rebalance_subtitle_segments(
                     moved_tok = n_toks.pop(0)
                     c_toks.append(moved_tok)
                     moved = True
-                elif len(n_toks) + 1 <= SOFT_MAX_WORDS and (len(c_toks[-1]['word']) + 1 + len(_seg_text(nxt))) <= SOFT_MAX_CHARS:
+                elif (
+                    len(n_toks) + 1 <= SOFT_MAX_WORDS
+                    and (len(c_toks[-1]['word']) + 1 + len(_seg_text(nxt))) <= SOFT_MAX_CHARS
+                    and not (len(c_toks) == 2 and _strip_edge_punct(c_toks[0]['word']).lower() in (ORPHAN_SHORT_WORDS | {'hay'}))
+                ):
                     moved_tok = c_toks.pop()
                     n_toks.insert(0, moved_tok)
                     moved = True

@@ -142,6 +142,12 @@ class TestMax13CharsLineLimit(unittest.TestCase):
         pieces_mix = [p["text"] for p in split_wide_segment_for_safe_margins(seg_mix)]
         self.assertEqual(pieces_mix, ["en la", "otorrinolaringología"])
 
+        # Lone tiny/functional words (y, el, lo, al, es) must NEVER be left alone on a line
+        for phrase in ["y neurofibroma", "el otorrinolaringólogo", "al neurofibroma", "lo importante es"]:
+            seg_tiny = {"index": 6, "start": 0, "end": 1200000, "duration": 1200000, "text": phrase}
+            pieces_tiny = [p["text"] for p in split_wide_segment_for_safe_margins(seg_tiny)]
+            self.assertEqual(pieces_tiny, [phrase], f"Should not isolate tiny functional word in {phrase!r}: {pieces_tiny}")
+
     def test_rebalance_subtitle_segments_respects_13_chars_default(self):
         raw_items = [
             {
