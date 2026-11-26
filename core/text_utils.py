@@ -7,6 +7,7 @@ from core.platform_paths import resolve_font_path
 
 
 SAFE_MARGIN_VISUAL_MAX_RATIO = 1.085
+HARD_MAX_LINE_CHARS = 13
 _NARROW_VISUAL_CHARS = set("iltfj.,:;!'|¡íìï")
 _WIDE_VISUAL_CHARS = set("mwMWOGQAHNDBRSECKPUVXYZÁÉÍÓÚÑ")
 _NOUN_BRIDGE_MID_WORDS = {'del', 'de', 'la', 'el', 'los', 'las', 'al'}
@@ -81,13 +82,15 @@ def measure_visual_width_ratio(
 
 def segment_exceeds_line_budget(
     toks_or_words: List[Any],
-    max_chars: int = 18,
+    max_chars: int = HARD_MAX_LINE_CHARS,
     max_words: int = 3,
     font_path: str = "",
     is_uppercase: bool = False,
     max_ratio: float = SAFE_MARGIN_VISUAL_MAX_RATIO,
 ) -> bool:
-    """Return True when a multi-word line exceeds safe margins or comfortable word/length density."""
+    """Return True when a multi-word line exceeds max_chars (default 13) or safe margins.
+    Single-word lines are never split even if they exceed max_chars.
+    """
     words: List[str] = []
     for t in toks_or_words:
         w = (t.get('word', '') if isinstance(t, dict) else str(t)).strip()
@@ -99,7 +102,12 @@ def segment_exceeds_line_budget(
 
     txt = " ".join(words)
     nc = len(txt)
-    ratio = measure_visual_width_ratio(txt, font_path_or_name=font_path, max_chars=max_chars, is_uppercase=is_uppercase)
+    eff_mc = max(1, int(max_chars or HARD_MAX_LINE_CHARS))
+    if nc > eff_mc:
+        return True
+
+    visual_cap = max(eff_mc, 18)
+    ratio = measure_visual_width_ratio(txt, font_path_or_name=font_path, max_chars=visual_cap, is_uppercase=is_uppercase)
     if ratio > max_ratio:
         return True
 
@@ -115,7 +123,7 @@ def segment_exceeds_line_budget(
         is_compact_4 = (
             eff_mw == 3
             and nw == 4
-            and nc <= 15
+            and nc <= min(15, eff_mc)
             and ratio <= 0.85
             and max(clens) <= 6
             and sum(1 for c in clens if c >= 5) <= 1
@@ -134,7 +142,7 @@ def segment_exceeds_line_budget(
         if nc >= 18:
             return True
 
-    if eff_mw > 3 and nc > max(int(max_chars or 18) + 4, 24):
+    if eff_mw > 3 and nc > max(eff_mc + 4, 24):
         return True
 
     return False
@@ -168,10 +176,14 @@ def _split_tokens_for_safe_margins(
         left_txt = " ".join(t['word'] for t in left_toks)
         right_txt = " ".join(t['word'] for t in right_toks)
 
-        r_left = measure_visual_width_ratio(left_txt, font_path, max_chars, is_uppercase)
-        r_right = measure_visual_width_ratio(right_txt, font_path, max_chars, is_uppercase)
+        r_left = measure_visual_width_ratio(left_txt, font_path, max(max_chars, 18), is_uppercase)
+        r_right = measure_visual_width_ratio(right_txt, font_path, max(max_chars, 18), is_uppercase)
 
-        score = abs(r_left - r_right) * 18.0
+        score = (
+            abs(r_left - r_right) * 18.0
+            + abs(len(left_txt) - len(right_txt)) * 2.5
+            + abs(len(left_toks) - len(right_toks)) * 4.0
+        )
         if r_left > max_ratio:
             score += (r_left - max_ratio) * 200.0
         if r_right > max_ratio:
@@ -226,7 +238,7 @@ def _split_tokens_for_safe_margins(
 
 def split_wide_segment_for_safe_margins(
     item: Dict[str, Any],
-    max_chars: int = 18,
+    max_chars: int = HARD_MAX_LINE_CHARS,
     max_words: int = 3,
     font_path: str = "",
     is_uppercase: bool = False,
@@ -1490,8 +1502,8 @@ def fix_question_marks_and_broken_tokens(
 
 def rebalance_subtitle_segments(
     raw_items: List[Dict[str, Any]],
-    max_chars: int = 22,
-    max_words: int = 4,
+    max_chars: int = HARD_MAX_LINE_CHARS,
+    max_words: int = 3,
     keep_punctuation: bool = False
 ) -> List[Dict[str, Any]]:
     """
@@ -1549,8 +1561,9 @@ def rebalance_subtitle_segments(
         'este', 'esta', 'estos', 'estas', 'ese', 'esa', 'esos', 'esas'
     }
     SOFT_MAX_WORDS = max(1, int(max_words or 3))
-    SOFT_MAX_CHARS = max(int(max_chars) + 2, 20)
-    ORPHAN_MERGE_MAX_CHARS = max(int(max_chars), 16)
+    HARD_MAX_CHARS = max(1, int(max_chars or HARD_MAX_LINE_CHARS))
+    SOFT_MAX_CHARS = max(HARD_MAX_CHARS + 2, 20) if HARD_MAX_CHARS > HARD_MAX_LINE_CHARS else HARD_MAX_CHARS
+    ORPHAN_MERGE_MAX_CHARS = max(HARD_MAX_CHARS, 16) if HARD_MAX_CHARS > HARD_MAX_LINE_CHARS else HARD_MAX_CHARS
     MAX_FLOW_GAP_US = 600000
 
     def _seg_text(s_entry: Dict[str, Any]) -> str:
@@ -1758,7 +1771,7 @@ def rebalance_subtitle_segments(
                             comb_chars = len(w) + 1 + len(_seg_text(nxt))
                             within_budget = (
                                 (comb_words <= SOFT_MAX_WORDS and comb_chars <= ORPHAN_MERGE_MAX_CHARS)
-                                or (SOFT_MAX_WORDS == 3 and comb_words == 4 and comb_chars <= 14)
+                                or (SOFT_MAX_WORDS == 3 and comb_words == 4 and comb_chars <= min(14, HARD_MAX_CHARS))
                             )
                             if not w.endswith(('?', '!', '.')) and gap_us <= 650000 and within_budget:
                                 nxt['tokens'].insert(0, toks[0])
@@ -1775,7 +1788,7 @@ def rebalance_subtitle_segments(
                             comb_chars = len(_seg_text(prev)) + 1 + len(w)
                             within_budget = (
                                 (comb_words <= SOFT_MAX_WORDS and comb_chars <= ORPHAN_MERGE_MAX_CHARS)
-                                or (SOFT_MAX_WORDS == 3 and comb_words == 4 and comb_chars <= 14)
+                                or (SOFT_MAX_WORDS == 3 and comb_words == 4 and comb_chars <= min(14, HARD_MAX_CHARS))
                             )
                             if not w.startswith(('¿', '¡')) and not is_cap_sentence_starter and not _ends_sentence(prev) and gap_us <= 650000 and within_budget:
                                 prev['tokens'].append(toks[0])

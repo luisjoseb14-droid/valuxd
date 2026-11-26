@@ -92,14 +92,14 @@
     "name": "Click_Mouse_Click_02(864360)",
     "path": "",
     "duration": 866666,
-    "volume": 0.50
+    "volume": 0.5
   },
   "pacing": {
     "min_seconds": 3.0,
     "max_seconds": 4.5
   },
   "margins": {
-    "max_chars_per_line": 18,
+    "max_chars_per_line": 13,
     "max_words_per_line": 3
   }
 }

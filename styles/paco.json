@@ -104,7 +104,7 @@
     "max_seconds": 3.5
   },
   "margins": {
-    "max_chars_per_line": 22,
+    "max_chars_per_line": 13,
     "max_words_per_line": 4
   }
 }

@@ -32,6 +32,7 @@ from core.text_utils import (
     _build_item_from_tokens,
     _strip_edge_punct,
     SAFE_MARGIN_VISUAL_MAX_RATIO,
+    HARD_MAX_LINE_CHARS,
     measure_visual_width_ratio,
     split_wide_segment_for_safe_margins,
     is_weak_highlight_word,
@@ -284,7 +285,7 @@ class DualStyler:
             self.scale = self.top_scale
             self.sound_fx = preset_data.get('sound_fx', {'enabled': True, 'volume': 0.65})
             self.pacing = preset_data.get('pacing', {'min_seconds': 3.0, 'max_seconds': 4.5})
-            self.margins = preset_data.get('margins', {'max_chars_per_line': 18, 'max_words_per_line': 3})
+            self.margins = preset_data.get('margins', {'max_chars_per_line': HARD_MAX_LINE_CHARS, 'max_words_per_line': 3})
             self.preset_name = preset_data.get('name', 'Custom')
             self.stickers_cfg = preset_data.get('stickers', {})
             self.keep_punctuation = bool(preset_data.get('keep_punctuation', False) or preset_data.get('preserve_punctuation', False))
@@ -310,7 +311,7 @@ class DualStyler:
             self.scale = scale or SCALE_DEFAULT
             self.sound_fx = {'enabled': True, 'volume': 0.65, 'name': 'Click_Mouse_Click_02(864360)'}
             self.pacing = {'min_seconds': 3.0, 'max_seconds': 4.5}
-            self.margins = {'max_chars_per_line': 18, 'max_words_per_line': 3}
+            self.margins = {'max_chars_per_line': HARD_MAX_LINE_CHARS, 'max_words_per_line': 3}
             self.preset_name = 'Custom'
             self.stickers_cfg = {}
             self.keep_punctuation = False
@@ -796,7 +797,7 @@ class DualStyler:
 
                     top_scale = copy.deepcopy(self.top_scale)
                     dyn_top_font = self.highlight_style.get('dynamic_font_size') or self.default_style.get('dynamic_font_size')
-                    eff_max_chars = int((self.preset_data or {}).get('margins', {}).get('max_chars_per_line', 18) or 18)
+                    eff_max_chars = int((self.preset_data or {}).get('margins', {}).get('max_chars_per_line', HARD_MAX_LINE_CHARS) or HARD_MAX_LINE_CHARS)
                     top_font_cfg = (self.highlight_style if is_top_hl else self.default_style).get('font_path', '')
                     is_top_upper = bool(
                         (self.highlight_style if is_top_hl else self.default_style).get('uppercase', False)
@@ -805,7 +806,7 @@ class DualStyler:
                     top_vis_ratio = measure_visual_width_ratio(
                         top_text,
                         font_path_or_name=top_font_cfg,
-                        max_chars=eff_max_chars,
+                        max_chars=max(eff_max_chars, 18),
                         is_uppercase=is_top_upper,
                     )
                     shrink_factor = 1.0
@@ -1078,7 +1079,7 @@ class DualStyler:
     def _consolidate_number_segments(
         self,
         raw_items: List[Dict[str, Any]],
-        max_chars: int = 18,
+        max_chars: int = HARD_MAX_LINE_CHARS,
         max_words: int = 3
     ) -> List[Dict[str, Any]]:
         """
@@ -2074,7 +2075,7 @@ class DualStyler:
         model: Optional[str] = None,
         min_pacing_sec: float = 3.0,
         max_pacing_sec: float = 5.0,
-        max_chars_per_line: int = 18,
+        max_chars_per_line: int = HARD_MAX_LINE_CHARS,
         max_words_per_line: int = 3,
         log_fn=None
     ) -> Tuple[int, int]:
@@ -2229,9 +2230,9 @@ class DualStyler:
                     raw_items[k]['duration'] = raw_items[k]['end'] - raw_items[k]['start']
 
         # Consolidate split numbers and convert words to digits
-        eff_max_chars = int(self.margins.get('max_chars_per_line') or max_chars_per_line or 18)
+        eff_max_chars = int(self.margins.get('max_chars_per_line') or max_chars_per_line or HARD_MAX_LINE_CHARS)
         eff_max_words = int(self.margins.get('max_words_per_line') or max_words_per_line or 3)
-        eff_max_hl_chars = int(self.margins.get('max_highlight_chars') or eff_max_chars)
+        eff_max_hl_chars = int(self.margins.get('max_highlight_chars') or max(16, eff_max_chars))
         raw_items = self._consolidate_number_segments(raw_items, max_chars=eff_max_chars, max_words=eff_max_words)
         forced_phrases = list(getattr(self, 'always_highlight_phrases', []) or [])
         if forced_phrases:
@@ -3491,7 +3492,7 @@ class DualStyler:
         min_neutral = int(pacing_cfg.get('min_neutral_segments', 3))
 
         margin_cfg = getattr(self, 'margins', {})
-        effective_max_chars = max_chars_per_line if (max_chars_per_line is not None and max_chars_per_line != 18) else int(margin_cfg.get('max_chars_per_line', 20))
+        effective_max_chars = max_chars_per_line if (max_chars_per_line is not None and max_chars_per_line not in (18, HARD_MAX_LINE_CHARS)) else int(margin_cfg.get('max_chars_per_line', HARD_MAX_LINE_CHARS))
 
         self._strip_existing_step_tracks(project.data)
         project._parse_subtitles()
@@ -3600,7 +3601,30 @@ class DualStyler:
             model=model,
             ai_phrases=ai_phrases,
         )
-        if precomputed_step_plan:
+
+        keep_punc_inline = getattr(self, 'keep_punctuation', False)
+        inline_font_cfg = self.default_style.get('font_path', '')
+        split_inline_items: List[Dict[str, Any]] = []
+        for it in raw_items:
+            split_inline_items.extend(
+                split_wide_segment_for_safe_margins(
+                    it,
+                    max_chars=eff_max_chars,
+                    max_words=eff_max_words,
+                    font_path=inline_font_cfg,
+                    keep_punctuation=keep_punc_inline,
+                )
+            )
+        split_changed = (
+            len(split_inline_items) != len(raw_items)
+            or any(a.get('text') != b.get('text') for a, b in zip(split_inline_items, raw_items))
+        )
+        if split_changed:
+            for new_idx, it in enumerate(split_inline_items):
+                it['index'] = new_idx
+            raw_items = split_inline_items
+
+        if precomputed_step_plan or split_changed:
             self._sync_inline_track0_segments(
                 project,
                 subs,
@@ -3846,7 +3870,7 @@ class DualStyler:
         min_neutral = int(pacing_cfg.get('min_neutral_segments', 1))
 
         margin_cfg = getattr(self, 'margins', {})
-        eff_max_chars = max_chars_per_line if (max_chars_per_line is not None and max_chars_per_line != 18) else int(margin_cfg.get('max_chars_per_line', 21))
+        eff_max_chars = max_chars_per_line if (max_chars_per_line is not None and max_chars_per_line not in (18, HARD_MAX_LINE_CHARS)) else int(margin_cfg.get('max_chars_per_line', HARD_MAX_LINE_CHARS))
 
         self._strip_existing_step_tracks(project.data)
         project._parse_subtitles()
@@ -4778,7 +4802,7 @@ class DualStyler:
         model: Optional[str] = None,
         min_pacing_sec: float = 20.0,
         max_pacing_sec: float = 30.0,
-        max_chars_per_line: int = 26,
+        max_chars_per_line: int = HARD_MAX_LINE_CHARS,
         max_words_per_line: int = 6,
         log_fn: Optional[Callable[[str], None]] = None
     ) -> Tuple[int, int]:
@@ -4977,13 +5001,13 @@ class DualStyler:
             it['index'] = idx
 
         # Helper para equilibrar líneas de subtítulos generales dentro de la zona segura
-        eff_max_chars = max_chars_per_line if (max_chars_per_line is not None and max_chars_per_line != 18) else int(margin_cfg.get('max_chars_per_line', 24))
+        eff_max_chars = max_chars_per_line if (max_chars_per_line is not None and max_chars_per_line not in (18, HARD_MAX_LINE_CHARS)) else int(margin_cfg.get('max_chars_per_line', HARD_MAX_LINE_CHARS))
 
         def balance_line(text: str, max_len: int = eff_max_chars) -> str:
             words = text.split()
             if not words:
                 return text
-            if len(text) <= max_len or len(words) <= 2:
+            if len(text) <= max_len or len(words) < 2:
                 t = ' '.join(words)
                 return t[0].upper() + t[1:] if len(t) > 1 else t.upper()
 

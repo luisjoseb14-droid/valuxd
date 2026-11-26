@@ -149,11 +149,12 @@ class TestDualStylerHighlightSeparation(unittest.TestCase):
         for bt in bot_texts:
             self.assertNotEqual(bt.lower(), "lingual forman")
 
-        # Verify top track has 'la movilidad' and 'forman'
+        # Verify top track has 'la movilidad', 'forman', 'parte del', and 'equilibrio' (<= 13 chars each)
         top_texts = [json.loads(texts[seg['material_id']]['content'])['text'] for seg in top_track['segments']]
         self.assertIn("la movilidad", top_texts)
         self.assertIn("forman", top_texts)
-        self.assertIn("parte del equilibrio", top_texts)
+        self.assertIn("parte del", top_texts)
+        self.assertIn("equilibrio", top_texts)
 
         # Verify no punctuation violations
         for t in list(texts.values()):

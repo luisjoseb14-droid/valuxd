@@ -1,8 +1,8 @@
 {
-  "version": "1.0.31",
-  "version_code": 32,
-  "date": "2026-11-23",
-  "description": "Nuevo menu desplegable con buscador para presets de doctores + nuevo preset Costa Calida (Montserrat Medium blanco 10 + PT Serif amarillo #F5D90E 14 con Aparicion progresiva y Click FX)",
+  "version": "1.0.32",
+  "version_code": 33,
+  "date": "2026-11-26",
+  "description": "Limite maximo estricto de 13 caracteres por linea (letras, espacios y signos) con division equilibrada a la mitad en todos los presets, respetando palabras unicas largas",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

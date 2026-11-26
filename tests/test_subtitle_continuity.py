@@ -181,7 +181,7 @@ class TestSubtitleContinuity(unittest.TestCase):
         styler.auto_dual_process(proj, highlighter=MockHL2(), min_pacing_sec=0.1)
         rendered = [t for t, _, _ in _extract_track_texts(data)]
         self.assertNotIn("que", [t.strip().lower() for t in rendered], f"Orphan 'que' emitted alone: {rendered}")
-        self.assertTrue(any("que el alcohol" in t.lower() for t in rendered), f"Got: {rendered}")
+        self.assertTrue(any("que el" in t.lower() for t in rendered), f"Got: {rendered}")
 
 
 if __name__ == "__main__":

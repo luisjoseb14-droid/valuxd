@@ -93,7 +93,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -187,7 +187,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     },
     "always_highlight_phrases": [
@@ -293,7 +293,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -396,7 +396,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -499,7 +499,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -598,7 +598,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -697,7 +697,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -836,7 +836,7 @@
       "min_neutral_segments": 1
     },
     "margins": {
-      "max_chars_per_line": 20,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -975,7 +975,7 @@
       "min_neutral_segments": 1
     },
     "margins": {
-      "max_chars_per_line": 20,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -1114,7 +1114,7 @@
       "min_neutral_segments": 1
     },
     "margins": {
-      "max_chars_per_line": 20,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -1218,7 +1218,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -1322,7 +1322,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -1426,7 +1426,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -1574,7 +1574,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -1722,7 +1722,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -1870,7 +1870,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -1972,7 +1972,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -2074,7 +2074,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -2177,7 +2177,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 12
     }
@@ -2281,7 +2281,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 12
     }
@@ -2385,7 +2385,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 12
     }
@@ -2489,7 +2489,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 12
     }
@@ -2593,7 +2593,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 12
     }
@@ -2697,7 +2697,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 12
     }
@@ -2801,7 +2801,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 12
     }
@@ -2905,7 +2905,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 12
     }
@@ -3009,7 +3009,7 @@
       "min_neutral_segments": 1
     },
     "margins": {
-      "max_chars_per_line": 21,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5
     }
   },
@@ -3112,7 +3112,7 @@
       "min_neutral_segments": 1
     },
     "margins": {
-      "max_chars_per_line": 21,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5
     }
   },
@@ -3215,7 +3215,7 @@
       "min_neutral_segments": 1
     },
     "margins": {
-      "max_chars_per_line": 21,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5
     }
   },
@@ -3318,7 +3318,7 @@
       "min_neutral_segments": 1
     },
     "margins": {
-      "max_chars_per_line": 21,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5
     }
   },
@@ -3421,7 +3421,7 @@
       "min_neutral_segments": 1
     },
     "margins": {
-      "max_chars_per_line": 21,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5
     }
   },
@@ -3524,7 +3524,7 @@
       "min_neutral_segments": 1
     },
     "margins": {
-      "max_chars_per_line": 21,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5
     }
   },
@@ -3627,7 +3627,7 @@
       "min_neutral_segments": 1
     },
     "margins": {
-      "max_chars_per_line": 21,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5
     }
   },
@@ -3732,7 +3732,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -3837,7 +3837,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -3942,7 +3942,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -4047,7 +4047,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -4152,7 +4152,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -4257,7 +4257,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -4362,7 +4362,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -4467,7 +4467,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -4572,7 +4572,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -4677,7 +4677,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -4782,7 +4782,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -4887,7 +4887,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -4992,7 +4992,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -5097,7 +5097,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -5202,7 +5202,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -5307,7 +5307,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -5410,7 +5410,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 18
     }
@@ -5514,7 +5514,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 18
     }
@@ -5618,7 +5618,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 18
     }
@@ -5722,7 +5722,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 18
     }
@@ -5826,7 +5826,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 18
     }
@@ -5930,7 +5930,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 18
     }
@@ -6034,7 +6034,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -6138,7 +6138,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -6242,7 +6242,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -6346,7 +6346,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -6450,7 +6450,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -6554,7 +6554,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -6670,7 +6670,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -6786,7 +6786,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -6902,7 +6902,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -7018,7 +7018,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -7134,7 +7134,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -7250,7 +7250,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -7366,7 +7366,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -7482,7 +7482,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -7598,7 +7598,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -7714,7 +7714,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -7830,7 +7830,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -7946,7 +7946,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -8062,7 +8062,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -8178,7 +8178,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -8294,7 +8294,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -8410,7 +8410,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -8508,7 +8508,7 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5,
       "max_chars_total": 42
     }
@@ -8606,7 +8606,7 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5,
       "max_chars_total": 42
     }
@@ -8704,7 +8704,7 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5,
       "max_chars_total": 42
     }
@@ -8802,7 +8802,7 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5,
       "max_chars_total": 42
     }
@@ -8900,7 +8900,7 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5,
       "max_chars_total": 42
     }
@@ -8998,7 +8998,7 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5,
       "max_chars_total": 42
     }
@@ -9096,7 +9096,7 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5,
       "max_chars_total": 42
     }
@@ -9194,7 +9194,7 @@
       "max_highlights_per_video": 3
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 5,
       "max_chars_total": 42
     }
@@ -9318,7 +9318,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4,
       "max_highlight_chars": 22
     },
@@ -9448,7 +9448,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4,
       "max_highlight_chars": 22
     },
@@ -9578,7 +9578,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4,
       "max_highlight_chars": 22
     },
@@ -9708,7 +9708,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4,
       "max_highlight_chars": 22
     },
@@ -9838,7 +9838,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4,
       "max_highlight_chars": 22
     },
@@ -9968,7 +9968,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4,
       "max_highlight_chars": 22
     },
@@ -10098,7 +10098,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4,
       "max_highlight_chars": 22
     },
@@ -10228,7 +10228,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4,
       "max_highlight_chars": 22
     },
@@ -10358,7 +10358,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4,
       "max_highlight_chars": 22
     },
@@ -10488,7 +10488,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4,
       "max_highlight_chars": 22
     },
@@ -10618,7 +10618,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4,
       "max_highlight_chars": 22
     },
@@ -10748,7 +10748,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 24,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4,
       "max_highlight_chars": 22
     },
@@ -10859,7 +10859,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -10963,7 +10963,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -11067,7 +11067,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -11171,7 +11171,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -11275,7 +11275,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -11379,7 +11379,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -11483,7 +11483,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -11587,7 +11587,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -11691,7 +11691,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -11795,7 +11795,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -11899,7 +11899,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -12052,7 +12052,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -12205,7 +12205,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -12358,7 +12358,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -12473,7 +12473,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -12588,7 +12588,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -12703,7 +12703,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -12818,7 +12818,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -12933,7 +12933,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -13048,7 +13048,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -13163,7 +13163,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -13337,7 +13337,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -13511,7 +13511,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -13685,7 +13685,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -13859,7 +13859,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -14033,7 +14033,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -14207,7 +14207,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -14381,7 +14381,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -14555,7 +14555,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -14729,7 +14729,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -14903,7 +14903,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -15077,7 +15077,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -15251,7 +15251,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -15425,7 +15425,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -15599,7 +15599,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -15773,7 +15773,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -15947,7 +15947,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -16121,7 +16121,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -16295,7 +16295,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -16469,7 +16469,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -16643,7 +16643,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -16817,7 +16817,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -16991,7 +16991,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -17165,7 +17165,7 @@
       "max_seconds": 4.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -17279,7 +17279,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -17393,7 +17393,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -17507,7 +17507,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -17621,7 +17621,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -17735,7 +17735,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -17849,7 +17849,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -17963,7 +17963,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -18077,7 +18077,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -18191,7 +18191,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -18305,7 +18305,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -18415,7 +18415,7 @@
       "max_seconds": 3.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -18525,7 +18525,7 @@
       "max_seconds": 3.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -18635,7 +18635,7 @@
       "max_seconds": 3.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -18745,7 +18745,7 @@
       "max_seconds": 3.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -18855,7 +18855,7 @@
       "max_seconds": 3.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -18965,7 +18965,7 @@
       "max_seconds": 3.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -19075,7 +19075,7 @@
       "max_seconds": 3.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -19185,7 +19185,7 @@
       "max_seconds": 3.5
     },
     "margins": {
-      "max_chars_per_line": 22,
+      "max_chars_per_line": 13,
       "max_words_per_line": 4
     }
   },
@@ -19308,7 +19308,7 @@
       "max_seconds": 3.0
     },
     "margins": {
-      "max_chars_per_line": 16,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -19432,7 +19432,7 @@
       "max_seconds": 3.0
     },
     "margins": {
-      "max_chars_per_line": 16,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -19556,7 +19556,7 @@
       "max_seconds": 3.0
     },
     "margins": {
-      "max_chars_per_line": 16,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -19680,7 +19680,7 @@
       "max_seconds": 3.0
     },
     "margins": {
-      "max_chars_per_line": 16,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -19804,7 +19804,7 @@
       "max_seconds": 3.0
     },
     "margins": {
-      "max_chars_per_line": 16,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -19928,7 +19928,7 @@
       "max_seconds": 3.0
     },
     "margins": {
-      "max_chars_per_line": 16,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -20052,7 +20052,7 @@
       "max_seconds": 3.0
     },
     "margins": {
-      "max_chars_per_line": 16,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -20176,7 +20176,7 @@
       "max_seconds": 3.0
     },
     "margins": {
-      "max_chars_per_line": 16,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -20300,7 +20300,7 @@
       "max_seconds": 3.0
     },
     "margins": {
-      "max_chars_per_line": 16,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -20424,7 +20424,7 @@
       "max_seconds": 3.0
     },
     "margins": {
-      "max_chars_per_line": 16,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3,
       "max_highlight_chars": 16
     }
@@ -20544,7 +20544,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -20663,7 +20663,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -20782,7 +20782,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -20901,7 +20901,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   },
@@ -21020,7 +21020,7 @@
       "max_seconds": 4.0
     },
     "margins": {
-      "max_chars_per_line": 18,
+      "max_chars_per_line": 13,
       "max_words_per_line": 3
     }
   }

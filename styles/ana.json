@@ -58,9 +58,9 @@
     "font_path": "Liliana-Black.otf",
     "color": "#FDE69A",
     "rgb_color": [
-      0.99215686321258545,
+      0.9921568632125854,
       0.901960790157318,
-      0.60392159223556519
+      0.6039215922355652
     ],
     "font_size": 11.0,
     "useLetterColor": true,
@@ -97,7 +97,7 @@
     "min_neutral_segments": 1
   },
   "margins": {
-    "max_chars_per_line": 21,
+    "max_chars_per_line": 13,
     "max_words_per_line": 5
   }
 }
