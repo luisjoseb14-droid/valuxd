@@ -8,6 +8,15 @@ from core.platform_paths import resolve_font_path
 
 SAFE_MARGIN_VISUAL_MAX_RATIO = 1.085
 HARD_MAX_LINE_CHARS = 13
+PAIR_ELASTIC_MAX_CHARS = 16
+STRICT_ORPHAN_WORDS = {
+    'el', 'la', 'lo', 'los', 'las', 'un', 'una', 'unos', 'unas',
+    'de', 'del', 'al', 'a', 'en', 'con', 'por', 'para', 'sin', 'sobre', 'tras',
+    'hacia', 'hasta', 'desde', 'contra', 'entre',
+    'y', 'e', 'ni', 'o', 'u', 'que',
+    'se', 'te', 'me', 'le', 'les', 'nos',
+    'mi', 'tu', 'su', 'mis', 'tus', 'sus',
+}
 _NARROW_VISUAL_CHARS = set("iltfj.,:;!'|¡íìï")
 _WIDE_VISUAL_CHARS = set("mwMWOGQAHNDBRSECKPUVXYZÁÉÍÓÚÑ")
 _NOUN_BRIDGE_MID_WORDS = {'del', 'de', 'la', 'el', 'los', 'las', 'al'}
@@ -109,11 +118,14 @@ def segment_exceeds_line_budget(
     }
     if nw == 2 and (bares[0] in tiny_lone or bares[1] in tiny_lone):
         return False
-    if nc > eff_mc:
-        return True
 
     visual_cap = max(eff_mc, 18)
     ratio = measure_visual_width_ratio(txt, font_path_or_name=font_path, max_chars=visual_cap, is_uppercase=is_uppercase)
+    if nw == 2:
+        pair_cap = max(eff_mc, PAIR_ELASTIC_MAX_CHARS) if eff_mc <= PAIR_ELASTIC_MAX_CHARS else eff_mc
+        return nc > pair_cap or ratio > max_ratio
+    if nc > eff_mc:
+        return True
     if ratio > max_ratio:
         return True
 
@@ -897,7 +909,12 @@ SPANISH_STOPWORDS = {
     'ahora', 'después', 'despues', 'antes', 'siempre', 'algo', 'alguien', 'casi', 'incluso', 'aún', 'aun', 'todavía', 'todavia', 'aparte', 'ojalá', 'ojala',
     'todo', 'toda', 'todos', 'todas', 'cada', 'otro', 'otra', 'otros', 'otras', 'mismo', 'misma', 'mismos', 'mismas',
     'algún', 'algun', 'alguna', 'alguno', 'algunos', 'algunas', 'ningun', 'cualquier', 'cualquiera', 'cuanto', 'cuanta', 'varios', 'varias',
-    'mucho', 'mucha', 'muchos', 'muchas', 'poco', 'poca', 'pocos', 'pocas', 'poquito', 'poquita', 'bastante', 'demasiado', 'demasiada',
+    'diferente', 'diferentes', 'distinto', 'distinta', 'distintos', 'distintas',
+    'mucho', 'mucha', 'muchos', 'muchas', 'poco', 'poca', 'pocos', 'pocas', 'poquito', 'poquita',
+    'bastante', 'bastantes', 'demasiado', 'demasiada', 'demasiados', 'demasiadas',
+    'montón', 'monton', 'montones',
+    'intentar', 'intento', 'intentas', 'intenta', 'intentan', 'intentamos', 'intentando', 'intenté', 'intentó',
+    'seguir', 'sigo', 'sigues', 'sigue', 'siguen', 'siguiendo',
     'francamente', 'realmente', 'básicamente', 'basicamente', 'simplemente', 'literalmente',
     'obviamente', 'claramente', 'prácticamente', 'practicamente', 'normalmente', 'generalmente', 'habitualmente',
     'totalmente', 'completamente', 'absolutamente', 'efectivamente', 'exactamente', 'precisamente',
@@ -949,7 +966,8 @@ INVALID_LEADING_CONNECTORS = {
     'bastante', 'bastantes', 'demasiado', 'demasiada', 'demasiados', 'demasiadas',
     'tanto', 'tanta', 'tantos', 'tantas', 'tan', 'más', 'mas', 'menos',
     'cada', 'todo', 'toda', 'todos', 'todas', 'otro', 'otra', 'otros', 'otras',
-    'cualquier', 'cualquiera',
+    'cualquier', 'cualquiera', 'varios', 'varias', 'algún', 'algun', 'alguna', 'alguno', 'algunos', 'algunas',
+    'diferente', 'diferentes', 'distinto', 'distinta', 'distintos', 'distintas', 'montón', 'monton',
     # Non-essential verbs / auxiliaries at start
     'aportan', 'aporta', 'tienen', 'tiene', 'dan', 'da', 'hacen', 'hace', 'son', 'es', 'están', 'está', 'hay',
     'creo', 'cree', 'creen', 'pienso', 'parece', 'debo', 'debe', 'puedo', 'puede', 'bueno', 'entonces', 'francamente', 'realmente', 'vale'
@@ -1566,6 +1584,13 @@ def rebalance_subtitle_segments(
         'no', 'se', 'me', 'te', 'le', 'les', 'nos', 'lo', 'mi', 'tu', 'su', 'mis', 'tus', 'sus',
         'este', 'esta', 'estos', 'estas', 'ese', 'esa', 'esos', 'esas'
     }
+    _REL_OPENER_PREPS = {'por', 'en', 'de', 'con', 'para', 'sin', 'sobre', 'a'}
+    _REL_OPENER_ARTS = {'el', 'la', 'lo', 'los', 'las'}
+    _PERIPHRASIS_AUX_WORDS = {
+        'tiene', 'tienen', 'tengo', 'tienes', 'tenemos', 'tenía', 'tenían',
+        'voy', 'vas', 'va', 'van', 'vamos', 'iba', 'iban',
+        'vuelve', 'vuelven', 'empieza', 'empiezan',
+    }
     SOFT_MAX_WORDS = max(1, int(max_words or 3))
     HARD_MAX_CHARS = max(1, int(max_chars or HARD_MAX_LINE_CHARS))
     SOFT_MAX_CHARS = max(HARD_MAX_CHARS + 2, 20) if HARD_MAX_CHARS > HARD_MAX_LINE_CHARS else HARD_MAX_CHARS
@@ -1698,12 +1723,67 @@ def rebalance_subtitle_segments(
                     c_toks.append(moved_tok)
                     moved = True
 
+            # 2b-bis. Keep compound relative openers ('por las que', 'en el que', 'de la que') together
+            elif (
+                len(c_toks) >= 3
+                and _strip_edge_punct(c_toks[-2]['word']).lower() in _REL_OPENER_PREPS
+                and last_c in _REL_OPENER_ARTS
+                and first_n == 'que'
+                and not c_toks[-2]['word'].endswith(('?', '!', '.', ','))
+                and not c_toks[-1]['word'].endswith(('?', '!', '.', ','))
+                and not (len(c_toks) == 3 and _strip_edge_punct(c_toks[0]['word']).lower() in STRICT_ORPHAN_WORDS)
+            ):
+                bridge_len = len(c_toks[-2]['word']) + 1 + len(c_toks[-1]['word']) + 1 + len(n_toks[0]['word'])
+                if bridge_len <= max(SOFT_MAX_CHARS, 14):
+                    rem_n_orphan = (
+                        len(n_toks) == 2
+                        and _strip_edge_punct(n_toks[1]['word']).lower() in STRICT_ORPHAN_WORDS
+                        and i + 2 >= len(segs)
+                    )
+                    if len(n_toks) == 1 and bridge_len <= max(SOFT_MAX_CHARS, 14):
+                        t2 = c_toks.pop()
+                        t1 = c_toks.pop()
+                        n_toks.insert(0, t2)
+                        n_toks.insert(0, t1)
+                        moved = True
+                    elif len(n_toks) >= 2 and not rem_n_orphan:
+                        t2 = c_toks.pop()
+                        t1 = c_toks.pop()
+                        q_tok = n_toks.pop(0)
+                        mid_tpl = dict(curr['template'])
+                        mid_tpl['item'] = None
+                        segs.insert(i + 1, {'template': mid_tpl, 'tokens': [t1, t2, q_tok], 'absorbed': []})
+                        moved = True
+
             # 2c. Push CTA starter forward (e.g. "la curamos sigueme" + "para mas" -> "la curamos" + "sigueme para mas")
             elif len(c_toks) >= 2 and last_c in CTA_STARTERS and first_n in CTA_CONTINUATIONS:
                 cand_len = len(c_toks[-1]['word']) + 1 + len(_seg_text(nxt))
                 if len(n_toks) + 1 <= SOFT_MAX_WORDS and cand_len <= SOFT_MAX_CHARS:
                     moved_tok = c_toks.pop()
                     n_toks.insert(0, moved_tok)
+                    moved = True
+
+            # 2c-bis. Keep verbal periphrases ('tienen que', 'va a', 'empiezan a') together across segments
+            elif (
+                len(c_toks) >= 3
+                and last_c in _PERIPHRASIS_AUX_WORDS
+                and first_n in {'que', 'a'}
+                and not c_toks[-1]['word'].endswith(('?', '!', '.', ','))
+            ):
+                rem_n_orphan = (
+                    len(n_toks) == 2
+                    and _strip_edge_punct(n_toks[1]['word']).lower() in STRICT_ORPHAN_WORDS
+                    and i + 2 >= len(segs)
+                )
+                if len(n_toks) + 1 <= SOFT_MAX_WORDS and (len(c_toks[-1]['word']) + 1 + len(_seg_text(nxt))) <= SOFT_MAX_CHARS:
+                    n_toks.insert(0, c_toks.pop())
+                    moved = True
+                elif len(n_toks) >= 2 and (len(c_toks[-1]['word']) + 1 + len(n_toks[0]['word'])) <= max(HARD_MAX_CHARS, 13) and not rem_n_orphan:
+                    aux_tok = c_toks.pop()
+                    rel_tok = n_toks.pop(0)
+                    mid_tpl = dict(curr['template'])
+                    mid_tpl['item'] = None
+                    segs.insert(i + 1, {'template': mid_tpl, 'tokens': [aux_tok, rel_tok], 'absorbed': []})
                     moved = True
 
             # 2d. Move dangling article/preposition/conjunction forward so segment never ends dangling on 'la', 'en', 'de', 'que', 'para'
@@ -1713,12 +1793,24 @@ def rebalance_subtitle_segments(
                 and not c_toks[-1]['word'].endswith(('?', '!', '.', ','))
                 and first_n not in CTA_STARTERS
             ):
+                is_intact_rel_opener = (
+                    len(c_toks) == 3
+                    and _strip_edge_punct(c_toks[0]['word']).lower() in _REL_OPENER_PREPS
+                    and _strip_edge_punct(c_toks[1]['word']).lower() in _REL_OPENER_ARTS
+                    and last_c == 'que'
+                )
+                is_intact_periphrasis = (
+                    last_c in {'que', 'a'}
+                    and _strip_edge_punct(c_toks[-2]['word']).lower() in _PERIPHRASIS_AUX_WORDS
+                )
                 if len(n_toks) == 1 and len(c_toks) + 1 <= SOFT_MAX_WORDS and (len(_seg_text(curr)) + 1 + len(n_toks[0]['word'])) <= SOFT_MAX_CHARS:
                     moved_tok = n_toks.pop(0)
                     c_toks.append(moved_tok)
                     moved = True
                 elif (
-                    len(n_toks) + 1 <= SOFT_MAX_WORDS
+                    not is_intact_rel_opener
+                    and not is_intact_periphrasis
+                    and len(n_toks) + 1 <= SOFT_MAX_WORDS
                     and (len(c_toks[-1]['word']) + 1 + len(_seg_text(nxt))) <= SOFT_MAX_CHARS
                     and not (len(c_toks) == 2 and _strip_edge_punct(c_toks[0]['word']).lower() in (ORPHAN_SHORT_WORDS | {'hay'}))
                 ):
@@ -1810,6 +1902,85 @@ def rebalance_subtitle_segments(
                                 break
                     if merged_ok:
                         continue
+
+                    # 3b. Rescue strict functional orphans ('para', 'de', 'con', 'por', 'y', 'el', etc.) blocked by tight max_chars:
+                    # First try rebalancing by stealing the leading word from the next segment ('para' + 'que puedas' -> 'para que' + 'puedas')
+                    # Then try merging up to 16 chars if it avoids stranding a lone strict orphan on screen.
+                    if w_bare in STRICT_ORPHAN_WORDS:
+                        stole_token = False
+                        if prefer_forward and i + 1 < len(segs) and not w.endswith(('?', '!', '.')):
+                            nxt = segs[i + 1]
+                            gap_us = nxt['tokens'][0]['start_us'] - toks[-1]['end_us']
+                            if gap_us <= 850000 and len(nxt['tokens']) >= 2:
+                                stolen = nxt['tokens'][0]
+                                cand_chars = len(w) + 1 + len(stolen['word'])
+                                nxt_rem_bare = _strip_edge_punct(nxt['tokens'][1]['word']).lower() if len(nxt['tokens']) == 2 else ''
+                                rem_lone_orphan = (len(nxt['tokens']) == 2 and nxt_rem_bare in STRICT_ORPHAN_WORDS)
+                                if cand_chars <= max(HARD_MAX_CHARS, 15) and not rem_lone_orphan:
+                                    curr['tokens'].append(nxt['tokens'].pop(0))
+                                    stole_token = True
+                                    changed = True
+                                    # If stealing left a 1-word nxt, coalesce it forward when it fits cleanly (e.g. 'puedas' + 'elegir' -> 'puedas elegir')
+                                    if len(nxt['tokens']) == 1 and i + 2 < len(segs):
+                                        n2 = segs[i + 2]
+                                        nt0 = nxt['tokens'][0]
+                                        gap2_us = n2['tokens'][0]['start_us'] - nt0['end_us']
+                                        comb2_words = 1 + len(n2['tokens'])
+                                        comb2_chars = len(nt0['word']) + 1 + len(_seg_text(n2))
+                                        if (
+                                            not nt0['word'].endswith(('?', '!', '.'))
+                                            and gap2_us <= 500000
+                                            and comb2_words <= SOFT_MAX_WORDS
+                                            and comb2_chars <= max(HARD_MAX_CHARS, 13)
+                                        ):
+                                            n2['tokens'].insert(0, nt0)
+                                            n2['absorbed'].append(nxt['template'].get('index'))
+                                            n2['absorbed'].extend(nxt['absorbed'])
+                                            segs.pop(i + 1)
+
+                        if not stole_token:
+                            elastic_cap = max(HARD_MAX_CHARS + 3, PAIR_ELASTIC_MAX_CHARS)
+                            for direction in directions:
+                                if direction == 'fwd' and i + 1 < len(segs):
+                                    nxt = segs[i + 1]
+                                    gap_us = nxt['tokens'][0]['start_us'] - toks[-1]['end_us']
+                                    comb_words = len(nxt['tokens']) + 1
+                                    comb_chars = len(w) + 1 + len(_seg_text(nxt))
+                                    if (
+                                        not w.endswith(('?', '!', '.'))
+                                        and gap_us <= 850000
+                                        and comb_words <= SOFT_MAX_WORDS
+                                        and (comb_chars <= elastic_cap or len(nxt['tokens']) == 1)
+                                    ):
+                                        nxt['tokens'].insert(0, toks[0])
+                                        nxt['absorbed'].append(curr['template'].get('index'))
+                                        nxt['absorbed'].extend(curr['absorbed'])
+                                        segs.pop(i)
+                                        merged_ok = True
+                                        changed = True
+                                        break
+                                elif direction == 'bwd' and i > 0:
+                                    prev = segs[i - 1]
+                                    gap_us = toks[0]['start_us'] - prev['tokens'][-1]['end_us']
+                                    comb_words = len(prev['tokens']) + 1
+                                    comb_chars = len(_seg_text(prev)) + 1 + len(w)
+                                    if (
+                                        not w.startswith(('¿', '¡'))
+                                        and not is_cap_sentence_starter
+                                        and not _ends_sentence(prev)
+                                        and gap_us <= 850000
+                                        and comb_words <= SOFT_MAX_WORDS
+                                        and comb_chars <= elastic_cap
+                                    ):
+                                        prev['tokens'].append(toks[0])
+                                        prev['absorbed'].append(curr['template'].get('index'))
+                                        prev['absorbed'].extend(curr['absorbed'])
+                                        segs.pop(i)
+                                        merged_ok = True
+                                        changed = True
+                                        break
+                            if merged_ok:
+                                continue
             i += 1
 
     # Pass 4: Spanish orthography polish on rebalanced tokens (clinica->clínica, Gala, Sígueme para más, sentence start capitalization)

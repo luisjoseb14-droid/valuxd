@@ -5,7 +5,7 @@ import uuid
 import copy
 import logging
 from typing import Dict, List, Any, Optional, Tuple, Callable
-from core.capcut_draft import CapCutProject, SubtitleItem
+from core.capcut_draft import CapCutProject, SubtitleItem, is_non_subtitle_text_track, is_user_overlay_text_track
 from core.animator import Animator
 from core.platform_paths import (
     resolve_font_path,
@@ -26,6 +26,8 @@ from core.text_utils import (
     rebalance_subtitle_segments,
     ORPHAN_SHORT_WORDS,
     PROCLITIC_ORPHAN_WORDS,
+    STRICT_ORPHAN_WORDS,
+    COMMON_LOWERCASE_WORDS,
     GALA_UNIQUE_SECOND_WORDS,
     normalize_gala_brand_text,
     _extract_word_tokens,
@@ -99,6 +101,26 @@ _STEP_QUANTITY_NEXT_WORDS = {
 }
 
 _PROCLITIC_NO_CAP_WORDS = set(PROCLITIC_ORPHAN_WORDS) | {'e', 'o', 'u', 'ni', 'pero', 'aunque', 'porque'}
+_STEP_SUBJECT_VERBS = {
+    'es', 'son', 'está', 'están', 'fue', 'fueron', 'era', 'eran',
+    'será', 'consiste', 'trata', 'tiene', 'tienen', 'va', 'viene',
+}
+_STANDALONE_STEP_HEADER_PREFIX_WORDS = {'número', 'numero', 'paso', 'punto'}
+
+
+def _is_standalone_step_header_tokens(toks: List[Dict[str, Any]], tok_idx: Optional[int]) -> bool:
+    """True for isolated spoken step announcements ('Segundo', 'Número 4', 'Y número cuatro')."""
+    if tok_idx is None or not toks or tok_idx != len(toks) - 1:
+        return False
+    if len(toks) == 1:
+        return _strip_edge_punct(toks[0]['word']).lower() in _STEP_ORDINAL_WORDS
+    if len(toks) == 2:
+        return _strip_edge_punct(toks[0]['word']).lower() in _STANDALONE_STEP_HEADER_PREFIX_WORDS
+    if len(toks) == 3:
+        w0 = _strip_edge_punct(toks[0]['word']).lower()
+        w1 = _strip_edge_punct(toks[1]['word']).lower()
+        return w0 in {'y', 'e'} and w1 in _STANDALONE_STEP_HEADER_PREFIX_WORDS
+    return False
 
 
 def _capitalize_leading_alpha(text: str) -> str:
@@ -174,7 +196,13 @@ def _resolve_step_start_in_items(
             can_strip = nxt_strip
 
     start_us = int(raw_items[s_pos]['start'])
-    if tok_idx is not None and can_strip:
+    is_standalone_header = False
+    if tok_idx is not None and not can_strip and s_pos + 1 < len(raw_items):
+        nxt_toks = _extract_word_tokens(raw_items[s_pos + 1])
+        nxt_first_bare = _strip_edge_punct(nxt_toks[0]['word']).lower() if nxt_toks else ""
+        if nxt_first_bare not in _STEP_SUBJECT_VERBS and _is_standalone_step_header_tokens(toks_s, tok_idx):
+            is_standalone_header = True
+    if tok_idx is not None and (can_strip or is_standalone_header):
         start_us = int(toks_s[tok_idx]['start_us'])
 
     return s_pos, tok_idx, can_strip, start_us
@@ -402,7 +430,7 @@ class DualStyler:
         mat_type: str = "subtitle",
         force_font_size: Optional[float] = None,
     ) -> str:
-        text_str = clean_subtitle_text(text_str, keep_punctuation=getattr(self, 'keep_punctuation', False))
+        text_str = clean_subtitle_text(str(text_str or '').strip(), keep_punctuation=getattr(self, 'keep_punctuation', False)).strip()
         if recognize_task_id != "step_badge" and (
             style_cfg.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False))
         ):
@@ -606,14 +634,60 @@ class DualStyler:
             duration_us=duration_us,
         )
 
-    def _ensure_text_tracks(self, draft_data: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
-        tracks = draft_data.setdefault('tracks', [])
-        text_tracks = [
-            t for t in tracks
-            if t.get('type') == 'text' and t.get('name') != STEP_BADGE_TRACK_NAME
+    @staticmethod
+    def _collect_preserved_overlay_ids(draft_data: Dict[str, Any]) -> Tuple[set, set, set]:
+        materials = draft_data.get('materials', {})
+        texts_list = materials.get('texts', [])
+        texts_by_id = {t.get('id'): t for t in texts_list if isinstance(t, dict) and t.get('id')}
+        templates_by_id = {t.get('id'): t for t in materials.get('text_templates', []) if isinstance(t, dict) and t.get('id')}
+        draft_dur = int(draft_data.get('duration', 0) or 0)
+
+        preserved_text_ids = set()
+        preserved_tmpl_ids = set()
+        preserved_anim_ids = set()
+
+        for trk in draft_data.get('tracks', []):
+            if not is_user_overlay_text_track(trk, texts_by_id=texts_by_id, draft_duration_us=draft_dur):
+                continue
+            for seg in trk.get('segments', []):
+                mat_id = seg.get('material_id')
+                if mat_id:
+                    if mat_id in texts_by_id:
+                        preserved_text_ids.add(mat_id)
+                    if mat_id in templates_by_id:
+                        preserved_tmpl_ids.add(mat_id)
+                        for res in templates_by_id[mat_id].get('text_info_resources', []):
+                            t_id = res.get('text_material_id')
+                            if t_id:
+                                preserved_text_ids.add(t_id)
+                            for a_id in res.get('extra_material_refs', []):
+                                if a_id:
+                                    preserved_anim_ids.add(a_id)
+                for ref_id in seg.get('extra_material_refs', []):
+                    if ref_id:
+                        preserved_anim_ids.add(ref_id)
+        return preserved_text_ids, preserved_tmpl_ids, preserved_anim_ids
+
+    @staticmethod
+    def _get_subtitle_text_track_indices(draft_data: Dict[str, Any]) -> List[int]:
+        materials = draft_data.get('materials', {})
+        texts_by_id = {t.get('id'): t for t in materials.get('texts', []) if isinstance(t, dict) and t.get('id')}
+        draft_dur = int(draft_data.get('duration', 0) or 0)
+        return [
+            i for i, t in enumerate(draft_data.get('tracks', []))
+            if t.get('type') == 'text' and not is_non_subtitle_text_track(t, texts_by_id=texts_by_id, draft_duration_us=draft_dur)
         ]
 
-        # Remove any excess text tracks beyond the 2 dual tracks
+    @classmethod
+    def _get_subtitle_text_tracks(cls, draft_data: Dict[str, Any]) -> List[Dict[str, Any]]:
+        tracks = draft_data.get('tracks', [])
+        return [tracks[i] for i in cls._get_subtitle_text_track_indices(draft_data)]
+
+    def _ensure_text_tracks(self, draft_data: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+        tracks = draft_data.setdefault('tracks', [])
+        text_tracks = self._get_subtitle_text_tracks(draft_data)
+
+        # Remove only excess subtitle text tracks beyond the 2 dual tracks, preserving user overlays & Pasos
         if len(text_tracks) > 2:
             for extra in text_tracks[2:]:
                 if extra in tracks:
@@ -738,11 +812,16 @@ class DualStyler:
 
     def apply_plan(self, project: CapCutProject, layout_plan: List[Dict[str, Any]]) -> Tuple[int, int]:
         data = project.data
+        preserved_text_ids, _, _ = self._collect_preserved_overlay_ids(data)
         top_track, bot_track = self._ensure_text_tracks(data)
 
         top_track['segments'] = []
         bot_track['segments'] = []
-        data.setdefault('materials', {})['texts'] = []
+        materials = data.setdefault('materials', {})
+        materials['texts'] = [
+            t for t in materials.get('texts', [])
+            if isinstance(t, dict) and t.get('id') in preserved_text_ids
+        ]
 
         stk_track = None
         has_stickers = bool(getattr(self, 'stickers_cfg', {}).get('enabled', False) and getattr(self, 'stickers_cfg', {}).get('pool'))
@@ -1684,10 +1763,27 @@ class DualStyler:
 
             toks = _extract_word_tokens(cleaned[s_pos])
             tok_idx, can_strip = _find_step_token_in_tokens(toks, num_val)
-            if tok_idx is None or not can_strip:
+            if tok_idx is None:
                 continue
 
             num_tok = toks[tok_idx]
+            if not can_strip:
+                nxt_toks = _extract_word_tokens(cleaned[s_pos + 1]) if (s_pos + 1) < len(cleaned) else []
+                nxt_first_bare = _strip_edge_punct(nxt_toks[0]['word']).lower() if nxt_toks else ""
+                if (
+                    (s_pos + 1) < len(cleaned)
+                    and nxt_first_bare not in _STEP_SUBJECT_VERBS
+                    and _is_standalone_step_header_tokens(toks, tok_idx)
+                ):
+                    removed_positions.add(s_pos)
+                    capitalize_after.add(s_pos)
+                    stripped_tokens_lower.add(_strip_edge_punct(num_tok['word']).lower())
+                    stripped_tokens_lower.add(str(num_val))
+                    header_phrase = " ".join(_strip_edge_punct(t['word']).lower() for t in toks if t.get('word'))
+                    if header_phrase:
+                        stripped_tokens_lower.add(header_phrase)
+                continue
+
             stripped_tokens_lower.add(_strip_edge_punct(num_tok['word']).lower())
             stripped_tokens_lower.add(str(num_val))
 
@@ -2067,6 +2163,104 @@ class DualStyler:
             log_fn(f"[+] Pasos numerados aplicados en esquina sup. izquierda ({nums_preview}) con Mini zoom + Enter / Click.")
         return added
 
+    @staticmethod
+    def _cleanup_plan_orphan_tops(
+        plan: List[Dict[str, Any]],
+        eff_max_chars: int,
+        eff_max_words: int,
+        is_all_uppercase: bool = False,
+    ) -> None:
+        """
+        Rescues stray 1-word top-only functional orphans ('Y', 'de', 'para', 'con', etc.)
+        left behind after step stripping or highlight extraction without ever touching
+        paired top+bot entries or 'top is None' solo-bottom entries.
+        """
+        changed = True
+        while changed and len(plan) > 1:
+            changed = False
+            i = 0
+            while i < len(plan):
+                item = plan[i]
+                cur_top = item.get('top')
+                if (
+                    not cur_top
+                    or item.get('bot') is not None
+                    or item.get('sticker') is not None
+                    or cur_top.get('is_highlight')
+                ):
+                    i += 1
+                    continue
+
+                cur_txt = (cur_top.get('text') or '').strip()
+                cur_words = cur_txt.split()
+                if len(cur_words) != 1 or _strip_edge_punct(cur_words[0]).lower() not in STRICT_ORPHAN_WORDS:
+                    i += 1
+                    continue
+
+                cur_ends_sent = cur_txt.rstrip().endswith(('.', '?', '!'))
+                merged = False
+
+                # Prefer forward merge into adjacent top-only entry
+                if i + 1 < len(plan) and not cur_ends_sent:
+                    nxt_item = plan[i + 1]
+                    nxt_top = nxt_item.get('top')
+                    if (
+                        nxt_top
+                        and not nxt_top.get('is_highlight')
+                        and nxt_item.get('bot') is None
+                    ):
+                        gap = nxt_top['start'] - cur_top['end']
+                        nxt_txt = (nxt_top.get('text') or '').strip()
+                        if not is_all_uppercase and nxt_txt and not nxt_txt.startswith(('¿', '¡')):
+                            m_cap = re.match(r'^([A-ZÁÉÍÓÚÑÜ])([^\s?!.,;:]*)(.*)$', nxt_txt)
+                            if m_cap:
+                                first_bare = _strip_edge_punct(m_cap.group(1) + m_cap.group(2)).lower()
+                                if first_bare in COMMON_LOWERCASE_WORDS:
+                                    nxt_txt = m_cap.group(1).lower() + m_cap.group(2) + m_cap.group(3)
+                        joined = f"{cur_txt} {nxt_txt}".strip()
+                        if (
+                            gap <= 650000
+                            and (len(nxt_txt.split()) + 1) <= (eff_max_words + 1)
+                            and len(joined) <= max(eff_max_chars + 2, 15)
+                        ):
+                            nxt_top['start'] = min(cur_top['start'], nxt_top['start'])
+                            nxt_top['text'] = joined
+                            plan.pop(i)
+                            merged = True
+                            changed = True
+                            continue
+
+                # Fallback backward merge into preceding top-only entry
+                if not merged and i > 0:
+                    prev_item = plan[i - 1]
+                    prev_top = prev_item.get('top')
+                    if (
+                        prev_top
+                        and not prev_top.get('is_highlight')
+                        and prev_item.get('bot') is None
+                        and not cur_txt.startswith(('¿', '¡'))
+                    ):
+                        prev_txt = (prev_top.get('text') or '').strip()
+                        gap = cur_top['start'] - prev_top['end']
+                        joined_txt = cur_txt
+                        if not is_all_uppercase and joined_txt and joined_txt[0].isupper():
+                            if _strip_edge_punct(cur_words[0]).lower() in COMMON_LOWERCASE_WORDS:
+                                joined_txt = joined_txt[0].lower() + joined_txt[1:]
+                        joined = f"{prev_txt} {joined_txt}".strip()
+                        if (
+                            not prev_txt.rstrip().endswith(('.', '?', '!'))
+                            and gap <= 500000
+                            and (len(prev_txt.split()) + 1) <= (eff_max_words + 1)
+                            and len(joined) <= max(eff_max_chars + 2, 15)
+                        ):
+                            prev_top['end'] = max(prev_top['end'], cur_top['end'])
+                            prev_top['text'] = joined
+                            plan.pop(i)
+                            changed = True
+                            continue
+
+                i += 1
+
     def auto_dual_process(
         self,
         project: CapCutProject,
@@ -2131,9 +2325,10 @@ class DualStyler:
         self._strip_existing_step_tracks(project.data)
         project._parse_subtitles()
 
-        # Check if project text tracks are already styled into dual layers (Track 0 top, Track 1 bottom with temporal overlap)
+        # Check if project subtitle text tracks are already styled into dual layers (Track 0 top, Track 1 bottom with temporal overlap)
         # or if they are separate sequential tracks generated in batches by the user.
-        text_tracks = [t for t in project.data.get('tracks', []) if t.get('type') == 'text']
+        text_track_indices = self._get_subtitle_text_track_indices(project.data)
+        text_tracks = [project.data['tracks'][i] for i in text_track_indices]
         is_already_dual = False
         if len(text_tracks) >= 2:
             t0_intervals = [(s['target_timerange']['start'], s['target_timerange']['start'] + s['target_timerange']['duration']) for s in text_tracks[0].get('segments', [])]
@@ -2147,7 +2342,7 @@ class DualStyler:
                     break
 
         if is_already_dual:
-            first_text_idx = next(i for i, t in enumerate(project.data.get('tracks', [])) if t.get('type') == 'text')
+            first_text_idx = text_track_indices[0]
             top_subs = [s for s in project.subtitles if s.track_index == first_text_idx]
             other_subs = [s for s in project.subtitles if s.track_index != first_text_idx]
 
@@ -2832,6 +3027,13 @@ class DualStyler:
 
 
 
+        self._cleanup_plan_orphan_tops(
+            plan,
+            eff_max_chars=eff_max_chars,
+            eff_max_words=eff_max_words,
+            is_all_uppercase=is_all_uppercase,
+        )
+
         res = self.apply_plan(project, plan)
         self._detect_and_apply_step_badges(
             project,
@@ -3161,11 +3363,8 @@ class DualStyler:
         data = project.data
         materials = data.setdefault('materials', {})
         texts = {t['id']: t for t in materials.setdefault('texts', [])}
-        tracks = data.setdefault('tracks', [])
-        text_tracks = [
-            t for t in tracks
-            if t.get('type') == 'text' and t.get('name') != STEP_BADGE_TRACK_NAME
-        ]
+        preserved_text_ids, _, _ = self._collect_preserved_overlay_ids(data)
+        text_tracks = self._get_subtitle_text_tracks(data)
 
         if not text_tracks:
             logger.warning("No se encontraron pistas de texto para reparar.")
@@ -3193,7 +3392,28 @@ class DualStyler:
             except Exception:
                 cj = {'text': raw_c}
 
-            current_text = cj.get('text', '')
+            current_text = (cj.get('text', '') or '').strip()
+            cj['text'] = current_text
+            if 'recognize_text' in tmat:
+                tmat['recognize_text'] = current_text
+            if isinstance(tmat.get('words'), dict) and isinstance(tmat['words'].get('text'), list):
+                w_txts = tmat['words']['text']
+                if len(w_txts) <= 1:
+                    tmat['words']['text'] = [current_text]
+                else:
+                    w_starts = tmat['words'].get('start_time', [])
+                    w_ends = tmat['words'].get('end_time', [])
+                    has_t = len(w_txts) == len(w_starts) == len(w_ends)
+                    while len(w_txts) > 1 and not str(w_txts[0]).strip():
+                        w_txts.pop(0)
+                        if has_t:
+                            w_starts.pop(0)
+                            w_ends.pop(0)
+                    while len(w_txts) > 1 and not str(w_txts[-1]).strip():
+                        w_txts.pop()
+                        if has_t:
+                            w_starts.pop()
+                            w_ends.pop()
             seg_st = seg.get('target_timerange', {}).get('start', 0)
             seg_dur = seg.get('target_timerange', {}).get('duration', 0)
             seg_et = seg_st + seg_dur
@@ -3342,7 +3562,28 @@ class DualStyler:
                     except Exception:
                         cj = {'text': raw_c}
 
-                    current_text = cj.get('text', '')
+                    current_text = (cj.get('text', '') or '').strip()
+                    cj['text'] = current_text
+                    if 'recognize_text' in tmat:
+                        tmat['recognize_text'] = current_text
+                    if isinstance(tmat.get('words'), dict) and isinstance(tmat['words'].get('text'), list):
+                        w_txts = tmat['words']['text']
+                        if len(w_txts) <= 1:
+                            tmat['words']['text'] = [current_text]
+                        else:
+                            w_starts = tmat['words'].get('start_time', [])
+                            w_ends = tmat['words'].get('end_time', [])
+                            has_t = len(w_txts) == len(w_starts) == len(w_ends)
+                            while len(w_txts) > 1 and not str(w_txts[0]).strip():
+                                w_txts.pop(0)
+                                if has_t:
+                                    w_starts.pop(0)
+                                    w_ends.pop(0)
+                            while len(w_txts) > 1 and not str(w_txts[-1]).strip():
+                                w_txts.pop()
+                                if has_t:
+                                    w_starts.pop()
+                                    w_ends.pop()
                     is_bot_upper = self.highlight_style.get('uppercase', False) or (self.preset_data and self.preset_data.get('uppercase', False))
                     if is_bot_upper:
                         current_text = current_text.upper()
@@ -3443,6 +3684,8 @@ class DualStyler:
         )
         if is_upper_required:
             for t_mat in texts.values():
+                if t_mat.get('id') in preserved_text_ids or t_mat.get('recognize_task_id') == 'step_badge':
+                    continue
                 rec_txt = t_mat.get('recognize_text', '')
                 if rec_txt:
                     t_mat['recognize_text'] = rec_txt.upper()
@@ -3497,8 +3740,8 @@ class DualStyler:
         self._strip_existing_step_tracks(project.data)
         project._parse_subtitles()
 
-        # 1. Read Track 0 speech subtitles
-        text_track_indices = [i for i, t in enumerate(project.data.get('tracks', [])) if t.get('type') == 'text']
+        # 1. Read Track 0 speech subtitles (ignoring Pasos and user overlay tracks)
+        text_track_indices = self._get_subtitle_text_track_indices(project.data)
         if text_track_indices:
             first_text_idx = text_track_indices[0]
             subs = [s for s in project.subtitles if s.track_index == first_text_idx]
@@ -3874,9 +4117,10 @@ class DualStyler:
 
         self._strip_existing_step_tracks(project.data)
         project._parse_subtitles()
+        preserved_text_ids, preserved_tmpl_ids, preserved_anim_ids = self._collect_preserved_overlay_ids(project.data)
 
-        # 1. Read Track 0 speech subtitles
-        text_track_indices = [i for i, t in enumerate(project.data.get('tracks', [])) if t.get('type') == 'text']
+        # 1. Read Track 0 speech subtitles (ignoring Pasos and user overlay tracks)
+        text_track_indices = self._get_subtitle_text_track_indices(project.data)
         if not text_track_indices:
             logger.warning("No text track found in project.")
             return 0, 0
@@ -4671,12 +4915,17 @@ class DualStyler:
             }
             new_segments.append(new_seg)
 
-        # 5. Update track segments and materials in project
+        # 5. Update track segments and materials in project (preserving overlay materials)
+        preserved_texts = [t for t in texts_list if isinstance(t, dict) and t.get('id') in preserved_text_ids]
+        preserved_tmpls = [tm for tm in materials.get('text_templates', []) if isinstance(tm, dict) and tm.get('id') in preserved_tmpl_ids]
         text_track['segments'] = new_segments
-        materials['texts'] = new_texts
-        materials['text_templates'] = new_tmpls
+        materials['texts'] = preserved_texts + new_texts
+        materials['text_templates'] = preserved_tmpls + new_tmpls
 
-        existing_non_sticker_anims = [a for a in materials.get('material_animations', []) if a.get('type') != 'sticker_animation']
+        existing_non_sticker_anims = [
+            a for a in materials.get('material_animations', [])
+            if a.get('type') != 'sticker_animation' or a.get('id') in preserved_anim_ids
+        ]
         materials['material_animations'] = existing_non_sticker_anims + new_anims
 
         # 6. Clean up any extra text tracks from old dual runs
@@ -4818,9 +5067,10 @@ class DualStyler:
         """
         self._strip_existing_step_tracks(project.data)
         project._parse_subtitles()
+        preserved_text_ids, preserved_tmpl_ids, _ = self._collect_preserved_overlay_ids(project.data)
 
-        # 1. Extraer subtítulos de todas las pistas de texto
-        text_track_indices = [i for i, t in enumerate(project.data.get('tracks', [])) if t.get('type') == 'text']
+        # 1. Extraer subtítulos solo de pistas de subtítulos (preservando Pasos y overlays)
+        text_track_indices = self._get_subtitle_text_track_indices(project.data)
         if not text_track_indices:
             logger.warning("No text track found in project.")
             return 0, 0
@@ -5330,9 +5580,9 @@ class DualStyler:
                 general_segments.append(gen_seg)
 
         # 5. Organización de Pistas en CapCut
-        # Pista General (flag=1) y 4 Pistas de Escalera (flag=0)
+        # Pista General (flag=1) y 4 Pistas de Escalera (flag=0), preservando overlays del usuario
         tracks = project.data.setdefault('tracks', [])
-        existing_text_tracks = [t for t in tracks if t.get('type') == 'text']
+        existing_text_tracks = self._get_subtitle_text_tracks(project.data)
 
         while len(existing_text_tracks) < 5:
             new_trk = {
@@ -5361,8 +5611,10 @@ class DualStyler:
         for extra_trk in existing_text_tracks[5:]:
             extra_trk['segments'] = []
 
-        materials['texts'] = new_texts
-        materials['text_templates'] = []
+        preserved_texts = [t for t in texts_list if isinstance(t, dict) and t.get('id') in preserved_text_ids]
+        preserved_tmpls = [tm for tm in materials.get('text_templates', []) if isinstance(tm, dict) and tm.get('id') in preserved_tmpl_ids]
+        materials['texts'] = preserved_texts + new_texts
+        materials['text_templates'] = preserved_tmpls
 
         self._detect_and_apply_step_badges(
             project,

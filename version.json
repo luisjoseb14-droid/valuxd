@@ -1,8 +1,8 @@
 {
-  "version": "1.0.33",
-  "version_code": 34,
+  "version": "1.0.34",
+  "version_code": 35,
   "date": "2026-11-26",
-  "description": "Blindaje para no dejar palabras cortas sueltas (y, el, lo, al, es, hay, etc.) en una sola linea al dividir frases largas",
+  "description": "Protege pistas Ranking/Titulos fijos, rescata huerfanas con rebalanceo, elasticidad en parejas de 2 palabras (14-16c), filtro de palabras relleno en highlights, limpieza de encabezados de Pasos y espacios",
   "repo_url": "https://github.com/luisjoseb14-droid/valuxd",
   "branch": "main"
 }

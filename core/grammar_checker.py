@@ -360,7 +360,7 @@ def check_project_grammar(
             allow_commas_periods=eff_keep_punc,
             prev_text=prev_text,
         )
-        if not cleaned_cand or cleaned_cand == orig_text:
+        if not cleaned_cand or cleaned_cand == orig_text.strip():
             continue
 
         seen_indices.add(idx)

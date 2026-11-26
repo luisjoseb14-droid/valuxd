@@ -12,6 +12,77 @@ logger = logging.getLogger('CCSubsPro.CapCutDraft')
 
 DEFAULT_DRAFT_DIR = get_default_draft_dir()
 
+MANAGED_SUBTITLE_TRACK_NAMES = {
+    '',
+    'general',
+    'subtítulos',
+    'subtitulos',
+    'subtitle',
+    'subtitles',
+    'escalera_0',
+    'escalera_1',
+    'escalera_2',
+    'escalera_3',
+}
+
+
+def is_user_overlay_text_track(
+    trk: Dict[str, Any],
+    texts_by_id: Optional[Dict[str, Any]] = None,
+    draft_duration_us: int = 0,
+) -> bool:
+    """
+    Returns True for user-created graphic/title/ranking text tracks (e.g.
+    'Ranking - Título Superior (Subtítulo)', 'Ranking Puesto #1', static
+    headers) that must NOT be parsed as speech subtitles or deleted.
+    """
+    if not isinstance(trk, dict) or trk.get('type') != 'text':
+        return False
+
+    name = (trk.get('name') or '').strip()
+    name_low = name.lower()
+    if name_low == 'pasos':
+        return False
+
+    if name and name_low not in MANAGED_SUBTITLE_TRACK_NAMES and not re.fullmatch(r'text_\d+', name_low):
+        return True
+
+    if texts_by_id:
+        segs = trk.get('segments', [])
+        if trk.get('flag', 1) == 0 and 1 <= len(segs) <= 6:
+            durs = []
+            all_static_text = True
+            for seg in segs:
+                mat = texts_by_id.get(seg.get('material_id'))
+                if not isinstance(mat, dict):
+                    all_static_text = False
+                    break
+                w_starts = (mat.get('words') or {}).get('start_time') or []
+                if mat.get('type') != 'text' or bool(mat.get('recognize_task_id')) or len(w_starts) > 1:
+                    all_static_text = False
+                    break
+                durs.append(int(seg.get('target_timerange', {}).get('duration', 0) or 0))
+            if all_static_text and durs:
+                min_dur = min(durs)
+                sum_dur = sum(durs)
+                if min_dur >= 8_000_000 or (draft_duration_us >= 12_000_000 and sum_dur >= 0.7 * draft_duration_us):
+                    return True
+
+    return False
+
+
+def is_non_subtitle_text_track(
+    trk: Dict[str, Any],
+    texts_by_id: Optional[Dict[str, Any]] = None,
+    draft_duration_us: int = 0,
+) -> bool:
+    """Returns True if track is 'Pasos' or a protected user overlay text track."""
+    if not isinstance(trk, dict) or trk.get('type') != 'text':
+        return False
+    if (trk.get('name') or '').strip() == 'Pasos':
+        return True
+    return is_user_overlay_text_track(trk, texts_by_id=texts_by_id, draft_duration_us=draft_duration_us)
+
 class SubtitleItem:
     def __init__(self, track_index: int, segment: Dict[str, Any], text_material: Dict[str, Any]):
         self.track_index = track_index
@@ -51,7 +122,7 @@ class SubtitleItem:
     def set_text(self, new_text: str, keep_punctuation: bool = False) -> str:
         """Sets new text for the subtitle item, ensuring clean punctuation, style range sync, and uppercase preservation."""
         is_already_upper = not any(c.islower() for c in new_text) if new_text else False
-        cleaned = clean_subtitle_text(new_text, preserve_case=is_already_upper, keep_punctuation=keep_punctuation)
+        cleaned = clean_subtitle_text(new_text, preserve_case=is_already_upper, keep_punctuation=keep_punctuation).strip()
         if is_already_upper:
             cleaned = cleaned.upper()
         self.parsed_content['text'] = cleaned
@@ -67,6 +138,24 @@ class SubtitleItem:
                 tokens = [t for t in re.split(r'(\s+)', cleaned) if t]
                 if len(tokens) == len(w_texts):
                     w_dict['text'] = tokens
+                else:
+                    # Trim outer whitespace-only tokens if present
+                    w_starts = w_dict.get('start_time', [])
+                    w_ends = w_dict.get('end_time', [])
+                    if len(w_texts) == len(w_starts) == len(w_ends):
+                        while len(w_texts) > 1 and not str(w_texts[0]).strip():
+                            w_texts.pop(0)
+                            w_starts.pop(0)
+                            w_ends.pop(0)
+                        while len(w_texts) > 1 and not str(w_texts[-1]).strip():
+                            w_texts.pop()
+                            w_starts.pop()
+                            w_ends.pop()
+                    elif w_texts:
+                        while len(w_texts) > 1 and not str(w_texts[0]).strip():
+                            w_texts.pop(0)
+                        while len(w_texts) > 1 and not str(w_texts[-1]).strip():
+                            w_texts.pop()
         if 'recognize_text' in self.text_material:
             self.text_material['recognize_text'] = cleaned
         self.sync_content_to_material()
@@ -138,10 +227,11 @@ class CapCutProject:
         templates_by_id = {t.get('id'): t for t in templates if isinstance(t, dict) and 'id' in t}
 
         tracks = self.data.get('tracks', [])
+        draft_dur = int(self.data.get('duration', 0) or 0)
         for trk_idx, trk in enumerate(tracks):
             if trk.get('type') == 'text':
-                # Ignore corner step-badge overlay track so numbers aren't parsed as spoken subtitles
-                if trk.get('name') == 'Pasos':
+                # Ignore corner step-badge overlay track and user graphic/ranking tracks
+                if is_non_subtitle_text_track(trk, texts_by_id, draft_dur):
                     continue
                 for seg in trk.get('segments', []):
                     mat_id = seg.get('material_id')

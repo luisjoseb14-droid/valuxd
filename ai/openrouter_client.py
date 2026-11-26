@@ -64,9 +64,9 @@ Tu tarea es recibir la lista cronológica de segmentos de subtítulos de un vide
       - Si la palabra clave va seguida de un verbo o conector, destaca ÚNICAMENTE la palabra clave aislada (ejemplo: destaca sólo "lingual", NO "lingual forman"; destaca sólo "dolor", NO "dolor cuando").
    h) PROHIBICIÓN ESTRICTA DE MULETILLAS, VERBOS DE OPINIÓN Y CONECTORES:
       - JAMÁS destaques conectores ni conjunciones solas o al inicio de una frase ("porque", "pero", "cuando", "como", "que", "si", "donde", "mientras", "pues", "ya", "sino", "entonces", "además").
-      - JAMÁS destaques verbos de opinión, duda, auxiliares o muletillas habladas ("creo", "pienso", "parece", "opino", "supongo", "digo", "vale", "bueno", "debo", "debido", "puedo", "puedes", "quiero", "tengo", "tienes", "sabes", "mira", "fíjate", "hace", "hacer", "ser", "estar", "sido").
+      - JAMÁS destaques verbos de opinión, duda, auxiliares o muletillas habladas ("creo", "pienso", "parece", "opino", "supongo", "digo", "vale", "bueno", "debo", "debido", "puedo", "puedes", "quiero", "tengo", "tienes", "sabes", "mira", "fíjate", "hace", "hacer", "ser", "estar", "sido", "intentar", "intenta").
       - JAMÁS destaques adverbios conversacionales terminados en "-mente" ("francamente", "realmente", "básicamente", "simplemente", "literalmente", "totalmente", "completamente", "absolutamente", "obviamente", "claramente", "prácticamente").
-      - JAMÁS destaques sustantivos genéricos o cuantificadores vagos solos ("caso", "cosa", "cosas", "parte", "forma", "manera", "tipo", "vez", "algo", "poquito", "poco", "mucho", "todo", "otro", "chica").
+      - JAMÁS destaques sustantivos genéricos, adjetivos vagos o cuantificadores débiles ("caso", "cosa", "cosas", "parte", "forma", "manera", "tipo", "vez", "algo", "poquito", "poco", "mucho", "todo", "otro", "chica", "bastante", "montón", "diferente", "diferentes", "distinto", "varios").
    i) PROHIBICIÓN TOTAL DE "NO", ARTÍCULOS O PALABRAS CORTAS VACÍAS:
       - JAMÁS destaques la palabra "no" ni palabras de 1 o 2 letras ("no", "el", "la", "o", "y", "un", "de", "en", "se", "al", "es", "ya", "ni", "si").
       - JAMÁS destaques palabras vacías como "así", "asi", "bien", "muy", "tan", "más", "cada".
